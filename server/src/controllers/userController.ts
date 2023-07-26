@@ -1,7 +1,8 @@
 import {Request, Response} from 'express';
 import {prisma} from '../app';
-import {handle500Error} from '../../utils/500errors';
+import {handle500Error} from '../../utils/500errorsUtil';
 import {MutableUserPayload} from '../../utils/types';
+import {hashPassword} from '../../utils/encryptionUtil';
 
 /**
  * Fetch all users from the database.
@@ -11,7 +12,8 @@ import {MutableUserPayload} from '../../utils/types';
  *
  * @returns {Response} Response object with the status code and all users.
  * @throws {500} If any error occurs during the operation.
- */ export async function getUsers(req: Request, res: Response) {
+ */
+export async function getUsers(req: Request, res: Response) {
   try {
     const allUsers = await prisma.user.findMany();
     res.status(200).json(allUsers);
@@ -28,12 +30,17 @@ import {MutableUserPayload} from '../../utils/types';
  *
  * @returns {Response} Response object with the status code and created user.
  * @throws {500} If any error occurs during the operation.
- */ export async function createUser(req: Request, res: Response) {
+ */
+export async function createUser(req: Request, res: Response) {
+  const {password, ...otherData} = req.body as MutableUserPayload;
   try {
+    const passwordHash = await hashPassword(password);
+
     const createdUser = await prisma.user.create({
       data: {
-        ...(req.body as MutableUserPayload),
+        password: passwordHash,
         stripeCustomerId: 'placeholder',
+        ...otherData,
       },
     });
     res.status(200).json(createdUser);
@@ -90,7 +97,7 @@ export async function updateUserById(req: Request, res: Response) {
 
     res.status(200).json(updatedUser);
   } catch (err) {
-    res.status(500).json({error: 'An error occurred while updating the user'});
+    handle500Error(res, err);
   }
 }
 
@@ -113,6 +120,6 @@ export async function deleteUser(req: Request, res: Response) {
 
     res.status(200).json(deletedUser);
   } catch (err) {
-    res.status(500).json({error: 'An error occurred while deleting the user'});
+    handle500Error(res, err);
   }
 }

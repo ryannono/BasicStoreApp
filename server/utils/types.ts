@@ -5,3 +5,8 @@ export type MutableUserPayload = Omit<
   UserPayload['scalars'],
   'createdAt' | 'updatedAt' | 'id' | 'stripeCustomerId'
 >;
+
+export type TokenUserPayload = Omit<
+  MutableUserPayload,
+  'phoneNumber' | 'password'
+>;

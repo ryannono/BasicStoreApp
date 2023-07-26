@@ -6,7 +6,7 @@ import {PrismaClient} from '@prisma/client';
 import express from 'express';
 
 // Import routers
-// import userRoutes from './routes/userRoutes';
+import userRoutes from './routes/userRoutes';
 // import authRoutes from './routes/authRoutes';
 // import productRoutes from './routes/productRoutes';
 // import cartRoutes from './routes/cartRoutes';
@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 // ---------------------- Routes -------------------- //
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 // app.use('/api/auth', authRoutes);
 // app.use('/api/products', productRoutes);
 // app.use('/api/cart', cartRoutes);
