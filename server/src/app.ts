@@ -6,11 +6,13 @@ import {PrismaClient} from '@prisma/client';
 import express from 'express';
 
 // Import routers
-// import userRouter from './routes/user';
-// import productRouter from './routes/product';
-// import orderRouter from './routes/order';
-// import cartRouter from './routes/cart';
-// import authRouter from './routes/auth';
+// import userRoutes from './routes/userRoutes';
+// import authRoutes from './routes/authRoutes';
+// import productRoutes from './routes/productRoutes';
+// import cartRoutes from './routes/cartRoutes';
+// import orderRoutes from './routes/orderRoutes';
+// import paymentRoutes from './routes/paymentRoutes';
+// import addressRoutes from './routes/addressRoutes';
 
 export const prisma = new PrismaClient();
 export const app = express();
@@ -26,11 +28,13 @@ app.use(cookieParser());
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 // ---------------------- Routes -------------------- //
-// app.use('/api/users', userRouter);
-// app.use('/api/products', productRouter);
-// app.use('/api/orders', orderRouter);
-// app.use('/api/cart', cartRouter);
-// app.use('/api/auth', authRouter);
+// app.use('/api/users', userRoutes);
+// app.use('/api/auth', authRoutes);
+// app.use('/api/products', productRoutes);
+// app.use('/api/cart', cartRoutes);
+// app.use('/api/orders', orderRoutes);
+// app.use('/api/payments', paymentRoutes);
+// app.use('/api/address', addressRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the TasteTrove API!');
