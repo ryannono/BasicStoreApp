@@ -1,6 +1,15 @@
 # TasteTrove Database Schema
 
+## Schema
+
+This directory contains the Prisma schema file (`schema.prisma`).
+
+`schema.prisma` is where you define your database schema and relations.
+
+`.env` is where you store environment variables such as database connection string.
+
 This schema is designed to support the backend for the TasteTrove e-commerce application. It comprises several models that represent the key entities in the system: users, carts, products, orders, and addresses.
+
 
 ## User
 
