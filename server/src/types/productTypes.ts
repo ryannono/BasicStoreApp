@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {ProductPayload} from '@prisma/client';
+import {ProductCategoryPayload, ProductPayload} from '@prisma/client';
 
 /**
  * The `MutableProductPayload` type takes all the scalar properties from
@@ -9,7 +9,16 @@ import {ProductPayload} from '@prisma/client';
  *
  * This type is typically used when you want to create or manipulate a product
  * and only care about the basic product details.
- *
- * @type {object}
  */
-export type MutableProductPayload = ProductPayload['scalars'];
+export type MutableProductPayload = Omit<ProductPayload['scalars'], 'id'>;
+
+/**
+ * Type `MutableCategoryPayload` represents the mutable properties of
+ * a product category. It omits the `id` property from
+ * `ProductCategoryPayload['scalars']` as this property should not
+ * be changed.
+ */
+export type MutableCategoryPayload = Omit<
+  ProductCategoryPayload['scalars'],
+  'id'
+>;

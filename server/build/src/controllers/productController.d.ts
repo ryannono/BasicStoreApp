@@ -75,3 +75,79 @@ export declare function updateProductById(req: Request, res: Response, next: Nex
  * the deleted product details as response.
  */
 export declare function deleteProductById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Create a new product category in the database. The category details
+ * are received through the request body.
+ *
+ * @async
+ * @function createCategory
+ * @param {Request} req - The request object, the body should
+ * be of type MutableCategoryPayload.
+ * @param {Response} res - The response object, sends the
+ * created category details as response.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<Response>} - The response object, sends
+ * the created category details as response.
+ */
+export declare function createCategory(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Fetch all categories from the database.
+ *
+ * @async
+ * @function getAllCategories
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object, sends all
+ * the category details as response.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<Response>} - The response object, sends
+ * all the category details as response.
+ */
+export declare function getAllCategories(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Fetch a category from the database by its ID. The ID is
+ * received through the request parameters.
+ *
+ * @async
+ * @function getCategoryById
+ * @param {Request} req - The request object, the parameters
+ * should contain the ID of the category to fetch.
+ * @param {Response} res - The response object, sends the
+ * category details as response.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<Response>} - The response object, sends
+ * the category details as response.
+ */
+export declare function getCategoryById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Update a category in the database by its ID. The ID is
+ * received through the request parameters, and the new
+ * category details are received through the request body.
+ *
+ * @async
+ * @function updateCategoryById
+ * @param {Request} req - The request object, the parameters
+ * should contain the ID of the category to update, and the
+ * body should be of type MutableCategoryPayload with the
+ * updated category details.
+ * @param {Response} res - The response object, sends the
+ * updated category details as response.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<Response>} - The response object, sends
+ * the updated category details as response.
+ */
+export declare function updateCategoryById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Delete a category from the database by its ID. The ID is
+ * received through the request parameters.
+ *
+ * @async
+ * @function deleteCategoryById
+ * @param {Request} req - The request object, the parameters
+ * should contain the ID of the category to delete.
+ * @param {Response} res - The response object, sends the
+ * deleted category details as response.
+ * @param {NextFunction} next - The next middleware function.
+ * @returns {Promise<Response>} - The response object, sends
+ * the deleted category details as response.
+ */
+export declare function deleteCategoryById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
