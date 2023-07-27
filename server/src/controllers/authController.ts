@@ -1,13 +1,15 @@
 import {NextFunction, Request, Response} from 'express';
-import {LoginUserPayload, MutableUserPayload} from '../utils/types';
+import {LoginUserPayload, MutableUserPayload} from '../types';
 import {prisma} from '../app';
-import {hashPassword, verifyPassword} from '../utils/encryptionUtil';
-import {DAY, MINUTE} from '../utils/constants';
 import {
+  hashPassword,
+  verifyPassword,
   generateAccessToken,
   generateRefreshToken,
   verifyToken,
-} from '../utils/tokenUtil';
+  DAY,
+  MINUTE,
+} from '../utils';
 
 /**
  * Asynchronous function to register a new user.

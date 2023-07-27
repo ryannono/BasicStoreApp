@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = exports.logoutUser = exports.refreshUser = exports.loginUser = exports.registerUser = void 0;
 const app_1 = require("../app");
-const encryptionUtil_1 = require("../utils/encryptionUtil");
-const constants_1 = require("../utils/constants");
-const tokenUtil_1 = require("../utils/tokenUtil");
+const utils_1 = require("../utils");
 /**
  * Asynchronous function to register a new user.
  *
@@ -34,7 +32,7 @@ async function registerUser(req, res, next) {
                 .json({ error: 'A user with this email already exists' });
         }
         // Hash the plain text password
-        const passwordHash = await (0, encryptionUtil_1.hashPassword)(password);
+        const passwordHash = await (0, utils_1.hashPassword)(password);
         // Create a new Stripe customer for the user
         const stripeCustomerId = 'placeholder';
         const createdUser = await app_1.prisma.user.create({
@@ -74,19 +72,19 @@ async function loginUser(req, res, next) {
         if (!user)
             return res.status(401).json({ error: 'Invalid email' });
         // verify the password
-        const validPassword = await (0, encryptionUtil_1.verifyPassword)(password, user.password);
+        const validPassword = await (0, utils_1.verifyPassword)(password, user.password);
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid password' });
         }
         // get tokens
-        const accessToken = (0, tokenUtil_1.generateAccessToken)(user);
-        const refreshToken = (0, tokenUtil_1.generateRefreshToken)(user);
+        const accessToken = (0, utils_1.generateAccessToken)(user);
+        const refreshToken = (0, utils_1.generateRefreshToken)(user);
         // send tokens as cookies
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            maxAge: 20 * constants_1.MINUTE,
+            maxAge: 20 * utils_1.MINUTE,
         });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: constants_1.DAY });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: utils_1.DAY });
         // send accessToken and user in response body
         return res.status(200).json(user);
     }
@@ -131,7 +129,7 @@ async function refreshUser(req, res, next) {
             });
         }
         // Verify the refresh token and extract user data
-        const userData = await (0, tokenUtil_1.verifyToken)(refreshToken);
+        const userData = await (0, utils_1.verifyToken)(refreshToken);
         // If user data does not match with the one in the DB, return an error response
         if (!userData || userData.id !== tokenInDb.tokenUser.id) {
             return res.status(403).json({
@@ -139,11 +137,11 @@ async function refreshUser(req, res, next) {
             });
         }
         // If the token is valid, generate a new access token
-        const accessToken = (0, tokenUtil_1.generateAccessToken)(tokenInDb.tokenUser);
+        const accessToken = (0, utils_1.generateAccessToken)(tokenInDb.tokenUser);
         // Return the new access token in the response as a secure HttpOnly cookie
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            maxAge: 20 * constants_1.MINUTE,
+            maxAge: 20 * utils_1.MINUTE,
         });
         // Send a success response
         return res
@@ -212,7 +210,7 @@ async function resetPassword(req, res, next) {
             return res.status(404).json({ error: 'User not found' });
         }
         // hash the new password
-        const passwordHash = await (0, encryptionUtil_1.hashPassword)(newPassword);
+        const passwordHash = await (0, utils_1.hashPassword)(newPassword);
         // update the user's password in the database
         await app_1.prisma.user.update({
             where: { email },

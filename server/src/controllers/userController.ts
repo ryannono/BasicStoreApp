@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
-import {MutableUserPayload} from '../utils/types';
+import {MutableUserPayload} from '../types';
 
 /**
  * Asynchronous Express middleware to fetch all users from the database.
