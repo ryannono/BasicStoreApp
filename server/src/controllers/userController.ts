@@ -1,8 +1,8 @@
 import {Request, Response} from 'express';
 import {prisma} from '../app';
-import {handle500Error} from '../../utils/500errorsUtil';
-import {MutableUserPayload} from '../../utils/types';
-import {hashPassword} from '../../utils/encryptionUtil';
+import {handle500Error} from '../utils/500errorsUtil';
+import {MutableUserPayload} from '../utils/types';
+import {hashPassword} from '../utils/encryptionUtil';
 
 /**
  * Fetch all users from the database.
@@ -13,7 +13,7 @@ import {hashPassword} from '../../utils/encryptionUtil';
  * @returns {Response} Response object with the status code and all users.
  * @throws {500} If any error occurs during the operation.
  */
-export async function getUsers(req: Request, res: Response) {
+export async function getAllUsers(req: Request, res: Response) {
   try {
     const allUsers = await prisma.user.findMany();
     res.status(200).json(allUsers);
@@ -110,7 +110,7 @@ export async function updateUserById(req: Request, res: Response) {
  * @returns {Response} Response object with the status code and deleted user data.
  * @throws {500} If any error occurs during the operation.
  */
-export async function deleteUser(req: Request, res: Response) {
+export async function deleteUserById(req: Request, res: Response) {
   const {id} = req.params;
 
   try {

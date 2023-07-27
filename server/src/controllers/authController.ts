@@ -1,14 +1,14 @@
 import {Request, Response} from 'express';
 import {prisma} from '../app';
-import {MutableUserPayload} from '../../utils/types';
-import {verifyPassword} from '../../utils/encryptionUtil';
-import {DAY} from '../../utils/constants';
-import {handle500Error} from '../../utils/500errorsUtil';
+import {MutableUserPayload} from '../utils/types';
+import {verifyPassword} from '../utils/encryptionUtil';
+import {DAY} from '../utils/constants';
+import {handle500Error} from '../utils/500errorsUtil';
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyToken,
-} from '../../utils/tokenUtil';
+} from '../utils/tokenUtil';
 
 export async function loginUser(req: Request, res: Response) {
   const {username, password} = req.body as MutableUserPayload;
