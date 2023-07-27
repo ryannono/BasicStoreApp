@@ -13,7 +13,7 @@ const express_1 = __importDefault(require("express"));
 // Import routers
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-// import productRoutes from './routes/productRoutes';
+const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
 // import cartRoutes from './routes/cartRoutes';
 // import orderRoutes from './routes/orderRoutes';
 // import paymentRoutes from './routes/paymentRoutes';
@@ -24,10 +24,6 @@ const errorMiddleware_1 = require("./middlewares/errorMiddleware");
 exports.prisma = new client_1.PrismaClient();
 exports.app = (0, express_1.default)();
 // ---------- Application-Level Middleware --------- //
-// handle json type data
-// handle urlencoded type data
-// handle cookie type data
-// enable cors (origin acccess control - request/pings from this address)
 exports.app.use(body_parser_1.default.json());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cookie_parser_1.default)());
@@ -35,7 +31,7 @@ exports.app.use((0, cors_1.default)({ credentials: true, origin: 'http://localho
 // ---------------------- Routes -------------------- //
 exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/auth', authRoutes_1.default);
-// app.use('/api/products', productRoutes);
+exports.app.use('/api/products', productRoutes_1.default);
 // app.use('/api/cart', cartRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/payments', paymentRoutes);
