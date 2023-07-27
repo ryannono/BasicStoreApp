@@ -14,15 +14,9 @@ import {TokenUserPayload} from './types';
  *
  * @throws {Error} If any error occurs during the token generation.
  */
-export function generateAccessToken({
-  id,
-  username,
-  email,
-  firstName,
-  lastName,
-}: User) {
+export function generateAccessToken({id, email, firstName, lastName}: User) {
   return jwt.sign(
-    {id, username, email, firstName, lastName},
+    {id, email, firstName, lastName},
     process.env.ACCESS_TOKEN_SECRET as string,
     {
       expiresIn: '20m',
@@ -40,15 +34,9 @@ export function generateAccessToken({
  *
  * @throws {Error} If any error occurs during the token generation.
  */
-export function generateRefreshToken({
-  id,
-  username,
-  email,
-  firstName,
-  lastName,
-}: User) {
+export function generateRefreshToken({id, email, firstName, lastName}: User) {
   return jwt.sign(
-    {id, username, email, firstName, lastName},
+    {id, email, firstName, lastName},
     process.env.REFRESH_TOKEN_SECRET as string,
     {
       expiresIn: '14d',

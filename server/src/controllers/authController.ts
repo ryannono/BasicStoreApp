@@ -1,28 +1,39 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
+import {AuthUserPayload} from '../utils/types';
 import {prisma} from '../app';
-import {MutableUserPayload} from '../utils/types';
 import {verifyPassword} from '../utils/encryptionUtil';
 import {DAY} from '../utils/constants';
-import {handle500Error} from '../utils/500errorsUtil';
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyToken,
 } from '../utils/tokenUtil';
 
-export async function loginUser(req: Request, res: Response) {
-  const {username, password} = req.body as MutableUserPayload;
+/**
+ * Asynchronous Express middleware for user login.
+ * The function identifies the user, verifies the password, generates access and refresh tokens.
+ * If successful, the refresh token is sent as an httpOnly cookie, and the access token and user data are sent in the response body.
+ * If an error occurs, or if the username/password are invalid, the error is passed on to the next middleware for error handling.
+ *
+ * @param {Request} req - The Express request object, expecting the user's username and password in the body.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
+ *
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the user login process.
+ */
+export async function loginUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const {email, password} = req.body as AuthUserPayload;
 
   try {
     // identify the user
-    const user = await prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
-    if (!user) {
-      return res.status(401).json({error: 'Invalid username'});
-    }
+    const user = await prisma.user.findUnique({where: {email}});
+    if (!user) return res.status(401).json({error: 'Invalid email'});
 
     // verify the password
     const validPassword = await verifyPassword(password, user.password);
@@ -34,11 +45,12 @@ export async function loginUser(req: Request, res: Response) {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    // send tokens
+    // send refresh token as cookie
     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: DAY});
-    res.status(200).json({accessToken});
-    return res.json({user});
+
+    // send accessToken and user in response body
+    return res.status(200).json({accessToken, user});
   } catch (err) {
-    return handle500Error(res, err);
+    return next(err);
   }
 }

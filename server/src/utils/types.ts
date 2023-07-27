@@ -6,7 +6,9 @@ export type MutableUserPayload = Omit<
   'createdAt' | 'updatedAt' | 'id' | 'stripeCustomerId'
 >;
 
-export type TokenUserPayload = Omit<
-  MutableUserPayload,
-  'phoneNumber' | 'password'
+export type TokenUserPayload = Pick<
+  UserPayload['scalars'],
+  'id' | 'email' | 'firstName' | 'lastName'
 >;
+
+export type AuthUserPayload = Pick<MutableUserPayload, 'email' | 'password'>;

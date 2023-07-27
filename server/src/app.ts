@@ -14,6 +14,11 @@ import userRoutes from './routes/userRoutes';
 // import paymentRoutes from './routes/paymentRoutes';
 // import addressRoutes from './routes/addressRoutes';
 
+//import error middleware
+import {errorHandler} from './middlewares/errorMiddleware';
+
+// ---------------- initialization ----------------- //
+
 export const prisma = new PrismaClient();
 export const app = express();
 
@@ -35,6 +40,7 @@ app.use('/api/users', userRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/payments', paymentRoutes);
 // app.use('/api/address', addressRoutes);
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the TasteTrove API!');
