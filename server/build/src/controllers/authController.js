@@ -2,25 +2,27 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = exports.logoutUser = exports.refreshUser = exports.loginUser = exports.registerUser = void 0;
 const app_1 = require("../app");
+const stripeService_1 = require("../services/stripeService");
 const utils_1 = require("../utils");
 /**
- * Registers a new user.
+ * Asynchronous function to register a new user.
  *
- * This function handles the POST request for user registration. It checks
- * if a user with the provided email already exists. If not, it hashes the
- * plain text password, creates a new Stripe customer for the user, and
- * persists the new user in the database.
+ * This function takes in request data, checks if a user with the provided
+ * email already exists, hashes the password, creates a new Stripe customer
+ * ID, and creates a new user in the database. Upon successful creation of
+ * the user, the user is authenticated and tokens are set in the HTTP-only
+ * cookies on the response. An existing cart is also associated with the
+ * user in the process of user creation.
  *
- * @async
- * @param {Request} req - The incoming HTTP request. The request body should
- *                        contain the user data.
- * @param {Response} res - The outgoing HTTP response. The response body will
- *                         contain the newly created user if registration is
- *                         successful.
- * @param {NextFunction} next - Express.js next function.
- * @throws Will throw an error if the operation fails.
- * @returns {Promise<Response>} A Promise that resolves to the Express.js
- *                              response object.
+ * @param req - The Express.js request object. The request body should contain
+ *              user data including email and password.
+ * @param res - The Express.js response object for sending responses to the client.
+ * @param next - The next middleware function.
+ *
+ * @returns The response object with the user data in JSON format,
+ *          and the access and refresh tokens set as HTTP-only cookies.
+ * @throws An error if there was an issue creating the user,
+ *         generating the tokens, or setting the cookies.
  */
 async function registerUser(req, res, next) {
     try {
@@ -36,8 +38,9 @@ async function registerUser(req, res, next) {
         }
         // Hash the plain text password
         const passwordHash = await (0, utils_1.hashPassword)(password);
-        // Create a new Stripe customer for the user
-        const stripeCustomerId = 'placeholder';
+        // Create a new Stripe customer entiry for the user
+        const stripeCustomerId = await (0, stripeService_1.getStripeCustomerId)(otherData);
+        // create user
         const createdUser = await app_1.prisma.user.create({
             data: {
                 password: passwordHash,
@@ -46,7 +49,8 @@ async function registerUser(req, res, next) {
                 cart: { create: true },
             },
         });
-        return res.status(200).json(createdUser);
+        // respond with accesstoken and refreshtoken in http only cookie
+        return (0, utils_1.handleAuthentication)(createdUser, res, true);
     }
     catch (err) {
         return next(err);
@@ -56,17 +60,20 @@ exports.registerUser = registerUser;
 /**
  * Asynchronous function to log in a user.
  *
- * This function will check if the user exists, and if it does,
- * verifies the password and generates an access token and a refresh token.
- * It will then send the tokens as cookies and returns the user data.
+ * This function takes in request data, verifies if the user exists,
+ * checks the password and then authenticates the user. The process of
+ * authentication includes generating tokens and setting them in the
+ * HTTP-only cookies on the response.
  *
- * @param req - The Express.js request object. The request body
- * should contain email and password of the user.
- * @param res - The Express.js response object.
+ * @param req - The Express.js request object. The request body should
+ *              contain the email and password of the user.
+ * @param res - The Express.js response object for sending responses to the client.
  * @param next - The next middleware function.
  *
- * @returns The user data in JSON format.
- * @throws An error if there was an issue logging in the user.
+ * @returns The response object with the user data in JSON format, and the
+ *          access and refresh tokens set as HTTP-only cookies.
+ * @throws An error if there was an issue identifying the user, verifying the
+ *         password, or during the authentication process.
  */
 async function loginUser(req, res, next) {
     try {
@@ -80,17 +87,8 @@ async function loginUser(req, res, next) {
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid password' });
         }
-        // get tokens
-        const accessToken = (0, utils_1.generateAccessToken)(user);
-        const refreshToken = (0, utils_1.generateRefreshToken)(user);
-        // send tokens as cookies
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            maxAge: 20 * utils_1.MINUTE,
-        });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: utils_1.DAY });
-        // send accessToken and user in response body
-        return res.status(200).json(user);
+        // respond with accesstoken and refreshtoken in http only cookie
+        return (0, utils_1.handleAuthentication)(user, res, true);
     }
     catch (err) {
         return next(err);
@@ -98,20 +96,29 @@ async function loginUser(req, res, next) {
 }
 exports.loginUser = loginUser;
 /**
- * Asynchronous function to refresh a user's access token.
+ * Asynchronous function to refresh the access token for a user.
  *
- * This function will validate the refresh token provided in the
- * request cookies. If the token is valid and exists in the database,
- * it will generate a new access token and return it as a HttpOnly
- * cookie in the response.
+ * This function retrieves the refresh token from the incoming request's cookies,
+ * verifies its existence in the database, and checks if the decoded user data
+ * matches the user data associated with the token in the database. If all checks
+ * pass, it authenticates the user by sending a new access token in an HTTP-only
+ * cookie.
  *
- * @param req - The Express.js request object. The refresh token
- * should be provided in the request cookies.
- * @param res - The Express.js response object.
- * @param next - The next middleware function.
+ * If the refresh token is missing, or if it's not verified or doesn't exist in
+ * the database, a JSON response with an error message is sent and the middleware
+ * chain is interrupted.
  *
- * @returns A success message and a new access token in JSON format.
- * @throws An error if there was an issue refreshing the token.
+ * This function should be used in routes where token refreshing is required.
+ *
+ * @param req - Express.js request object containing the client request information.
+ * @param res - Express.js response object for sending responses to the client.
+ * @param next - Callback function to invoke the next middleware function in the chain.
+ *
+ * @throws {Error} When an unexpected error occurs during token verification or
+ *                 user authentication.
+ *
+ * @returns {Response} This function returns the response object with a new access
+ *                     token in an HTTP-only cookie.
  */
 async function refreshUser(req, res, next) {
     try {
@@ -140,17 +147,8 @@ async function refreshUser(req, res, next) {
                 error: 'Refresh token is invalid',
             });
         }
-        // If the token is valid, generate a new access token
-        const accessToken = (0, utils_1.generateAccessToken)(tokenInDb.tokenUser);
-        // Return the new access token in the response as a secure HttpOnly cookie
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            maxAge: 20 * utils_1.MINUTE,
-        });
-        // Send a success response
-        return res
-            .status(200)
-            .json({ message: 'Access token refreshed successfully' });
+        // respond with accesstoken in http only cookie
+        return (0, utils_1.handleAuthentication)(tokenInDb.tokenUser, res);
     }
     catch (err) {
         return next(err);

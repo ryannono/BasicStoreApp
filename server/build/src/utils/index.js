@@ -17,4 +17,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./constants"), exports);
 __exportStar(require("./encryptionUtil"), exports);
 __exportStar(require("./tokenUtil"), exports);
+__exportStar(require("./authUtil"), exports);
 //# sourceMappingURL=index.js.map

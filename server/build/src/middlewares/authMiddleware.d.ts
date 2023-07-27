@@ -19,4 +19,4 @@ import { Request, Response, NextFunction } from 'express';
  *
  * @returns {void} This function does not have a return value.
  */
-export declare function authenticateAccess(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+export declare function authenticateAccessToken(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;

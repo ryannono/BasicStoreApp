@@ -21,7 +21,7 @@ import {verifyToken} from '../utils/tokenUtil';
  *
  * @returns {void} This function does not have a return value.
  */
-export async function authenticateAccess(
+export async function authenticateAccessToken(
   req: Request,
   res: Response,
   next: NextFunction

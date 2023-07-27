@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateAccess = void 0;
+exports.authenticateAccessToken = void 0;
 const tokenUtil_1 = require("../utils/tokenUtil");
 /**
  * Middleware function to authenticate user access.
@@ -22,7 +22,7 @@ const tokenUtil_1 = require("../utils/tokenUtil");
  *
  * @returns {void} This function does not have a return value.
  */
-async function authenticateAccess(req, res, next) {
+async function authenticateAccessToken(req, res, next) {
     try {
         // get accessToken from request
         const accessToken = req.cookies.accessToken;
@@ -43,5 +43,5 @@ async function authenticateAccess(req, res, next) {
         next(err);
     }
 }
-exports.authenticateAccess = authenticateAccess;
+exports.authenticateAccessToken = authenticateAccessToken;
 //# sourceMappingURL=authMiddleware.js.map
