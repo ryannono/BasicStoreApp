@@ -4,16 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// import {
-//   registerUser,
-//   loginUser,
-//   logoutUser,
-//   resetPassword,
-// } from '../controllers/authController';
+const authController_1 = require("../controllers/authController");
 const router = express_1.default.Router();
-// router.post('/register', registerUser);
-// router.post('/login', loginUser);
-// router.post('/logout', logoutUser);
-// router.post('/reset-password', resetPassword);
+router.post('/register', authController_1.registerUser);
+router.post('/login', authController_1.loginUser);
+router.post('/refresh', authController_1.refreshUser);
+router.post('/logout', authController_1.logoutUser);
+router.post('/reset-password', authController_1.resetPassword);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map

@@ -12,12 +12,15 @@ const client_1 = require("@prisma/client");
 const express_1 = __importDefault(require("express"));
 // Import routers
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
-// import authRoutes from './routes/authRoutes';
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 // import productRoutes from './routes/productRoutes';
 // import cartRoutes from './routes/cartRoutes';
 // import orderRoutes from './routes/orderRoutes';
 // import paymentRoutes from './routes/paymentRoutes';
 // import addressRoutes from './routes/addressRoutes';
+//import error middleware
+const errorMiddleware_1 = require("./middlewares/errorMiddleware");
+// ---------------- initialization ----------------- //
 exports.prisma = new client_1.PrismaClient();
 exports.app = (0, express_1.default)();
 // ---------- Application-Level Middleware --------- //
@@ -31,12 +34,13 @@ exports.app.use((0, cookie_parser_1.default)());
 exports.app.use((0, cors_1.default)({ credentials: true, origin: 'http://localhost:3000' }));
 // ---------------------- Routes -------------------- //
 exports.app.use('/api/users', userRoutes_1.default);
-// app.use('/api/auth', authRoutes);
+exports.app.use('/api/auth', authRoutes_1.default);
 // app.use('/api/products', productRoutes);
 // app.use('/api/cart', cartRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/payments', paymentRoutes);
 // app.use('/api/address', addressRoutes);
+exports.app.use(errorMiddleware_1.errorHandler);
 exports.app.get('/', (req, res) => {
     res.send('Welcome to the TasteTrove API!');
 });

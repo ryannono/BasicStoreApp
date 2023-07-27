@@ -1,126 +1,109 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUserById = exports.getUserById = exports.createUser = exports.getUsers = void 0;
+exports.deleteUserById = exports.updateUserById = exports.getUserById = exports.getAllUsers = void 0;
 const app_1 = require("../app");
-const _500errorsUtil_1 = require("../../utils/500errorsUtil");
-const encryptionUtil_1 = require("../../utils/encryptionUtil");
 /**
- * Fetch all users from the database.
+ * Asynchronous Express middleware to fetch all users from the database.
+ * If successful, responds with a JSON array of all user objects.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and all users.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the process.
  */
-async function getUsers(req, res) {
+async function getAllUsers(req, res, next) {
     try {
         const allUsers = await app_1.prisma.user.findMany();
-        res.status(200).json(allUsers);
+        return res.status(200).json(allUsers);
     }
     catch (err) {
-        (0, _500errorsUtil_1.handle500Error)(res, err);
+        return next(err);
     }
 }
-exports.getUsers = getUsers;
+exports.getAllUsers = getAllUsers;
 /**
- * Create a new user with the provided request body data.
+ * Asynchronous Express middleware to fetch a specific user from the database by their ID.
+ * If successful, responds with a JSON object of the user.
+ * If an error occurs or the user is not found, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the body containing user information.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and created user.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the process.
  */
-async function createUser(req, res) {
-    const { password, ...otherData } = req.body;
-    try {
-        const passwordHash = await (0, encryptionUtil_1.hashPassword)(password);
-        const createdUser = await app_1.prisma.user.create({
-            data: {
-                password: passwordHash,
-                stripeCustomerId: 'placeholder',
-                ...otherData,
-            },
-        });
-        res.status(200).json(createdUser);
-    }
-    catch (err) {
-        (0, _500errorsUtil_1.handle500Error)(res, err);
-    }
-}
-exports.createUser = createUser;
-/**
- * Fetch a specific user by their id.
- *
- * @param {Request} req - Express request object with the params containing user id.
- * @param {Response} res - Express response object.
- *
- * @returns {Response} Response object with the status code and user data.
- * @throws {404} If the user is not found.
- * @throws {500} If any other error occurs during the operation.
- */
-async function getUserById(req, res) {
+async function getUserById(req, res, next) {
     const { id } = req.params;
     try {
         const user = await app_1.prisma.user.findUnique({
             where: { id },
         });
-        if (!user) {
-            res.status(404).json({ error: 'User not found' });
-        }
-        else {
-            res.status(200).json(user);
-        }
+        if (!user)
+            return res.status(404).json({ error: 'User not found' });
+        return res.status(200).json(user);
     }
     catch (err) {
-        (0, _500errorsUtil_1.handle500Error)(res, err);
+        return next(err);
     }
 }
 exports.getUserById = getUserById;
 /**
- * Update a specific user's data with the provided request body.
+ * Asynchronous Express middleware to update a specific user in the database by their ID.
+ * If successful, responds with a JSON object of the updated user.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the params containing user id and body with new data.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters and the updated data in the body.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and updated user data.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the user updating process.
  */
-async function updateUserById(req, res) {
+async function updateUserById(req, res, next) {
     const { id } = req.params;
     try {
         const updatedUser = await app_1.prisma.user.update({
             where: { id },
             data: req.body,
         });
-        res.status(200).json(updatedUser);
+        return res.status(200).json(updatedUser);
     }
     catch (err) {
-        (0, _500errorsUtil_1.handle500Error)(res, err);
+        return next(err);
     }
 }
 exports.updateUserById = updateUserById;
 /**
- * Delete a specific user by their id.
+ * Asynchronous Express middleware to delete a specific user from the database by their ID.
+ * If successful, responds with a JSON object of the deleted user.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the params containing user id.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and deleted user data.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the user deletion process.
  */
-async function deleteUser(req, res) {
+async function deleteUserById(req, res, next) {
     const { id } = req.params;
     try {
         const deletedUser = await app_1.prisma.user.delete({
             where: { id },
         });
-        res.status(200).json(deletedUser);
+        return res.status(200).json(deletedUser);
     }
     catch (err) {
-        (0, _500errorsUtil_1.handle500Error)(res, err);
+        return next(err);
     }
 }
-exports.deleteUser = deleteUser;
+exports.deleteUserById = deleteUserById;
 //# sourceMappingURL=userController.js.map

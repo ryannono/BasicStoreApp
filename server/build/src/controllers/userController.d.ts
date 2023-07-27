@@ -1,52 +1,57 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 /**
- * Fetch all users from the database.
+ * Asynchronous Express middleware to fetch all users from the database.
+ * If successful, responds with a JSON array of all user objects.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and all users.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the process.
  */
-export declare function getUsers(req: Request, res: Response): Promise<void>;
+export declare function getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
 /**
- * Create a new user with the provided request body data.
+ * Asynchronous Express middleware to fetch a specific user from the database by their ID.
+ * If successful, responds with a JSON object of the user.
+ * If an error occurs or the user is not found, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the body containing user information.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and created user.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the process.
  */
-export declare function createUser(req: Request, res: Response): Promise<void>;
+export declare function getUserById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
 /**
- * Fetch a specific user by their id.
+ * Asynchronous Express middleware to update a specific user in the database by their ID.
+ * If successful, responds with a JSON object of the updated user.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the params containing user id.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters and the updated data in the body.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and user data.
- * @throws {404} If the user is not found.
- * @throws {500} If any other error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the user updating process.
  */
-export declare function getUserById(req: Request, res: Response): Promise<void>;
+export declare function updateUserById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
 /**
- * Update a specific user's data with the provided request body.
+ * Asynchronous Express middleware to delete a specific user from the database by their ID.
+ * If successful, responds with a JSON object of the deleted user.
+ * If an error occurs, it is passed on to the next middleware for error handling.
  *
- * @param {Request} req - Express request object with the params containing user id and body with new data.
- * @param {Response} res - Express response object.
+ * @param {Request} req - The Express request object, expecting the user's ID in the parameters.
+ * @param {Response} res - The Express response object.
+ * @param {NextFunction} next - The next middleware function in the Express pipeline.
  *
- * @returns {Response} Response object with the status code and updated user data.
- * @throws {500} If any error occurs during the operation.
+ * @returns {Promise<void>} Nothing.
+ *
+ * @throws {Error} If any error occurs during the user deletion process.
  */
-export declare function updateUserById(req: Request, res: Response): Promise<void>;
-/**
- * Delete a specific user by their id.
- *
- * @param {Request} req - Express request object with the params containing user id.
- * @param {Response} res - Express response object.
- *
- * @returns {Response} Response object with the status code and deleted user data.
- * @throws {500} If any error occurs during the operation.
- */
-export declare function deleteUser(req: Request, res: Response): Promise<void>;
+export declare function deleteUserById(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;

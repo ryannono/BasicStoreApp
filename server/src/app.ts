@@ -7,7 +7,7 @@ import express from 'express';
 
 // Import routers
 import userRoutes from './routes/userRoutes';
-// import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/authRoutes';
 // import productRoutes from './routes/productRoutes';
 // import cartRoutes from './routes/cartRoutes';
 // import orderRoutes from './routes/orderRoutes';
@@ -34,7 +34,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 // ---------------------- Routes -------------------- //
 app.use('/api/users', userRoutes);
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/products', productRoutes);
 // app.use('/api/cart', cartRoutes);
 // app.use('/api/orders', orderRoutes);

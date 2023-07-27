@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// eslint-disable-next-line node/no-extraneous-import
-import {User} from '@prisma/client';
-import jwt, {JwtPayload} from 'jsonwebtoken';
-import {TokenUserPayload} from './types';
-
+import { User } from '@prisma/client';
+import { TokenUserPayload } from './types';
 /**
  * Generate an access token for a given user. The token will contain the user's ID,
  * username, email, and names.
@@ -14,16 +10,7 @@ import {TokenUserPayload} from './types';
  *
  * @throws {Error} If any error occurs during the token generation.
  */
-export function generateAccessToken({id, email, firstName, lastName}: User) {
-  return jwt.sign(
-    {id, email, firstName, lastName},
-    process.env.ACCESS_TOKEN_SECRET as string,
-    {
-      expiresIn: '20m',
-    }
-  );
-}
-
+export declare function generateAccessToken({ id, email, firstName, lastName }: User): string;
 /**
  * Generate a refresh token for a given user. The token will contain the user's ID,
  * username, email, and names.
@@ -34,16 +21,7 @@ export function generateAccessToken({id, email, firstName, lastName}: User) {
  *
  * @throws {Error} If any error occurs during the token generation.
  */
-export function generateRefreshToken({id, email, firstName, lastName}: User) {
-  return jwt.sign(
-    {id, email, firstName, lastName},
-    process.env.REFRESH_TOKEN_SECRET as string,
-    {
-      expiresIn: '14d',
-    }
-  );
-}
-
+export declare function generateRefreshToken({ id, email, firstName, lastName }: User): string;
 /**
  * Asynchronous function to verify a given JSON Web Token (JWT).
  *
@@ -59,21 +37,4 @@ export function generateRefreshToken({id, email, firstName, lastName}: User) {
  *   2. Resolves with null, indicating that the token is invalid or
  *      has been tampered with.
  */
-export function verifyToken(token: string): Promise<TokenUserPayload | null> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(
-      token,
-      process.env.REFRESH_TOKEN_SECRET as string,
-      (err, tokenUserPayloadAndJwt) => {
-        if (err) {
-          resolve(null);
-        } else {
-          const {iat, exp, ...tokenUserPayload} =
-            tokenUserPayloadAndJwt as TokenUserPayload &
-              Pick<JwtPayload, 'iat' | 'exp'>;
-          resolve(tokenUserPayload);
-        }
-      }
-    );
-  });
-}
+export declare function verifyToken(token: string): Promise<TokenUserPayload | null>;

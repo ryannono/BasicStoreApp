@@ -30,9 +30,9 @@ export async function registerUser(
   res: Response,
   next: NextFunction
 ) {
-  const {password, ...otherData} = req.body as MutableUserPayload;
-
   try {
+    const {password, ...otherData} = req.body as MutableUserPayload;
+
     // check existing user
     const existingUser = await prisma.user.findUnique({
       where: {email: otherData.email},
@@ -82,9 +82,9 @@ export async function loginUser(
   res: Response,
   next: NextFunction
 ) {
-  const {email, password} = req.body as LoginUserPayload;
-
   try {
+    const {email, password} = req.body as LoginUserPayload;
+
     // identify the user
     const user = await prisma.user.findUnique({where: {email}});
     if (!user) return res.status(401).json({error: 'Invalid email'});
@@ -160,7 +160,7 @@ export async function refreshUser(
     const userData = await verifyToken(refreshToken);
 
     // If user data does not match with the one in the DB, return an error response
-    if (userData.id !== tokenInDb.tokenUser.id) {
+    if (!userData || userData.id !== tokenInDb.tokenUser.id) {
       return res.status(403).json({
         error: 'Refresh token is invalid',
       });
@@ -203,10 +203,10 @@ export async function logoutUser(
   res: Response,
   next: NextFunction
 ) {
-  // Get refresh token from the request cookies
-  const refreshToken = req.cookies.refreshToken;
-
   try {
+    // Get refresh token from the request cookies
+    const refreshToken = req.cookies.refreshToken;
+
     // Remove token from database
     await prisma.refreshToken.delete({
       where: {token: refreshToken},
@@ -243,9 +243,9 @@ export async function resetPassword(
   res: Response,
   next: NextFunction
 ) {
-  const {email, newPassword} = req.body;
-
   try {
+    const {email, newPassword} = req.body;
+
     // identify the user
     const user = await prisma.user.findUnique({where: {email}});
     if (!user) {
