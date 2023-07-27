@@ -14,7 +14,6 @@ const express_1 = __importDefault(require("express"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
-// import cartRoutes from './routes/cartRoutes';
 // import orderRoutes from './routes/orderRoutes';
 // import paymentRoutes from './routes/paymentRoutes';
 // import addressRoutes from './routes/addressRoutes';
@@ -32,7 +31,6 @@ exports.app.use((0, cors_1.default)({ credentials: true, origin: 'http://localho
 exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/auth', authRoutes_1.default);
 exports.app.use('/api/products', productRoutes_1.default);
-// app.use('/api/cart', cartRoutes);
 // app.use('/api/orders', orderRoutes);
 // app.use('/api/payments', paymentRoutes);
 // app.use('/api/address', addressRoutes);
