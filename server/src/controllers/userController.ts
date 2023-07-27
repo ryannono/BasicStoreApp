@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload} from '../utils/types';
-import {hashPassword} from '../utils/encryptionUtil';
 
 /**
  * Asynchronous Express middleware to fetch all users from the database.
@@ -24,41 +23,6 @@ export async function getAllUsers(
   try {
     const allUsers = await prisma.user.findMany();
     return res.status(200).json(allUsers);
-  } catch (err) {
-    return next(err);
-  }
-}
-
-/**
- * Asynchronous Express middleware to create a new user in the database.
- * Responds with a JSON object of the newly created user.
- * If an error occurs, it is passed on to the next middleware for error handling.
- *
- * @param {Request} req - The Express request object, expecting the new user's details in the body.
- * @param {Response} res - The Express response object.
- * @param {NextFunction} next - The next middleware function in the Express pipeline.
- *
- * @returns {Promise<void>} Nothing.
- *
- * @throws {Error} If any error occurs during the user creation process.
- */
-export async function createUser(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const {password, ...otherData} = req.body as MutableUserPayload;
-  try {
-    const passwordHash = await hashPassword(password);
-
-    const createdUser = await prisma.user.create({
-      data: {
-        password: passwordHash,
-        stripeCustomerId: 'placeholder',
-        ...otherData,
-      },
-    });
-    return res.status(200).json(createdUser);
   } catch (err) {
     return next(err);
   }

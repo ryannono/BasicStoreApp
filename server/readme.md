@@ -47,12 +47,20 @@ For more detailed information about each directory, refer to the `README.md` fil
 
 ## API Endpoints
 
+### Auth Endpoints
+
+- `POST /register`: Register a new user.
+- `POST /login`: Login a user.
+- `POST /refresh`: Refresh a user's session.
+- `POST /logout`: Logout a user.
+- `POST /reset-password`: Reset a user's password.
+
 ### User Endpoints
 
-- `POST /users`: Create a new user.
-- `GET /users/:id`: Get a user by ID.
-- `PUT /users/:id`: Update a user by ID.
-- `DELETE /users/:id`: Delete a user by ID.
+- `GET /`: Get all users.
+- `GET /:id`: Get a user by ID.
+- `PUT /:id`: Update a user by ID.
+- `DELETE /:id`: Delete a user by ID.
 
 ### Product Endpoints
 
@@ -80,7 +88,7 @@ For more detailed information about each directory, refer to the `README.md` fil
 ### Address Endpoints
 
 - `POST /addresses`: Create a new address.
-- `GET /addresses/:id`: Get an address by ID.
+- `GET /addresses/:id`: Get an address by
 - `PUT /addresses/:id`: Update an address by ID.
 - `DELETE /addresses/:id`: Delete an address by ID.
 

@@ -11,4 +11,4 @@ export type TokenUserPayload = Pick<
   'id' | 'email' | 'firstName' | 'lastName'
 >;
 
-export type AuthUserPayload = Pick<MutableUserPayload, 'email' | 'password'>;
+export type LoginUserPayload = Pick<MutableUserPayload, 'email' | 'password'>;
