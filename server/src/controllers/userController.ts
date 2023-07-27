@@ -1,6 +1,8 @@
 import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
-import {MutableUserPayload} from '../types';
+import {MutableUserPayload, MutableCartItemPayload} from '../types';
+
+// ------------------- User Controller ---------------------- //
 
 /**
  * Asynchronous Express middleware to fetch all users from the database.
@@ -118,6 +120,220 @@ export async function deleteUserById(
     });
 
     return res.status(200).json(deletedUser);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+// ------------------- User Cart Controller ---------------------- //
+
+/**
+ * Retrieves a user's shopping cart.
+ *
+ * This function handles the GET request to fetch a user's cart by their ID.
+ * It fetches the cart associated with the given user ID from the database.
+ *
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request parameters
+ *                        should contain the user ID.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the fetched cart if the operation is successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
+ */
+export async function getCart(req: Request, res: Response, next: NextFunction) {
+  try {
+    const {userId} = req.params;
+    const cart = await prisma.cart.findUnique({
+      where: {userId},
+    });
+    return res.status(200).json(cart);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/**
+ * Adds an item to a user's shopping cart.
+ *
+ * This function handles the POST request to add an item to a user's cart.
+ * It updates the cart associated with the given user ID in the database.
+ *
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request parameters
+ *                        should contain the user ID and the request body
+ *                        should contain the product ID and quantity.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the updated cart if the operation is successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
+ */
+export async function addItemToCart(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const {userId} = req.params;
+    const {productId, productQuantity} = req.body as MutableCartItemPayload;
+
+    const updatedCart = await prisma.cart.update({
+      where: {userId},
+      data: {
+        items: {
+          create: {
+            productId,
+            productQuantity,
+          },
+        },
+      },
+    });
+    return res.status(200).json(updatedCart);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/**
+ * Updates the quantity of an item in a user's shopping cart.
+ *
+ * This function handles the PUT request to update the quantity of an item
+ * in a user's cart. It fetches the cart associated with the given user ID,
+ * finds the item with the provided product ID, and updates its quantity in
+ * the database.
+ *
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request parameters
+ *                        should contain the user ID and the request body
+ *                        should contain the product ID and new quantity.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the updated cart if the operation is successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
+ */
+export async function updateCartItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const {userId} = req.params;
+    const {productId, productQuantity} = req.body as MutableCartItemPayload;
+
+    const cart = await prisma.cart.findUnique({
+      where: {userId},
+    });
+
+    if (!cart) return res.status(404).json({error: 'No cart found'});
+
+    const updatedCart = await prisma.cart.update({
+      where: {userId},
+      data: {
+        items: {
+          update: {
+            where: {
+              cartId_productId: {
+                cartId: cart.id,
+                productId,
+              },
+            },
+            data: {
+              productQuantity,
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json(updatedCart);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/**
+ * Removes an item from a user's shopping cart.
+ *
+ * This function handles the DELETE request to remove an item from a user's
+ * cart. It updates the cart associated with the given user ID in the database.
+ *
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request parameters
+ *                        should contain the user ID and the product ID.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the updated cart if the operation is successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
+ */
+export async function removeItemFromCart(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const {userId, productId} = req.params;
+
+    const cart = await prisma.cart.findUnique({
+      where: {userId},
+    });
+
+    if (!cart) return res.status(404).json({error: 'No cart found'});
+
+    const updatedCart = await prisma.cart.update({
+      where: {id: cart?.id},
+      data: {
+        items: {
+          delete: {
+            cartId_productId: {
+              cartId: cart.id,
+              productId,
+            },
+          },
+        },
+      },
+    });
+    return res.status(200).json(updatedCart);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+/**
+ * Clears a user's shopping cart.
+ *
+ * This function handles the DELETE request to clear a user's cart. It deletes
+ * the cart associated with the given user ID from the database.
+ *
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request parameters
+ *                        should contain the user ID.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the response of the delete operation if successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
+ */
+export async function clearCart(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = req.params.userId;
+
+    const clearedCart = await prisma.cart.deleteMany({
+      where: {userId},
+    });
+
+    return res.status(200).json(clearedCart);
   } catch (err) {
     return next(err);
   }

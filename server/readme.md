@@ -57,10 +57,17 @@ For more detailed information about each directory, refer to the `README.md` fil
 
 ### User Endpoints
 
-- `GET /`: Get all users.
-- `GET /:id`: Get a user by ID.
-- `PUT /:id`: Update a user by ID.
-- `DELETE /:id`: Delete a user by ID.
+- `GET /users`: Get all users.
+- `GET /users/:id`: Get a user by ID.
+- `PUT /users/:id`: Update a user by ID.
+- `DELETE /users/:id`: Delete a user by ID.
+
+### User Cart Endpoints
+
+- `GET /users/:userId/cart`: Get the cart of a specific user.
+- `POST /users/:userId/cart`: Create a new cart for a user or add an item to the existing cart.
+- `PUT /users/:userId/cart`: Update a user's cart.
+- `DELETE /users/:userId/cart`: Delete a user's cart or remove a specific item.
 
 ### Product Endpoints
 
@@ -69,13 +76,6 @@ For more detailed information about each directory, refer to the `README.md` fil
 - `GET /products/:id`: Get a product by ID.
 - `PUT /products/:id`: Update a product by ID.
 - `DELETE /products/:id`: Delete a product by ID.
-
-### Cart Endpoints
-
-- `POST /carts`: Create a new cart for a user.
-- `GET /carts/:userId`: Get a user's cart by their user ID.
-- `PUT /carts/:userId`: Update a user's cart by their user ID.
-- `DELETE /carts/:userId`: Delete a user's cart by their user ID.
 
 ### Order Endpoints
 
@@ -88,7 +88,7 @@ For more detailed information about each directory, refer to the `README.md` fil
 ### Address Endpoints
 
 - `POST /addresses`: Create a new address.
-- `GET /addresses/:id`: Get an address by
+- `GET /addresses/:id`: Get an address by ID.
 - `PUT /addresses/:id`: Update an address by ID.
 - `DELETE /addresses/:id`: Delete an address by ID.
 

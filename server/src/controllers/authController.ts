@@ -12,20 +12,23 @@ import {
 } from '../utils';
 
 /**
- * Asynchronous function to register a new user.
+ * Registers a new user.
  *
- * This function validates if a user with the provided email exists.
- * If it doesn't, the function will hash the password,
- * create a new Stripe customer ID (placeholder in this example),
- * and store the new user in the database.
+ * This function handles the POST request for user registration. It checks
+ * if a user with the provided email already exists. If not, it hashes the
+ * plain text password, creates a new Stripe customer for the user, and
+ * persists the new user in the database.
  *
- * @param req - The Express.js request object. The request body
- * should be a user payload.
- * @param res - The Express.js response object.
- * @param next - The next middleware function.
- *
- * @returns The created user in JSON format.
- * @throws An error if there was an issue creating the user.
+ * @async
+ * @param {Request} req - The incoming HTTP request. The request body should
+ *                        contain the user data.
+ * @param {Response} res - The outgoing HTTP response. The response body will
+ *                         contain the newly created user if registration is
+ *                         successful.
+ * @param {NextFunction} next - Express.js next function.
+ * @throws Will throw an error if the operation fails.
+ * @returns {Promise<Response>} A Promise that resolves to the Express.js
+ *                              response object.
  */
 export async function registerUser(
   req: Request,
@@ -56,6 +59,7 @@ export async function registerUser(
         password: passwordHash,
         stripeCustomerId,
         ...otherData,
+        cart: {create: true},
       },
     });
     return res.status(200).json(createdUser);

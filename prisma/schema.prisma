@@ -39,6 +39,8 @@ model CartItem {
   product         Product @relation(fields: [productId], references: [id])
   productId       String
   productQuantity Int     @default(1)
+
+  @@unique([cartId, productId])
 }
 
 model RefreshToken {

@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {UserPayload} from '@prisma/client';
+import {CartItem, CartPayload, UserPayload} from '@prisma/client';
 
 /**
  * The `MutableUserPayload` type is derived from the `UserPayload` type.
@@ -32,3 +32,5 @@ export type TokenUserPayload = Pick<
  * This type is used when handling a login request from the user.
  */
 export type LoginUserPayload = Pick<MutableUserPayload, 'email' | 'password'>;
+
+export type MutableCartItemPayload = Omit<CartItem, 'id' | 'cartId'>;

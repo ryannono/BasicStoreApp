@@ -1,4 +1,4 @@
-import { UserPayload } from '@prisma/client';
+import { CartItem, UserPayload } from '@prisma/client';
 /**
  * The `MutableUserPayload` type is derived from the `UserPayload` type.
  * It omits certain properties that should not be modified directly by the user.
@@ -22,3 +22,4 @@ export declare type TokenUserPayload = Pick<UserPayload['scalars'], 'id' | 'emai
  * This type is used when handling a login request from the user.
  */
 export declare type LoginUserPayload = Pick<MutableUserPayload, 'email' | 'password'>;
+export declare type MutableCartItemPayload = Omit<CartItem, 'id' | 'cartId'>;
