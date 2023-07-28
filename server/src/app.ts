@@ -1,6 +1,5 @@
 // eslint-disable-next-line node/no-extraneous-import
 import {PrismaClient} from '@prisma/client';
-import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -16,7 +15,7 @@ import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
 import {errorHandler} from './middlewares/errorMiddleware';
-import {addCategories, addProducts, removeProducts} from './utils/productUtil';
+// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 
 // ---------------- initialization ----------------- //
 

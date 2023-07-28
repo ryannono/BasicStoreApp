@@ -19,6 +19,7 @@ const paymentRoutes_1 = __importDefault(require("./routes/paymentRoutes"));
 const addressRoutes_1 = __importDefault(require("./routes/addressRoutes"));
 //import error middleware
 const errorMiddleware_1 = require("./middlewares/errorMiddleware");
+// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 // ---------------- initialization ----------------- //
 exports.prisma = new client_1.PrismaClient();
 exports.app = (0, express_1.default)();
