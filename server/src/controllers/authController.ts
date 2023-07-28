@@ -207,11 +207,22 @@ export async function logoutUser(
   try {
     // Get refresh token from the request cookies
     const refreshToken = req.cookies.refreshToken;
+    const userData = await verifyToken(refreshToken);
+
+    if (!userData) {
+      return res.status(403).json({error: 'Refresh token is invalid'});
+    }
 
     // Remove token from database
-    console.log(`Removing token: ${refreshToken}`);
-    await prisma.refreshToken.delete({
-      where: {token: refreshToken},
+    await prisma.user.update({
+      where: {id: userData.id},
+      data: {
+        refreshTokens: {
+          delete: {
+            token: refreshToken,
+          },
+        },
+      },
     });
 
     // Clear the access and refresh token cookies
