@@ -35,7 +35,7 @@ model Cart {
 
 model CartItem {
   id              String  @id @default(uuid())
-  cart            Cart    @relation(fields: [cartId], references: [id])
+  cart            Cart    @relation(fields: [cartId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   cartId          String
   product         Product @relation(fields: [productId], references: [id])
   productId       String
@@ -46,7 +46,7 @@ model CartItem {
 
 model RefreshToken {
   id          String   @id @default(uuid())
-  tokenUser   User     @relation(fields: [tokenUserId], references: [id])
+  tokenUser   User     @relation(fields: [tokenUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   tokenUserId String
   token       String   @unique
   createdAt   DateTime @default(now())
@@ -96,7 +96,7 @@ model Order {
 
 model OrderItem {
   id              String  @id @default(uuid())
-  order           Order   @relation(fields: [orderId], references: [id])
+  order           Order   @relation(fields: [orderId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   orderId         String
   product         Product @relation(fields: [productId], references: [id])
   productId       String
