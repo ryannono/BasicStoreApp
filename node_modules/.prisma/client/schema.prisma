@@ -29,7 +29,7 @@ model User {
 model Cart {
   id     String     @id @default(uuid())
   items  CartItem[]
-  user   User       @relation(fields: [userId], references: [id])
+  user   User       @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId String     @unique
 }
 

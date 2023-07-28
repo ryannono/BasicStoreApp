@@ -85,12 +85,12 @@ export async function updateUserById(
   const {id} = req.params;
 
   try {
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
       where: {id},
       data: req.body as MutableUserPayload,
     });
 
-    return res.status(200).json(getEssentialUserProps(updatedUser));
+    return res.status(200).json({message: 'User updated successfully'});
   } catch (err) {
     return next(err);
   }
@@ -117,11 +117,11 @@ export async function deleteUserById(
   const {id} = req.params;
 
   try {
-    const deletedUser = await prisma.user.delete({
+    await prisma.user.delete({
       where: {id},
     });
 
-    return res.status(200).json(getEssentialUserProps(deletedUser));
+    return res.status(200).json({message: 'User deleted successfully'});
   } catch (err) {
     return next(err);
   }

@@ -10,22 +10,27 @@ import {
   removeItemFromCart,
   updateCartItem,
 } from '../controllers/userController';
+import {authenticateAccessToken} from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
 // ------------------- user model routes --------------- //
 
-router.get('/', getAllUsers); // GET all users
-router.get('/:id', getUserById); // GET a specific user
-router.put('/:id', updateUserById); // UPDATE a specific user
-router.delete('/:id', deleteUserById); // DELETE a specific user
+router.get('/', authenticateAccessToken, getAllUsers); // GET all users
+router.get('/:id', authenticateAccessToken, getUserById); // GET a specific user
+router.put('/:id', authenticateAccessToken, updateUserById); // UPDATE a specific user
+router.delete('/:id', authenticateAccessToken, deleteUserById); // DELETE a specific user
 
 // ----------------- user cart model routes --------------- //
 
-router.get('/:userid/cart', getCart); // GET a user's cart
-router.post('/:userid/cart', addItemToCart); // POST add item to a user's cart
-router.put('/:userid/cart', updateCartItem); // UPDATE a user's cart
-router.delete('/:userid/cart/:productId', removeItemFromCart); // DELETE a specific product from a user's cart.
-router.delete('/:userid/cart/', clearCart); // DELETE (clear) a user's cart
+router.get('/:userid/cart', authenticateAccessToken, getCart); // GET a user's cart
+router.post('/:userid/cart', authenticateAccessToken, addItemToCart); // POST add item to a user's cart
+router.put('/:userid/cart', authenticateAccessToken, updateCartItem); // UPDATE a user's cart
+router.delete(
+  '/:userid/cart/:productId',
+  authenticateAccessToken,
+  removeItemFromCart
+); // DELETE a specific product from a user's cart.
+router.delete('/:userid/cart/', authenticateAccessToken, clearCart); // DELETE (clear) a user's cart
 
 export default router;
