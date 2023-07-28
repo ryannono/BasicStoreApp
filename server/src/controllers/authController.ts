@@ -207,6 +207,7 @@ export async function logoutUser(
   try {
     // Get refresh token from the request cookies
     const refreshToken = req.cookies.refreshToken;
+    console.log(`Refresh: ${refreshToken}`);
     const userData = await verifyToken(refreshToken);
 
     if (!userData) {

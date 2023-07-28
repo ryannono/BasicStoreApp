@@ -69,7 +69,7 @@ export function verifyToken(token: string): Promise<TokenUserPayload | null> {
   return new Promise((resolve, reject) => {
     jwt.verify(
       token,
-      process.env.REFRESH_TOKEN_SECRET as string,
+      process.env.REFRESH_TOKEN_SECRET!,
       (err, tokenUserPayloadAndJwt) => {
         if (err) {
           resolve(null);
