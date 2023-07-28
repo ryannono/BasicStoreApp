@@ -38,6 +38,7 @@ async function registerUser(req, res, next) {
         }
         // Hash the plain text password
         const passwordHash = await (0, utils_1.hashPassword)(password);
+        console.log(role, otherData);
         // Create a new Stripe customer entiry for the user
         const stripeCustomerId = await (0, stripeService_1.getStripeCustomerId)(otherData);
         // create user
@@ -45,11 +46,12 @@ async function registerUser(req, res, next) {
             data: {
                 password: passwordHash,
                 stripeCustomerId,
-                role: role === 'ADMIN' ? 'ADMIN' : undefined,
+                role,
                 ...otherData,
                 cart: { create: {} },
             },
         });
+        console.log(createdUser);
         // respond with accesstoken and refreshtoken in http only cookie
         // also send user info
         return (0, utils_1.handleAuthentication)(createdUser, res, true);
