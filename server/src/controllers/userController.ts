@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
+import {getEssentialUserProps} from '../utils/';
 
 // ------------------- User Controller ---------------------- //
 
@@ -24,7 +25,8 @@ export async function getAllUsers(
 ) {
   try {
     const allUsers = await prisma.user.findMany();
-    return res.status(200).json(allUsers);
+    const essentialAllUsers = allUsers.map(user => getEssentialUserProps(user));
+    return res.status(200).json(essentialAllUsers);
   } catch (err) {
     return next(err);
   }
@@ -56,7 +58,7 @@ export async function getUserById(
     });
 
     if (!user) return res.status(404).json({error: 'User not found'});
-    return res.status(200).json(user);
+    return res.status(200).json(getEssentialUserProps(user));
   } catch (err) {
     return next(err);
   }
@@ -88,7 +90,7 @@ export async function updateUserById(
       data: req.body as MutableUserPayload,
     });
 
-    return res.status(200).json(updatedUser);
+    return res.status(200).json(getEssentialUserProps(updatedUser));
   } catch (err) {
     return next(err);
   }
@@ -119,7 +121,7 @@ export async function deleteUserById(
       where: {id},
     });
 
-    return res.status(200).json(deletedUser);
+    return res.status(200).json(getEssentialUserProps(deletedUser));
   } catch (err) {
     return next(err);
   }
@@ -192,6 +194,7 @@ export async function addItemToCart(
           },
         },
       },
+      include: {items: true},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {
@@ -250,6 +253,7 @@ export async function updateCartItem(
           },
         },
       },
+      include: {items: true},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {
@@ -299,6 +303,7 @@ export async function removeItemFromCart(
           },
         },
       },
+      include: {items: true},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {
@@ -330,11 +335,15 @@ export async function clearCart(
   try {
     const userId = req.params.userId;
 
-    const clearedCart = await prisma.cart.deleteMany({
-      where: {userId},
+    await prisma.cartItem.deleteMany({
+      where: {
+        cart: {
+          userId,
+        },
+      },
     });
 
-    return res.status(200).json(clearedCart);
+    return res.status(200).json({message: 'Cart cleared successfully'});
   } catch (err) {
     return next(err);
   }

@@ -64,6 +64,7 @@ export async function registerUser(
     });
 
     // respond with accesstoken and refreshtoken in http only cookie
+    // also send user info
     return handleAuthentication(createdUser, res, true);
   } catch (err) {
     return next(err);
@@ -107,6 +108,7 @@ export async function loginUser(
     }
 
     // respond with accesstoken and refreshtoken in http only cookie
+    // also send user info
     return handleAuthentication(user, res, true);
   } catch (err) {
     return next(err);
@@ -176,6 +178,7 @@ export async function refreshUser(
     }
 
     // respond with accesstoken in http only cookie
+    // also send user info
     return handleAuthentication(tokenInDb.tokenUser, res);
   } catch (err) {
     return next(err);
@@ -242,7 +245,8 @@ export async function resetPassword(
   next: NextFunction
 ) {
   try {
-    const {email, newPassword} = req.body;
+    // get email and new password
+    const {email, password} = req.body;
 
     // identify the user
     const user = await prisma.user.findUnique({where: {email}});
@@ -251,7 +255,7 @@ export async function resetPassword(
     }
 
     // hash the new password
-    const passwordHash = await hashPassword(newPassword);
+    const passwordHash = await hashPassword(password);
 
     // update the user's password in the database
     await prisma.user.update({
