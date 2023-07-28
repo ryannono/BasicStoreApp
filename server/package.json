@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "keywords": [],
   "scripts": {
+    "build": "tsc --build",
     "start": "node build/src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "devStart": "nodemon build/src/server.js",
