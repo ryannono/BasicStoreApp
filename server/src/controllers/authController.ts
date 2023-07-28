@@ -59,7 +59,7 @@ export async function registerUser(
         password: passwordHash,
         stripeCustomerId,
         ...otherData,
-        cart: {create: true},
+        cart: {create: {}},
       },
     });
 
