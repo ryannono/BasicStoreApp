@@ -35,7 +35,7 @@ export async function registerUser(
   next: NextFunction
 ) {
   try {
-    const {password, ...otherData} = req.body as MutableUserPayload;
+    const {password, role, ...otherData} = req.body as MutableUserPayload;
 
     // check existing user
     const existingUser = await prisma.user.findUnique({
@@ -58,6 +58,7 @@ export async function registerUser(
       data: {
         password: passwordHash,
         stripeCustomerId,
+        role: role === 'ADMIN' ? 'ADMIN' : undefined,
         ...otherData,
         cart: {create: {}},
       },

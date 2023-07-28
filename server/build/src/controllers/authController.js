@@ -26,7 +26,7 @@ const utils_1 = require("../utils");
  */
 async function registerUser(req, res, next) {
     try {
-        const { password, ...otherData } = req.body;
+        const { password, role, ...otherData } = req.body;
         // check existing user
         const existingUser = await app_1.prisma.user.findUnique({
             where: { email: otherData.email },
@@ -45,6 +45,7 @@ async function registerUser(req, res, next) {
             data: {
                 password: passwordHash,
                 stripeCustomerId,
+                role: role === 'ADMIN' ? 'ADMIN' : undefined,
                 ...otherData,
                 cart: { create: {} },
             },
