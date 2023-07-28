@@ -20,7 +20,7 @@ async function getStripeCustomerId({ email, firstName, lastName, phoneNumber, })
             const newStripeCustomer = await stripe.customers.create({
                 email,
                 name: `${firstName} ${lastName}`,
-                phone: phoneNumber,
+                phone: phoneNumber !== null && phoneNumber !== void 0 ? phoneNumber : undefined,
             });
             return newStripeCustomer.id;
         }

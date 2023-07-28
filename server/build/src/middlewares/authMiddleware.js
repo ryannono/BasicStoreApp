@@ -26,6 +26,7 @@ async function authenticateAccessToken(req, res, next) {
     try {
         // get accessToken from request
         const accessToken = req.cookies.accessToken;
+        console.log(accessToken);
         const noAccess = () => {
             return res.status(401).json({ error: 'User does not have access' });
         };

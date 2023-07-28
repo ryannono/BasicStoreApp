@@ -79,7 +79,7 @@ export declare function refreshUser(req: Request, res: Response, next: NextFunct
  * @returns A success message in JSON format.
  * @throws An error if there was an issue logging out the user.
  */
-export declare function logoutUser(req: Request, res: Response, next: NextFunction): Promise<void>;
+export declare function logoutUser(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
 /**
  * Asynchronous function to reset a user's password.
  *

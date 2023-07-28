@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearCart = exports.removeItemFromCart = exports.updateCartItem = exports.addItemToCart = exports.getCart = exports.deleteUserById = exports.updateUserById = exports.getUserById = exports.getAllUsers = void 0;
 const app_1 = require("../app");
+const utils_1 = require("../utils/");
 // ------------------- User Controller ---------------------- //
 /**
  * Asynchronous Express middleware to fetch all users from the database.
@@ -19,7 +20,8 @@ const app_1 = require("../app");
 async function getAllUsers(req, res, next) {
     try {
         const allUsers = await app_1.prisma.user.findMany();
-        return res.status(200).json(allUsers);
+        const essentialAllUsers = allUsers.map(user => (0, utils_1.getEssentialUserProps)(user));
+        return res.status(200).json(essentialAllUsers);
     }
     catch (err) {
         return next(err);
@@ -47,7 +49,7 @@ async function getUserById(req, res, next) {
         });
         if (!user)
             return res.status(404).json({ error: 'User not found' });
-        return res.status(200).json(user);
+        return res.status(200).json((0, utils_1.getEssentialUserProps)(user));
     }
     catch (err) {
         return next(err);
@@ -70,11 +72,11 @@ exports.getUserById = getUserById;
 async function updateUserById(req, res, next) {
     const { id } = req.params;
     try {
-        const updatedUser = await app_1.prisma.user.update({
+        await app_1.prisma.user.update({
             where: { id },
             data: req.body,
         });
-        return res.status(200).json(updatedUser);
+        return res.status(200).json({ message: 'User updated successfully' });
     }
     catch (err) {
         return next(err);
@@ -97,10 +99,10 @@ exports.updateUserById = updateUserById;
 async function deleteUserById(req, res, next) {
     const { id } = req.params;
     try {
-        const deletedUser = await app_1.prisma.user.delete({
+        await app_1.prisma.user.delete({
             where: { id },
         });
-        return res.status(200).json(deletedUser);
+        return res.status(200).json({ message: 'User deleted successfully' });
     }
     catch (err) {
         return next(err);
@@ -169,6 +171,7 @@ async function addItemToCart(req, res, next) {
                     },
                 },
             },
+            include: { items: true },
         });
         return res.status(200).json(updatedCart);
     }
@@ -222,6 +225,7 @@ async function updateCartItem(req, res, next) {
                     },
                 },
             },
+            include: { items: true },
         });
         return res.status(200).json(updatedCart);
     }
@@ -266,6 +270,7 @@ async function removeItemFromCart(req, res, next) {
                     },
                 },
             },
+            include: { items: true },
         });
         return res.status(200).json(updatedCart);
     }
@@ -293,10 +298,14 @@ exports.removeItemFromCart = removeItemFromCart;
 async function clearCart(req, res, next) {
     try {
         const userId = req.params.userId;
-        const clearedCart = await app_1.prisma.cart.deleteMany({
-            where: { userId },
+        await app_1.prisma.cartItem.deleteMany({
+            where: {
+                cart: {
+                    userId,
+                },
+            },
         });
-        return res.status(200).json(clearedCart);
+        return res.status(200).json({ message: 'Cart cleared successfully' });
     }
     catch (err) {
         return next(err);

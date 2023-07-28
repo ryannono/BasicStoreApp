@@ -46,10 +46,11 @@ async function registerUser(req, res, next) {
                 password: passwordHash,
                 stripeCustomerId,
                 ...otherData,
-                cart: { create: true },
+                cart: { create: {} },
             },
         });
         // respond with accesstoken and refreshtoken in http only cookie
+        // also send user info
         return (0, utils_1.handleAuthentication)(createdUser, res, true);
     }
     catch (err) {
@@ -88,6 +89,7 @@ async function loginUser(req, res, next) {
             return res.status(401).json({ error: 'Invalid password' });
         }
         // respond with accesstoken and refreshtoken in http only cookie
+        // also send user info
         return (0, utils_1.handleAuthentication)(user, res, true);
     }
     catch (err) {
@@ -148,6 +150,7 @@ async function refreshUser(req, res, next) {
             });
         }
         // respond with accesstoken in http only cookie
+        // also send user info
         return (0, utils_1.handleAuthentication)(tokenInDb.tokenUser, res);
     }
     catch (err) {
@@ -173,9 +176,21 @@ async function logoutUser(req, res, next) {
     try {
         // Get refresh token from the request cookies
         const refreshToken = req.cookies.refreshToken;
+        console.log(`cookies: ${JSON.stringify(req.cookies.refreshToken)}`);
+        const userData = await (0, utils_1.verifyToken)(refreshToken);
+        if (!userData) {
+            return res.status(403).json({ error: 'Refresh token is invalid' });
+        }
         // Remove token from database
-        await app_1.prisma.refreshToken.delete({
-            where: { token: refreshToken },
+        await app_1.prisma.user.update({
+            where: { id: userData.id },
+            data: {
+                refreshTokens: {
+                    delete: {
+                        token: refreshToken,
+                    },
+                },
+            },
         });
         // Clear the access and refresh token cookies
         res.clearCookie('accessToken');
@@ -205,14 +220,15 @@ exports.logoutUser = logoutUser;
  */
 async function resetPassword(req, res, next) {
     try {
-        const { email, newPassword } = req.body;
+        // get email and new password
+        const { email, password } = req.body;
         // identify the user
         const user = await app_1.prisma.user.findUnique({ where: { email } });
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
         // hash the new password
-        const passwordHash = await (0, utils_1.hashPassword)(newPassword);
+        const passwordHash = await (0, utils_1.hashPassword)(password);
         // update the user's password in the database
         await app_1.prisma.user.update({
             where: { email },

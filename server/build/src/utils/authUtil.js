@@ -3,24 +3,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleAuthentication = void 0;
 const constants_1 = require("./constants");
 const tokenUtil_1 = require("./tokenUtil");
+const app_1 = require("../app");
+const userUtil_1 = require("./userUtil");
 /**
- * Asynchronous function to handle the authentication of a user.
+ * Asynchronous function to handle user authentication.
  *
- * This function generates an access token for a given user,
- * sets the token as an HTTP-only cookie on the response,
- * and sends a response back to the client with the user data.
- * If the `withRefreshToken` parameter is true, a refresh token
- * is also generated and set as an HTTP-only cookie.
+ * This function generates and sends an access token (and optionally a refresh token)
+ * as HTTP-only cookies. The access token has a lifespan of 20 minutes, while the
+ * refresh token (if generated) lasts for 14 days.
  *
- * @param user - The User object representing the user to authenticate.
- * @param res - The Express.js response object for sending responses to the client.
- * @param withRefreshToken - Boolean value indicating whether to generate
- *                           and set a refresh token as an HTTP-only cookie.
+ * If the `withRefreshToken` parameter is true, the function will store the refresh
+ * token in the database along with the expiry date and the user's ID.
  *
- * @returns The Express.js response object with the user data in JSON format,
- *          and the access (and optionally refresh) token(s) set as HTTP-only cookies.
+ * It also sends a JSON response containing the authenticated user's ID, email,
+ * first name, and last name.
  *
- * @throws An error if there was an issue generating the tokens or setting the cookies.
+ * @param user - The user to authenticate.
+ * @param res - Express.js response object for sending responses to the client.
+ * @param withRefreshToken - Boolean flag indicating whether to generate and send a
+ * refresh token along with the access token. Optional and defaults to false.
+ *
+ * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
 async function handleAuthentication(user, res, withRefreshToken) {
     // send tokens as cookies
@@ -31,10 +34,24 @@ async function handleAuthentication(user, res, withRefreshToken) {
     });
     if (withRefreshToken) {
         const refreshToken = (0, tokenUtil_1.generateRefreshToken)(user);
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: constants_1.DAY });
+        await app_1.prisma.refreshToken.create({
+            data: {
+                token: refreshToken,
+                expiresAt: new Date(Date.now() + 14 * constants_1.DAY),
+                tokenUser: {
+                    connect: {
+                        id: user.id,
+                    },
+                },
+            },
+        });
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            maxAge: 14 * constants_1.DAY,
+        });
     }
     // send user in response body
-    return res.status(200).json(user);
+    return res.status(200).json((0, userUtil_1.getEssentialUserProps)(user));
 }
 exports.handleAuthentication = handleAuthentication;
 //# sourceMappingURL=authUtil.js.map

@@ -18,4 +18,5 @@ __exportStar(require("./constants"), exports);
 __exportStar(require("./encryptionUtil"), exports);
 __exportStar(require("./tokenUtil"), exports);
 __exportStar(require("./authUtil"), exports);
+__exportStar(require("./userUtil"), exports);
 //# sourceMappingURL=index.js.map
