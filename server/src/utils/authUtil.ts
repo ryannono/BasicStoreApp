@@ -3,25 +3,24 @@ import {User} from '@prisma/client';
 import {Response} from 'express';
 import {MINUTE, DAY} from './constants';
 import {generateAccessToken, generateRefreshToken} from './tokenUtil';
+import {prisma} from '../app';
 
 /**
- * Asynchronous function to handle the authentication of a user.
+ * Asynchronous function to handle user authentication.
  *
- * This function generates an access token for a given user,
- * sets the token as an HTTP-only cookie on the response,
- * and sends a response back to the client with the user data.
- * If the `withRefreshToken` parameter is true, a refresh token
- * is also generated and set as an HTTP-only cookie.
+ * This function generates and sends an access token (and optionally a refresh token)
+ * as HTTP-only cookies. The access token has a lifespan of 20 minutes, while the
+ * refresh token (if generated) lasts for one day.
  *
- * @param user - The User object representing the user to authenticate.
- * @param res - The Express.js response object for sending responses to the client.
- * @param withRefreshToken - Boolean value indicating whether to generate
- *                           and set a refresh token as an HTTP-only cookie.
+ * It also sends a JSON response containing the authenticated user's ID, email,
+ * and name.
  *
- * @returns The Express.js response object with the user data in JSON format,
- *          and the access (and optionally refresh) token(s) set as HTTP-only cookies.
+ * @param user - The user to authenticate.
+ * @param res - Express.js response object for sending responses to the client.
+ * @param withRefreshToken - Boolean flag indicating whether to generate and send a
+ * refresh token. Optional, and defaults to false.
  *
- * @throws An error if there was an issue generating the tokens or setting the cookies.
+ * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
 export async function handleAuthentication(
   user: User,
@@ -37,9 +36,26 @@ export async function handleAuthentication(
 
   if (withRefreshToken) {
     const refreshToken = generateRefreshToken(user);
-    res.cookie('refreshToken', refreshToken, {httpOnly: true, maxAge: DAY});
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        expiresAt: new Date(Date.now() + 14 * DAY),
+        tokenUser: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 14 * DAY,
+    });
   }
 
   // send user in response body
-  return res.status(200).json(user);
+  const {id, email, firstName, lastName} = user;
+  return res.status(200).json({id, email, firstName, lastName});
 }
