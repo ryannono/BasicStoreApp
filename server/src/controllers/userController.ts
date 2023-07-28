@@ -154,7 +154,7 @@ export async function getCart(req: Request, res: Response, next: NextFunction) {
     const userId = req.params.userId;
     const cart = await prisma.cart.findUnique({
       where: {userId},
-      include: {items: true},
+      select: {id: true, items: true},
     });
     return res.status(200).json(cart);
   } catch (err) {
