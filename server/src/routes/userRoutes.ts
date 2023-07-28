@@ -10,16 +10,19 @@ import {
   removeItemFromCart,
   updateCartItem,
 } from '../controllers/userController';
-import {authenticateAccessToken} from '../middlewares/authMiddleware';
+import {
+  authenticateAccessToken,
+  verifyAdmin,
+} from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
 // ------------------- user model routes --------------- //
 
-router.get('/', authenticateAccessToken, getAllUsers); // GET all users
+router.get('/', authenticateAccessToken, verifyAdmin, getAllUsers); // GET all users
 router.get('/:id', authenticateAccessToken, getUserById); // GET a specific user
-router.put('/:id', authenticateAccessToken, updateUserById); // UPDATE a specific user
-router.delete('/:id', authenticateAccessToken, deleteUserById); // DELETE a specific user
+router.put('/:id', authenticateAccessToken, verifyAdmin, updateUserById); // UPDATE a specific user
+router.delete('/:id', authenticateAccessToken, verifyAdmin, deleteUserById); // DELETE a specific user
 
 // ----------------- user cart model routes --------------- //
 

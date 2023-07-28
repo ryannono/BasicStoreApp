@@ -3,22 +3,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrievePaymentIntent = exports.getStripeCustomerId = void 0;
+exports.retrievePaymentIntent = exports.getStripeCustomerId = exports.stripe = void 0;
 // eslint-disable-next-line node/no-extraneous-require
 const stripe_1 = __importDefault(require("stripe"));
-const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
+exports.stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
 });
 async function getStripeCustomerId({ email, firstName, lastName, phoneNumber, }) {
-    console.log(process.env.STRIPE_SECRET_KEY);
     try {
-        const existingCustomer = (await stripe.customers.search({
+        const existingCustomer = (await exports.stripe.customers.search({
             query: `email:"${email}"`,
         })).data[0];
         if (existingCustomer)
             return existingCustomer.id;
         else {
-            const newStripeCustomer = await stripe.customers.create({
+            const newStripeCustomer = await exports.stripe.customers.create({
                 email,
                 name: `${firstName} ${lastName}`,
                 phone: phoneNumber !== null && phoneNumber !== void 0 ? phoneNumber : undefined,
@@ -33,7 +32,7 @@ async function getStripeCustomerId({ email, firstName, lastName, phoneNumber, })
 exports.getStripeCustomerId = getStripeCustomerId;
 async function retrievePaymentIntent(id) {
     try {
-        const paymentIntent = await stripe.paymentIntents.retrieve(id);
+        const paymentIntent = await exports.stripe.paymentIntents.retrieve(id);
         return paymentIntent;
     }
     catch (err) {
@@ -42,5 +41,5 @@ async function retrievePaymentIntent(id) {
     }
 }
 exports.retrievePaymentIntent = retrievePaymentIntent;
-exports.default = stripe;
+exports.default = exports.stripe;
 //# sourceMappingURL=stripeService.js.map

@@ -18,8 +18,8 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
  * and the secret key from the environment variable 'ACCESS_TOKEN_SECRET'.
  * The token will expire in 20 minutes ('20m').
  */
-function generateAccessToken({ id, email, firstName, lastName }) {
-    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName }, process.env.ACCESS_TOKEN_SECRET, {
+function generateAccessToken({ id, email, firstName, lastName, role, }) {
+    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName, role }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '20m',
     });
 }
@@ -37,8 +37,8 @@ exports.generateAccessToken = generateAccessToken;
  * and the secret key from the environment variable 'REFRESH_TOKEN_SECRET'.
  * The token will expire in 14 days ('14d').
  */
-function generateRefreshToken({ id, email, firstName, lastName }) {
-    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName }, process.env.REFRESH_TOKEN_SECRET, {
+function generateRefreshToken({ id, email, firstName, lastName, role, }) {
+    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName, role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '14d',
     });
 }

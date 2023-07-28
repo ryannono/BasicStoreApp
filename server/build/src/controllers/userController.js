@@ -71,10 +71,23 @@ exports.getUserById = getUserById;
  */
 async function updateUserById(req, res, next) {
     const { id } = req.params;
+    const { role, ...otherUpdateData } = req.body;
+    let roleUpdate = undefined;
+    if (role) {
+        roleUpdate = {
+            role: {
+                set: role,
+            },
+        };
+    }
+    const updateData = {
+        ...otherUpdateData,
+        ...roleUpdate,
+    };
     try {
         await app_1.prisma.user.update({
             where: { id },
-            data: req.body,
+            data: updateData,
         });
         return res.status(200).json({ message: 'User updated successfully' });
     }

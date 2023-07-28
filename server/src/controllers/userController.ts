@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
 import {getEssentialUserProps} from '../utils/';
+import {TokenUserPayload} from '../types/userTypes';
 
 // ------------------- User Controller ---------------------- //
 
@@ -83,11 +84,27 @@ export async function updateUserById(
   next: NextFunction
 ) {
   const {id} = req.params;
+  const {role, ...otherUpdateData} = req.body as Partial<MutableUserPayload>;
+
+  let roleUpdate = undefined;
+
+  if (role) {
+    roleUpdate = {
+      role: {
+        set: role,
+      },
+    };
+  }
+
+  const updateData = {
+    ...otherUpdateData,
+    ...roleUpdate,
+  } as const;
 
   try {
     await prisma.user.update({
       where: {id},
-      data: req.body as MutableUserPayload,
+      data: updateData,
     });
 
     return res.status(200).json({message: 'User updated successfully'});

@@ -8,10 +8,10 @@ const userController_1 = require("../controllers/userController");
 const authMiddleware_1 = require("../middlewares/authMiddleware");
 const router = express_1.default.Router();
 // ------------------- user model routes --------------- //
-router.get('/', authMiddleware_1.authenticateAccessToken, userController_1.getAllUsers); // GET all users
+router.get('/', authMiddleware_1.authenticateAccessToken, authMiddleware_1.verifyAdmin, userController_1.getAllUsers); // GET all users
 router.get('/:id', authMiddleware_1.authenticateAccessToken, userController_1.getUserById); // GET a specific user
-router.put('/:id', authMiddleware_1.authenticateAccessToken, userController_1.updateUserById); // UPDATE a specific user
-router.delete('/:id', authMiddleware_1.authenticateAccessToken, userController_1.deleteUserById); // DELETE a specific user
+router.put('/:id', authMiddleware_1.authenticateAccessToken, authMiddleware_1.verifyAdmin, userController_1.updateUserById); // UPDATE a specific user
+router.delete('/:id', authMiddleware_1.authenticateAccessToken, authMiddleware_1.verifyAdmin, userController_1.deleteUserById); // DELETE a specific user
 // ----------------- user cart model routes --------------- //
 router.get('/:userid/cart', authMiddleware_1.authenticateAccessToken, userController_1.getCart); // GET a user's cart
 router.post('/:userid/cart', authMiddleware_1.authenticateAccessToken, userController_1.addItemToCart); // POST add item to a user's cart

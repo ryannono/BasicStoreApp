@@ -17,9 +17,15 @@ import {TokenUserPayload} from '../types/userTypes';
  * and the secret key from the environment variable 'ACCESS_TOKEN_SECRET'.
  * The token will expire in 20 minutes ('20m').
  */
-export function generateAccessToken({id, email, firstName, lastName}: User) {
+export function generateAccessToken({
+  id,
+  email,
+  firstName,
+  lastName,
+  role,
+}: User) {
   return jwt.sign(
-    {id, email, firstName, lastName},
+    {id, email, firstName, lastName, role},
     process.env.ACCESS_TOKEN_SECRET as string,
     {
       expiresIn: '20m',
@@ -40,9 +46,15 @@ export function generateAccessToken({id, email, firstName, lastName}: User) {
  * and the secret key from the environment variable 'REFRESH_TOKEN_SECRET'.
  * The token will expire in 14 days ('14d').
  */
-export function generateRefreshToken({id, email, firstName, lastName}: User) {
+export function generateRefreshToken({
+  id,
+  email,
+  firstName,
+  lastName,
+  role,
+}: User) {
   return jwt.sign(
-    {id, email, firstName, lastName},
+    {id, email, firstName, lastName, role},
     process.env.REFRESH_TOKEN_SECRET as string,
     {
       expiresIn: '14d',
