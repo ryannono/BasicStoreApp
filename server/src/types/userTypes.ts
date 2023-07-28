@@ -1,6 +1,14 @@
 // eslint-disable-next-line node/no-extraneous-import
 import {CartItem, CartPayload, UserPayload} from '@prisma/client';
 
+export type UserCreationPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+};
+
 /**
  * The `MutableUserPayload` type is derived from the `UserPayload` type.
  * It omits certain properties that should not be modified directly by the user.

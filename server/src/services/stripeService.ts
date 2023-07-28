@@ -24,7 +24,7 @@ export async function getStripeCustomerId({
       const newStripeCustomer = await stripe.customers.create({
         email,
         name: `${firstName} ${lastName}`,
-        phone: phoneNumber,
+        phone: phoneNumber ?? undefined,
       });
 
       return newStripeCustomer.id;

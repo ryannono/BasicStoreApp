@@ -16,7 +16,7 @@ model User {
   lastName         String
   email            String         @unique
   password         String
-  phoneNumber      String
+  phoneNumber      String?
   cart             Cart?
   stripeCustomerId String         @unique
   orders           Order[]
