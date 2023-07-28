@@ -26,7 +26,7 @@ const app_1 = require("../app");
  */
 async function getAllAddresses(req, res, next) {
     try {
-        const { id } = req.body.user;
+        const { id } = res.locals.user;
         const addresses = await app_1.prisma.user.findUnique({
             where: { id },
             select: { savedAddresses: true },
@@ -59,7 +59,7 @@ exports.getAllAddresses = getAllAddresses;
  */
 async function createAddress(req, res, next) {
     try {
-        const { id } = req.body.user;
+        const { id } = res.locals.user;
         const newAddress = await app_1.prisma.user.update({
             where: { id },
             data: {

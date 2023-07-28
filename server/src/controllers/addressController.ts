@@ -32,7 +32,7 @@ export async function getAllAddresses(
   next: NextFunction
 ) {
   try {
-    const {id} = req.body.user as TokenUserPayload;
+    const {id} = res.locals.user as TokenUserPayload;
 
     const addresses = await prisma.user.findUnique({
       where: {id},
@@ -70,7 +70,7 @@ export async function createAddress(
   next: NextFunction
 ) {
   try {
-    const {id} = req.body.user as TokenUserPayload;
+    const {id} = res.locals.user as TokenUserPayload;
 
     const newAddress = await prisma.user.update({
       where: {id},

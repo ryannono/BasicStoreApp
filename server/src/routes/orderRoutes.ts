@@ -5,13 +5,17 @@ import {
   deleteOrderById,
   getOrderItemsById,
 } from '../controllers/orderController';
+import {
+  authenticateAccessToken,
+  verifyAdmin,
+} from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
 // -- note order creation is handled by payment controller
-router.get('/', getAllOrders);
+router.get('/', authenticateAccessToken, verifyAdmin, getAllOrders);
 router.get('/:id', getOrderById);
-router.delete('/:id', deleteOrderById);
+router.delete('/:id', authenticateAccessToken, verifyAdmin, deleteOrderById);
 router.delete('/:orderId/items', getOrderItemsById);
 
 export default router;
