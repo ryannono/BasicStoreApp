@@ -16,6 +16,7 @@ import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
 import {errorHandler} from './middlewares/errorMiddleware';
+import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 
 // ---------------- initialization ----------------- //
 

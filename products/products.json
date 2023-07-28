@@ -1,0 +1,302 @@
+[
+  {
+    "id": "prod-1",
+    "name": "Organic Cumin Powder",
+    "images": [
+      {
+        "id": "img-1",
+        "url": "https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTMcFaw1KghXz4G0ORD_xb9MZ6CDYfu1KzvmlAQobH5gaYJWOPYqrCZPTwBdD-P3gS1SOEZT8uwyW1mM1U",
+        "isPrimary": true
+      },
+      {
+        "id": "img-2",
+        "url": "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/02/319562_2200-732x549.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-3",
+        "url": "https://gatheringplacetrading.com/cdn/shop/products/cumin-seed-organic_3a6f1d28-92f0-4070-aa82-6eff555c03d2.jpg?v=1659324955",
+        "isPrimary": false
+      },
+      {
+        "id": "img-4",
+        "url": "https://cdn.britannica.com/59/219359-050-662D86EA/Cumin-Spice.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Organic cumin powder with a strong, unique flavor.",
+    "price": 8.99,
+    "stock": 200,
+    "categoryId": "cat-1"
+  },
+  {
+    "id": "prod-2",
+    "name": "Smoked Paprika",
+    "images": [
+      {
+        "id": "img-5",
+        "url": "https://tildaricelive.s3.eu-central-1.amazonaws.com/wp-content/uploads/2021/04/25153812/Paprika.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-6",
+        "url": "https://i0.wp.com/images-prod.healthline.com/hlcmsresource/images/AN_images/paprika-benefits-1296x728-feature.jpg?w=1155&h=1528",
+        "isPrimary": false
+      },
+      {
+        "id": "img-7",
+        "url": "https://www.spicejungle.com/wp/files/2021/04/All-about-paprika-1024x683.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-8",
+        "url": "https://hips.hearstapps.com/hmg-prod/images/chili-paprika-powder-royalty-free-image-1678118290.jpg?crop=1xw:0.84296xh;center,top",
+        "isPrimary": false
+      }
+    ],
+    "description": "Smoky and flavorful paprika sourced from Spain.",
+    "price": 6.99,
+    "stock": 150,
+    "categoryId": "cat-1"
+  },
+  {
+    "id": "prod-3",
+    "name": "Turmeric Powder",
+    "images": [
+      {
+        "id": "img-9",
+        "url": "https://static.toiimg.com/thumb/resizemode-4,width-1280,height-720,msid-66636383/66636383.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-10",
+        "url": "https://media-cldnry.s-nbcnews.com/image/upload/t_fit-1500w,f_auto,q_auto:best/newscms/2017_33/2120916/170815-turmeric-mn-1415.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-11",
+        "url": "https://hips.hearstapps.com/hmg-prod/images/close-up-of-turmeric-on-table-royalty-free-image-890928998-1532356554.jpg?crop=0.80658xw:1xh;center,top&resize=1200:*",
+        "isPrimary": false
+      },
+      {
+        "id": "img-12",
+        "url": "https://media-cldnry.s-nbcnews.com/image/upload/newscms/2020_46/1633136/turmeric-te-inline-201109.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Premium quality Turmeric powder, rich in curcumin.",
+    "price": 7.99,
+    "stock": 100,
+    "categoryId": "cat-1"
+  },
+  {
+    "id": "prod-4",
+    "name": "Saffron Strands",
+    "images": [
+      {
+        "id": "img-13",
+        "url": "https://post.healthline.com/wp-content/uploads/2020/11/saffron-732x549-thumbnail.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-14",
+        "url": "https://images.lifestyleasia.com/wp-content/uploads/sites/7/2023/02/07141814/Saffron-hero-1600x900.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-15",
+        "url": "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/01/327017_2200-732x549.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-16",
+        "url": "https://www.thespruceeats.com/thmb/eFLu3Io3lky_SofgJIgNXvpuvXE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/persian-pantry-5271130-hero-08-1772e10cf2f043a39e6ff5e2f9ea9655.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Premium Saffron strands sourced from Spain.",
+    "price": 19.99,
+    "stock": 50,
+    "categoryId": "cat-2"
+  },
+  {
+    "id": "prod-5",
+    "name": "Cardamom Pods",
+    "images": [
+      {
+        "id": "img-17",
+        "url": "https://www.simplyrecipes.com/thmb/Mr2zh5uPFDmI5sjNypliQ85k4DY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Simply-Recipes-Ingredient-Cardamom-LEAD-1-ce94795eaba1461ca65c6af9c599d9bc.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-18",
+        "url": "https://spiceworld.ca/cdn/shop/products/image_411c2121-1ee3-4eb2-acbd-d8fe1f7660bf_1024x1024@2x.jpg?v=1643388917",
+        "isPrimary": false
+      },
+      {
+        "id": "img-19",
+        "url": "https://spicepilgrim.com/cdn/shop/articles/2022-02-15_16.52.50.jpg?v=1646503435",
+        "isPrimary": false
+      },
+      {
+        "id": "img-20",
+        "url": "https://static.toiimg.com/photo/65785061.cms?width=500&resizemode=4&imgsize=462789",
+        "isPrimary": false
+      }
+    ],
+    "description": "High-quality cardamom pods, great for a variety of dishes.",
+    "price": 10.99,
+    "stock": 120,
+    "categoryId": "cat-2"
+  },
+  {
+    "id": "prod-6",
+    "name": "Cloves",
+    "images": [
+      {
+        "id": "img-21",
+        "url": "https://resize.indiatvnews.com/en/resize/newbucket/1200_-/2021/04/cloves-warm-water-1617732352.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-22",
+        "url": "https://www.verywellhealth.com/thmb/q8oitVkT_bmIdogYfaZLL8XIq_c=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1068570034-177f4f5555934e519b0471912105fdb6.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-23",
+        "url": "https://img.emedihealth.com/wp-content/uploads/2022/11/cloves-helps-restore-your-health-feat.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-24",
+        "url": "https://www.thespruceeats.com/thmb/b0gshewZGy6DrZGLvWa14moQ7Sc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/close-up-of-clove-spice-in-a-ceramic-spoon-914516590-5b40664ec9e77c0037a2737c.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Organic cloves, perfect for adding a warm, sweet and aromatic taste to your dish.",
+    "price": 5.99,
+    "stock": 100,
+    "categoryId": "cat-2"
+  },
+  {
+    "id": "prod-7",
+    "name": "Ground Nutmeg",
+    "images": [
+      {
+        "id": "img-25",
+        "url": "https://www.thespruceeats.com/thmb/KP2RHqAGUulNs5Qtl2hK58QR5CM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/what-is-nutmeg-1328522-nutmeg-03-98c8ea3e291641618783344ff60ccfbd.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-26",
+        "url": "https://foodal.com/wp-content/uploads/2015/02/Everything-You-Ever-Wanted-To-Know-About-Nutmeg.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-27",
+        "url": "https://www.tastingtable.com/img/gallery/most-of-the-worlds-nutmeg-comes-from-this-country/intro-1666725215.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-28",
+        "url": "https://post.medicalnewstoday.com/wp-content/uploads/sites/3/2020/10/Nutmeg-Grated-Spice-732x549-Thumbnail.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Freshly ground nutmeg, ideal for baking and making comforting, warming dishes.",
+    "price": 6.99,
+    "stock": 90,
+    "categoryId": "cat-3"
+  },
+  {
+    "id": "prod-8",
+    "name": "Coriander Seeds",
+    "images": [
+      {
+        "id": "img-29",
+        "url": "https://cdn.vegetariantimes.com/wp-content/uploads/2017/01/edible-gardening-101-harvesting-coriander-seeds-2-corriander-seeds-leaves-powder-1024x683.jpg?width=1200",
+        "isPrimary": true
+      },
+      {
+        "id": "img-30",
+        "url": "https://troyersspices.ca/app/uploads/CorWho.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-31",
+        "url": "https://post.healthline.com/wp-content/uploads/2019/09/coriander-cilantro-seeds-herb-1200x628-facebook.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-32",
+        "url": "https://cdn.britannica.com/95/205795-050-EF644B7F/Bowl-cilantro-leaves-coriander-fruits-Coriandrum-sativum.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Robust, aromatic and citrusy coriander seeds.",
+    "price": 4.99,
+    "stock": 75,
+    "categoryId": "cat-3"
+  },
+  {
+    "id": "prod-9",
+    "name": "Cayenne Pepper",
+    "images": [
+      {
+        "id": "img-33",
+        "url": "https://www.allrecipes.com/thmb/MXcg1fSxFsQQ_dEjLe9bUDvkEsc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Cayenne-Pepper-vs-Chili-Powder-3x2-1-9053e6b176074731ad78b596ec645b7d.png",
+        "isPrimary": true
+      },
+      {
+        "id": "img-34",
+        "url": "https://parrotjunkie.com/cdn/shop/articles/cayenne-pepper-powder.jpg?v=1680623349",
+        "isPrimary": false
+      },
+      {
+        "id": "img-35",
+        "url": "https://spices.com/cdn/shop/products/16877c945887e18a86af9fd80852b8ab36a1bf5a5a50bce144542fca5ebc292a_c6a6775e-d4c3-4802-bb3c-1d907a338c1d.jpg?v=1632326464",
+        "isPrimary": false
+      },
+      {
+        "id": "img-36",
+        "url": "https://health.clevelandclinic.org/wp-content/uploads/sites/3/2021/11/CayenneBenefits-1205330754-770x533-1-650x428.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Hot cayenne pepper, perfect for adding a spicy kick to your dishes.",
+    "price": 6.99,
+    "stock": 80,
+    "categoryId": "cat-3"
+  },
+  {
+    "id": "prod-10",
+    "name": "Star Anise",
+    "images": [
+      {
+        "id": "img-37",
+        "url": "https://m.media-amazon.com/images/I/71b8k-5cySL.jpg",
+        "isPrimary": true
+      },
+      {
+        "id": "img-38",
+        "url": "https://images-prod.healthline.com/hlcmsresource/images/AN_images/star-anise-1296x728-feature.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-39",
+        "url": "https://www.eximcan.com/wp-content/uploads/2019/02/Star-Anise.jpg",
+        "isPrimary": false
+      },
+      {
+        "id": "img-40",
+        "url": "https://www.spiceography.com/wp-content/uploads/2018/08/cooking-with-star-anise.jpg",
+        "isPrimary": false
+      }
+    ],
+    "description": "Sweet, spicy, licorice-like star anise, perfect for Asian cuisine.",
+    "price": 8.99,
+    "stock": 60,
+    "categoryId": "cat-3"
+  }
+]
