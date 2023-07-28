@@ -82,12 +82,10 @@ Before you begin, ensure that you have Node.js installed on your system. You als
 
 ### Payment Routes
 
-| Route                    | HTTP Method | Description                     |
-| ------------------------ | ----------- | ------------------------------- |
-| `/api/payments/intent` | POST        | Creates a Stripe PaymentIntent. |
-|                          |             |                                 |
-
- `/api/payments/confirm`  | POST        | Confirms a PaymentIntent and creates an order if successful.     |
+| Route                     | HTTP Method | Description                                                  |
+| ------------------------- | ----------- | ------------------------------------------------------------ |
+| `/api/payments/intent`  | POST        | Creates a Stripe PaymentIntent.                              |
+| `/api/payments/webhook` | POST        | Confirms a PaymentIntent and creates an order if successful. |
 
 ### Address Routes
 
