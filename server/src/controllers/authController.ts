@@ -209,6 +209,7 @@ export async function logoutUser(
     const refreshToken = req.cookies.refreshToken;
 
     // Remove token from database
+    console.log(`Removing token: ${refreshToken}`);
     await prisma.refreshToken.delete({
       where: {token: refreshToken},
     });
