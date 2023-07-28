@@ -168,7 +168,7 @@ export async function refreshUser(
     }
 
     // Verify the refresh token and extract user data
-    const userData = await verifyToken(refreshToken);
+    const userData = await verifyToken(refreshToken, 'refresh');
 
     // If user data does not match with the one in the DB, return an error response
     if (!userData || userData.id !== tokenInDb.tokenUser.id) {
@@ -207,8 +207,7 @@ export async function logoutUser(
   try {
     // Get refresh token from the request cookies
     const refreshToken = req.cookies.refreshToken;
-    console.log(`cookies: ${JSON.stringify(req.cookies.refreshToken)}`);
-    const userData = await verifyToken(refreshToken);
+    const userData = await verifyToken(refreshToken, 'refresh');
     if (!userData) {
       return res.status(403).json({error: 'Refresh token is invalid'});
     }

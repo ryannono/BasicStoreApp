@@ -1,5 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 import {verifyToken} from '../utils/tokenUtil';
+import {TokenUserPayload} from '../types/userTypes';
 
 /**
  * Asynchronous middleware function to authenticate access based on a valid access token.
@@ -29,7 +30,6 @@ export async function authenticateAccessToken(
   try {
     // get accessToken from request
     const accessToken = req.cookies.accessToken;
-    console.log(accessToken);
     const noAccess = () => {
       return res.status(401).json({error: 'User does not have access'});
     };
@@ -38,7 +38,7 @@ export async function authenticateAccessToken(
     if (!accessToken) return noAccess();
 
     // verify token
-    const verifiedUser = await verifyToken(accessToken);
+    const verifiedUser = await verifyToken(accessToken, 'access');
     if (!verifiedUser) return noAccess();
 
     // pass user information to next middleware
@@ -47,6 +47,15 @@ export async function authenticateAccessToken(
     // next function
     return next();
   } catch (err) {
-    next(err);
+    return next(err);
   }
+}
+
+export function verifyAdmin(req: Request, res: Response, next: NextFunction) {
+  const user: TokenUserPayload = req.body.user;
+  if (!user) return next(new Error('Authenticate access token first'));
+  if (user.role !== 'ADMIN') {
+    return res.status(401).json({error: 'Access denied'});
+  }
+  return next();
 }

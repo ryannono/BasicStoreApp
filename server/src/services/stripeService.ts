@@ -12,6 +12,7 @@ export async function getStripeCustomerId({
   lastName,
   phoneNumber,
 }: Omit<MutableUserPayload, 'password'>) {
+  console.log(process.env.STRIPE_SECRET_KEY!);
   try {
     const existingCustomer = (
       await stripe.customers.search({

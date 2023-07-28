@@ -1,6 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TO_CENTS_MULTIPLIER = exports.DAY = exports.HOUR = exports.MINUTE = void 0;
+exports.TO_CENTS_MULTIPLIER = exports.DAY = exports.HOUR = exports.MINUTE = exports.SECOND = void 0;
+/**
+ * This is a constant that represents the number of milliseconds in a second.
+ * It is commonly used when setting durations or intervals in functions that
+ * operate with time in milliseconds, such as setTimeout or setInterval.
+ *
+ * @type {number}
+ */
+exports.SECOND = 1000;
 /**
  * This is a constant that represents the number of milliseconds in a minute.
  * It is commonly used when setting durations or intervals in functions that
@@ -8,7 +16,7 @@ exports.TO_CENTS_MULTIPLIER = exports.DAY = exports.HOUR = exports.MINUTE = void
  *
  * @type {number}
  */
-exports.MINUTE = 1000;
+exports.MINUTE = 60 * exports.SECOND;
 /**
  * This constant represents the number of milliseconds in an hour.
  * It is calculated by multiplying the number of milliseconds in a minute by 60.

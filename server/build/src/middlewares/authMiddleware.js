@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authenticateAccessToken = void 0;
+exports.verifyAdmin = exports.authenticateAccessToken = void 0;
 const tokenUtil_1 = require("../utils/tokenUtil");
 /**
  * Asynchronous middleware function to authenticate access based on a valid access token.
@@ -26,7 +26,6 @@ async function authenticateAccessToken(req, res, next) {
     try {
         // get accessToken from request
         const accessToken = req.cookies.accessToken;
-        console.log(accessToken);
         const noAccess = () => {
             return res.status(401).json({ error: 'User does not have access' });
         };
@@ -34,7 +33,7 @@ async function authenticateAccessToken(req, res, next) {
         if (!accessToken)
             return noAccess();
         // verify token
-        const verifiedUser = await (0, tokenUtil_1.verifyToken)(accessToken);
+        const verifiedUser = await (0, tokenUtil_1.verifyToken)(accessToken, 'access');
         if (!verifiedUser)
             return noAccess();
         // pass user information to next middleware
@@ -43,8 +42,18 @@ async function authenticateAccessToken(req, res, next) {
         return next();
     }
     catch (err) {
-        next(err);
+        return next(err);
     }
 }
 exports.authenticateAccessToken = authenticateAccessToken;
+function verifyAdmin(req, res, next) {
+    const user = req.body.user;
+    if (!user)
+        return next(new Error('Authenticate access token first'));
+    if (user.role !== 'ADMIN') {
+        return res.status(401).json({ error: 'Access denied' });
+    }
+    return next();
+}
+exports.verifyAdmin = verifyAdmin;
 //# sourceMappingURL=authMiddleware.js.map

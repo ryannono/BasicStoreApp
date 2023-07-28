@@ -10,6 +10,7 @@ const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
 });
 async function getStripeCustomerId({ email, firstName, lastName, phoneNumber, }) {
+    console.log(process.env.STRIPE_SECRET_KEY);
     try {
         const existingCustomer = (await stripe.customers.search({
             query: `email:"${email}"`,

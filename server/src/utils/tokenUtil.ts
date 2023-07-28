@@ -54,22 +54,29 @@ export function generateRefreshToken({id, email, firstName, lastName}: User) {
  * Asynchronous function to verify a given JSON Web Token (JWT).
  *
  * This function will use JWT's verify method to validate the token
- * against the refresh token secret defined in the environment variables.
+ * against either the access token secret or refresh token secret,
+ * depending on the `tokenType` parameter, defined in the environment variables.
  *
  * @param token - The JWT that needs to be verified.
+ * @param tokenType - The type of token to verify, either 'access' or 'refresh'.
  *
  * @returns A Promise that either:
  *   1. Resolves with the user payload data (of type TokenUserPayload),
- *      which includes properties such as the user ID, username, email,
- *      first name and last name, if the token is valid.
+ *      which includes properties such as the user ID, email, first name,
+ *      and last name, if the token is valid.
  *   2. Resolves with null, indicating that the token is invalid or
  *      has been tampered with.
  */
-export function verifyToken(token: string): Promise<TokenUserPayload | null> {
+export function verifyToken(
+  token: string,
+  tokenType: 'access' | 'refresh'
+): Promise<TokenUserPayload | null> {
   return new Promise((resolve, reject) => {
     jwt.verify(
       token,
-      process.env.REFRESH_TOKEN_SECRET!,
+      (tokenType === 'access'
+        ? process.env.ACCESS_TOKEN_SECRET
+        : process.env.REFRESH_TOKEN_SECRET)!,
       (err, tokenUserPayloadAndJwt) => {
         if (err) {
           resolve(null);

@@ -1,11 +1,20 @@
 /**
+ * This is a constant that represents the number of milliseconds in a second.
+ * It is commonly used when setting durations or intervals in functions that
+ * operate with time in milliseconds, such as setTimeout or setInterval.
+ *
+ * @type {number}
+ */
+export const SECOND = 1000;
+
+/**
  * This is a constant that represents the number of milliseconds in a minute.
  * It is commonly used when setting durations or intervals in functions that
  * operate with time in milliseconds, such as setTimeout or setInterval.
  *
  * @type {number}
  */
-export const MINUTE = 1000;
+export const MINUTE: number = 60 * SECOND;
 
 /**
  * This constant represents the number of milliseconds in an hour.

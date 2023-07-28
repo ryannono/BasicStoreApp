@@ -15,6 +15,6 @@ import {TokenUserPayload} from '../types/userTypes';
  * @returns {TokenUserPayload} An object containing essential user properties.
  */
 export function getEssentialUserProps(user: User): TokenUserPayload {
-  const {id, email, firstName, lastName} = user;
-  return {id, email, firstName, lastName};
+  const {id, email, firstName, lastName, role} = user;
+  return {id, email, firstName, lastName, role};
 }

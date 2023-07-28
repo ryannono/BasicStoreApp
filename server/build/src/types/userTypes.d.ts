@@ -1,11 +1,4 @@
-import { CartItem, UserPayload } from '@prisma/client';
-export declare type UserCreationPayload = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    phoneNumber?: string;
-};
+import { CartItem, User, UserPayload } from '@prisma/client';
 /**
  * The `MutableUserPayload` type is derived from the `UserPayload` type.
  * It omits certain properties that should not be modified directly by the user.
@@ -21,7 +14,7 @@ export declare type MutableUserPayload = Omit<UserPayload['scalars'], 'createdAt
  *
  * This type is used when creating a token for the user.
  */
-export declare type TokenUserPayload = Pick<UserPayload['scalars'], 'id' | 'email' | 'firstName' | 'lastName'>;
+export declare type TokenUserPayload = Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'role'>;
 /**
  * The `LoginUserPayload` type represents the data needed from a user to log in.
  * It includes only 'email' and 'password', as those are the required credentials for a user to log in.
