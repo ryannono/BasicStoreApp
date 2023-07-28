@@ -151,9 +151,9 @@ export async function deleteUserById(
  */
 export async function getCart(req: Request, res: Response, next: NextFunction) {
   try {
-    const {userId} = req.params;
+    const userId = req.params.userId;
     const cart = await prisma.cart.findUnique({
-      where: {userId: userId},
+      where: {userId},
       include: {items: true},
     });
     return res.status(200).json(cart);

@@ -132,9 +132,9 @@ exports.deleteUserById = deleteUserById;
  */
 async function getCart(req, res, next) {
     try {
-        const { userId } = req.params;
+        const userId = req.params.userId;
         const cart = await app_1.prisma.cart.findUnique({
-            where: { userId: userId },
+            where: { userId },
             include: { items: true },
         });
         return res.status(200).json(cart);
