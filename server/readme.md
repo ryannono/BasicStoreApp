@@ -1,122 +1,110 @@
-# TasteTrove Server
+# TasteTrove API
 
-The TasteTrove Server is a RESTful API built using Express.js with TypeScript. It provides the necessary endpoints for the TasteTrove E-commerce application, including operations for users, products, carts, orders, and addresses. The server also integrates with the Stripe payment processing system.
+## Introduction
 
-## Prerequisites
+The TasteTrove API is an e-commerce RESTful API written in TypeScript and powered by Express.js, PostgreSQL, and Prisma. The API supports operations related to users, products, orders, payments, and addresses.
 
-Ensure you have the following installed on your system:
+## Getting Started
 
-- Node.js (v14 or above)
-- npm (v7 or above)
+Before you begin, ensure that you have Node.js installed on your system. You also need a PostgreSQL database set up either locally or hosted.
 
-## Installation and Setup
-
-To set up the TasteTrove server locally, follow these steps:
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/username/tastetrove-server.git
-```
-
-2. Navigate to the project root directory
-
-```bash
-cd tastetrove-server
-```
-
-3. Install the dependencies
-
-```bash
-npm install
-```
+1. Clone this repository to your local machine using `git clone https://github.com/your-repo-url/taste-trove-api.git`
+2. Run `npm install` in the root directory to install all the required dependencies.
+3. Copy the contents of `.env.example` into a new file named `.env` in the root directory and replace the placeholders with your actual information.
+4. Run `npm run devStart` to start the development server.
 
 ## Directory Structure
 
-Here's a brief overview of the directory structure:
-
-- `controllers/`: Contains all controller files, which handle HTTP requests and sending HTTP responses.
-- `models/`: Contains data models that interact with the database.
-- `routes/`: Contains all routing files, which decide which controller gets to handle incoming requests.
-- `middlewares/`: Contains middleware functions for handling things like authentication and error handling.
-- `services/`: Contains files related to third-party services the application might interact with.
-- `utils/`: Contains utility functions and constants used across the application.
-- `prisma/`: Contains the Prisma schema and environment variables files.
-
-For more detailed information about each directory, refer to the `README.md` file within each directory.
-
-## API Endpoints
-
-### Auth Endpoints
-
-- `POST /register`: Register a new user.
-- `POST /login`: Login a user.
-- `POST /refresh`: Refresh a user's session.
-- `POST /logout`: Logout a user.
-- `POST /reset-password`: Reset a user's password.
-
-### User Endpoints
-
-- `GET /users`: Get all users.
-- `GET /users/:id`: Get a user by ID.
-- `PUT /users/:id`: Update a user by ID.
-- `DELETE /users/:id`: Delete a user by ID.
-
-### User Cart Endpoints
-
-- `GET /users/:userId/cart`: Get the cart of a specific user.
-- `POST /users/:userId/cart`: Create a new cart for a user or add an item to the existing cart.
-- `PUT /users/:userId/cart`: Update a user's cart.
-- `DELETE /users/:userId/cart`: Delete a user's cart or remove a specific item.
-
-### Product Endpoints
-
-- `POST /products`: Create a new product.
-- `GET /products`: Get all products.
-- `GET /products/:id`: Get a product by ID.
-- `PUT /products/:id`: Update a product by ID.
-- `DELETE /products/:id`: Delete a product by ID.
-
-### Order Endpoints
-
-- `POST /orders`: Create a new order.
-- `GET /orders/:userId`: Get all orders for a user by their user ID.
-- `GET /orders/:orderId`: Get an order by its ID.
-- `PUT /orders/:orderId`: Update an order by its ID.
-- `DELETE /orders/:orderId`: Delete an order by its ID.
-
-### Address Endpoints
-
-- `POST /addresses`: Create a new address.
-- `GET /addresses/:id`: Get an address by ID.
-- `PUT /addresses/:id`: Update an address by ID.
-- `DELETE /addresses/:id`: Delete an address by ID.
-
-### Stripe Endpoints
-
-- `POST /stripe/checkout`: Create a new Stripe checkout session.
-- `GET /stripe/checkout/:sessionId`: Retrieve a checkout session.
-
-## Testing
-
-To run tests, execute the following command:
-
-```bash
-npm run test
+```
+/server
+├── /src
+│   ├── /controllers
+│   ├── /routes
+│   ├── /middlewares
+│   ├── /services
+│   ├── /types
+│   ├── /utils
+│   ├── app.ts
+│   └── server.ts
+├── package.json
+└── tsconfig.json
 ```
 
-Please note that you should have a testing environment setup for the database. Ensure the testing database URL is provided in the `.env` file.
+## API Documentation
 
-## Contributing
+### Auth Routes
 
-For contributing guidelines, please refer to the `CONTRIBUTING.md` file.
+| Route                        | HTTP Method | Description                                |
+| ---------------------------- | ----------- | ------------------------------------------ |
+| `/api/auth/register`       | POST        | Registers a new user.                      |
+| `/api/auth/login`          | POST        | Logs in a user.                            |
+| `/api/auth/refresh`        | POST        | Refreshes the user's authentication token. |
+| `/api/auth/logout`         | POST        | Logs out a user.                           |
+| `/api/auth/reset-password` | POST        | Allows a user to reset their password.     |
+
+### User Routes
+
+| Route                                  | HTTP Method | Description                                                   |
+| -------------------------------------- | ----------- | ------------------------------------------------------------- |
+| `/api/users`                         | GET         | Fetches all users. Available to admin users only.             |
+| `/api/users/:id`                     | GET         | Fetches a specific user by id.                                |
+| `/api/users/:id`                     | PUT         | Updates a specific user by id. Available to admin users only. |
+| `/api/users/:id`                     | DELETE      | Deletes a specific user by id. Available to admin users only. |
+| `/api/users/:userId/cart`            | GET         | Fetches a user's cart.                                        |
+| `/api/users/:userId/cart`            | POST        | Adds an item to a user's cart.                                |
+| `/api/users/:userId/cart`            | PUT         | Updates a user's cart.                                        |
+| `/api/users/:userId/cart/:productId` | DELETE      | Removes a specific product from a user's cart.                |
+| `/api/users/:userId/cart/`           | DELETE      | Clears a user's cart.                                         |
+
+### Product Routes
+
+| Route                          | HTTP Method | Description                                                               |
+| ------------------------------ | ----------- | ------------------------------------------------------------------------- |
+| `/api/products`              | GET         | Fetches all products.                                                     |
+| `/api/products`              | POST        | Creates a new product. Available to admin users only.                     |
+| `/api/products/:id`          | GET         | Fetches a specific product by id.                                         |
+| `/api/products/:id`          | PUT         | Updates a specific product by id. Available to admin users only.          |
+| `/api/products/:id`          | DELETE      | Deletes a specific product by id. Available to admin users only.          |
+| `/api/products/category`     | GET         | Fetches all product categories.                                           |
+| `/api/products/category`     | POST        | Creates a new product category. Available to admin users only.            |
+| `/api/products/category/:id` | GET         | Fetches a specific product category by id.                                |
+| `/api/products/category/:id` | PUT         | Updates a specific product category by id. Available to admin users only. |
+| `/api/products/category/:id` | DELETE      | Deletes a specific product category by id. Available to admin users only. |
+
+### Order Routes
+
+| Route                          | HTTP Method | Description                                                    |
+| ------------------------------ | ----------- | -------------------------------------------------------------- |
+| `/api/orders`                | GET         | Fetches all orders. Available to admin users only.             |
+| `/api/orders/:id`            | GET         | Fetches a specific order by id.                                |
+| `/api/orders/:id`            | DELETE      | Deletes a specific order by id. Available to admin users only. |
+| `/api/orders/:orderId/items` | GET         | Fetches items of a specific order.                             |
+
+### Payment Routes
+
+| Route                    | HTTP Method | Description                     |
+| ------------------------ | ----------- | ------------------------------- |
+| `/api/payments/intent` | POST        | Creates a Stripe PaymentIntent. |
+|                          |             |                                 |
+
+ `/api/payments/confirm`  | POST        | Confirms a PaymentIntent and creates an order if successful.     |
+
+### Address Routes
+
+| Route                | HTTP Method | Description                       |
+| -------------------- | ----------- | --------------------------------- |
+| `/api/address`     | GET         | Fetches all addresses for a user. |
+| `/api/address`     | POST        | Adds a new address for a user.    |
+| `/api/address/:id` | GET         | Fetches a specific address by id. |
+| `/api/address/:id` | PUT         | Updates a specific address by id. |
+| `/api/address/:id` | DELETE      | Deletes a specific address by id. |
+
+Each route expects specific parameters and JSON payloads, and returns certain responses. For more detail about each route, please refer to the route documentation in the `/src/routes` directory.
+
+## Error Handling
+
+The application uses centralized error handling, which simplifies error processing and allows for a cleaner codebase. All errors are forwarded to the `errorHandler` middleware function in `app.ts` for processing.
 
 ## License
 
-For license information, please refer to the `LICENSE` file.
-
-## Contact
-
-For any queries or issues, please raise an issue in the GitHub repository or contact the maintainers.
-
-Happy Coding!
+This project is licensed under the MIT license. For more information, refer to the `LICENSE` file in the repository.
