@@ -13,10 +13,10 @@ router.get('/:id', authMiddleware_1.authenticateAccessToken, userController_1.ge
 router.put('/:id', authMiddleware_1.authenticateAccessToken, authMiddleware_1.verifyAdmin, userController_1.updateUserById); // UPDATE a specific user
 router.delete('/:id', authMiddleware_1.authenticateAccessToken, authMiddleware_1.verifyAdmin, userController_1.deleteUserById); // DELETE a specific user
 // ----------------- user cart model routes --------------- //
-router.get('/:userid/cart', authMiddleware_1.authenticateAccessToken, userController_1.getCart); // GET a user's cart
-router.post('/:userid/cart', authMiddleware_1.authenticateAccessToken, userController_1.addItemToCart); // POST add item to a user's cart
-router.put('/:userid/cart', authMiddleware_1.authenticateAccessToken, userController_1.updateCartItem); // UPDATE a user's cart
-router.delete('/:userid/cart/:productId', authMiddleware_1.authenticateAccessToken, userController_1.removeItemFromCart); // DELETE a specific product from a user's cart.
-router.delete('/:userid/cart/', authMiddleware_1.authenticateAccessToken, userController_1.clearCart); // DELETE (clear) a user's cart
+router.get('/:userId/cart', authMiddleware_1.authenticateAccessToken, userController_1.getCart); // GET a user's cart
+router.post('/:userId/cart', authMiddleware_1.authenticateAccessToken, userController_1.addItemToCart); // POST add item to a user's cart
+router.put('/:userId/cart', authMiddleware_1.authenticateAccessToken, userController_1.updateCartItem); // UPDATE a user's cart
+router.delete('/:userId/cart/:productId', authMiddleware_1.authenticateAccessToken, userController_1.removeItemFromCart); // DELETE a specific product from a user's cart.
+router.delete('/:userId/cart/', authMiddleware_1.authenticateAccessToken, userController_1.clearCart); // DELETE (clear) a user's cart
 exports.default = router;
 //# sourceMappingURL=userRoutes.js.map

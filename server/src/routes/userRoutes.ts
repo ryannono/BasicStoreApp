@@ -26,14 +26,14 @@ router.delete('/:id', authenticateAccessToken, verifyAdmin, deleteUserById); // 
 
 // ----------------- user cart model routes --------------- //
 
-router.get('/:userid/cart', authenticateAccessToken, getCart); // GET a user's cart
-router.post('/:userid/cart', authenticateAccessToken, addItemToCart); // POST add item to a user's cart
-router.put('/:userid/cart', authenticateAccessToken, updateCartItem); // UPDATE a user's cart
+router.get('/:userId/cart', authenticateAccessToken, getCart); // GET a user's cart
+router.post('/:userId/cart', authenticateAccessToken, addItemToCart); // POST add item to a user's cart
+router.put('/:userId/cart', authenticateAccessToken, updateCartItem); // UPDATE a user's cart
 router.delete(
-  '/:userid/cart/:productId',
+  '/:userId/cart/:productId',
   authenticateAccessToken,
   removeItemFromCart
 ); // DELETE a specific product from a user's cart.
-router.delete('/:userid/cart/', authenticateAccessToken, clearCart); // DELETE (clear) a user's cart
+router.delete('/:userId/cart/', authenticateAccessToken, clearCart); // DELETE (clear) a user's cart
 
 export default router;
