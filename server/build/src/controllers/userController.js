@@ -134,7 +134,7 @@ async function getCart(req, res, next) {
     try {
         const { userId } = req.params;
         const cart = await app_1.prisma.cart.findUnique({
-            where: { userId },
+            where: { userId: userId },
             include: { items: true },
         });
         return res.status(200).json(cart);

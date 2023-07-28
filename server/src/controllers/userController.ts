@@ -153,7 +153,7 @@ export async function getCart(req: Request, res: Response, next: NextFunction) {
   try {
     const {userId} = req.params;
     const cart = await prisma.cart.findUnique({
-      where: {userId},
+      where: {userId: userId},
       include: {items: true},
     });
     return res.status(200).json(cart);
