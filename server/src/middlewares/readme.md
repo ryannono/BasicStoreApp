@@ -1,5 +1,5 @@
-# Middlewares
+# Middlewares Directory README
 
-This directory contains middleware functions. Middlewares can execute any code, make changes to the request and response objects, end the request-response cycle, and call the next middleware in the stack.
+This directory contains all the middleware functions used across the application. Middleware functions are functions that have access to the request object (`req`), the response object (`res`), and the next function in the application’s request-response cycle.
 
-Here you may define any custom middleware such as authentication and error handling.
+The middleware functions in this directory include error handling, validating request bodies, verifying tokens, etc.

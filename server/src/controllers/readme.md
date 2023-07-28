@@ -1,5 +1,5 @@
-# Controllers
+# Controllers Directory README
 
-This directory contains all controller files. Controllers are responsible for handling HTTP requests and sending HTTP responses. They contain the logic for the CRUD operations for each resource.
+This directory contains all the controller functions used by the application. Each controller corresponds to a particular model (e.g., user, product, order, etc.).
 
-Each controller should be responsible for a single resource and should contain all the necessary CRUD operations for that resource.
+Each controller file exports functions that handle HTTP requests and responses. These functions interact with the corresponding services to perform necessary CRUD operations.

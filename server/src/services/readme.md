@@ -2,4 +2,8 @@
 
 This directory contains any third-party services your application might need to interact with.
 
+This directory contains any third-party services your application might need to interact with.
+
+`stripeService.ts` contains functions and methods related to Stripe integration and operation
+
 `stripeService.ts` contains functions and methods related to Stripe integration and operations.
