@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const orderController_1 = require("../controllers/orderController");
 const router = express_1.default.Router();
-router.post('/', orderController_1.createOrder);
+// -- note order creation is handled by payment controller
 router.get('/', orderController_1.getAllOrders);
 router.get('/:id', orderController_1.getOrderById);
 router.delete('/:id', orderController_1.deleteOrderById);

@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {MutableCartItemPayload} from './userTypes';
 // eslint-disable-next-line node/no-extraneous-import
 import {AddressPayload, OrderPayload, Prisma} from '@prisma/client';
+import {MutableCartItemPayload} from './userTypes';
 
 export type MutableOrderPayload = Pick<
   OrderPayload['scalars'],
@@ -10,14 +10,14 @@ export type MutableOrderPayload = Pick<
 
 export type MutableAddressPayload = Omit<AddressPayload['scalars'], 'id'>;
 
-export type CreateOrderPayload = {
-  orderDetails: MutableOrderPayload;
-  shippingAddress: MutableAddressPayload;
-  items: MutableCartItemPayload[];
-};
-
 export type CreateOrderData =
   | (Prisma.Without<Prisma.OrderCreateInput, Prisma.OrderUncheckedCreateInput> &
       Prisma.OrderUncheckedCreateInput)
   | (Prisma.Without<Prisma.OrderUncheckedCreateInput, Prisma.OrderCreateInput> &
       Prisma.OrderCreateInput);
+
+export type CreatePaymentIntentPayload = {
+  items: MutableCartItemPayload;
+  shippingAddress: MutableAddressPayload;
+  orderDetails: MutableOrderPayload;
+};

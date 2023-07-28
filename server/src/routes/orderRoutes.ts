@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  createOrder,
   getAllOrders,
   getOrderById,
   deleteOrderById,
@@ -9,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.post('/', createOrder);
+// -- note order creation is handled by payment controller
 router.get('/', getAllOrders);
 router.get('/:id', getOrderById);
 router.delete('/:id', deleteOrderById);

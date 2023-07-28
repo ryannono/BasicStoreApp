@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrievePaymentIntent = exports.createPaymentIntent = exports.getStripeCustomerId = void 0;
+exports.retrievePaymentIntent = exports.getStripeCustomerId = void 0;
 // eslint-disable-next-line node/no-extraneous-require
 const stripe_1 = __importDefault(require("stripe"));
 const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY, {
@@ -30,19 +30,6 @@ async function getStripeCustomerId({ email, firstName, lastName, phoneNumber, })
     }
 }
 exports.getStripeCustomerId = getStripeCustomerId;
-async function createPaymentIntent(amount, currency = 'usd') {
-    try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency,
-        });
-        return paymentIntent;
-    }
-    catch (err) {
-        throw new Error(`Error creating payment intent: ${err}`);
-    }
-}
-exports.createPaymentIntent = createPaymentIntent;
 async function retrievePaymentIntent(id) {
     try {
         const paymentIntent = await stripe.paymentIntents.retrieve(id);

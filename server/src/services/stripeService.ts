@@ -34,19 +34,6 @@ export async function getStripeCustomerId({
   }
 }
 
-export async function createPaymentIntent(amount: number, currency = 'usd') {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-    });
-
-    return paymentIntent;
-  } catch (err) {
-    throw new Error(`Error creating payment intent: ${err}`);
-  }
-}
-
 export async function retrievePaymentIntent(id: string) {
   try {
     const paymentIntent = await stripe.paymentIntents.retrieve(id);

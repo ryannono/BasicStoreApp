@@ -1,57 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOrderItemsById = exports.deleteOrderById = exports.getOrderById = exports.getAllOrders = exports.createOrder = void 0;
+exports.getOrderItemsById = exports.deleteOrderById = exports.getOrderById = exports.getAllOrders = void 0;
 const app_1 = require("../app");
-/**
- * Creates a new order.
- *
- * This function handles the POST request to create a new order. It accepts
- * details of the order, including items, order details and shipping address
- * from the request body, and creates a new order in the database.
- *
- * @async
- * @param {Request} req - The incoming HTTP request. The request body should
- *                        contain the details of the order to be created.
- * @param {Response} res - The outgoing HTTP response. The response body will
- *                         contain the newly created order if the operation
- *                         is successful.
- * @param {NextFunction} next - Express.js next function.
- * @throws Will throw an error if the operation fails.
- * @returns {Promise<Response>} A Promise that resolves to the Express.js
- *                              response object.
- */
-async function createOrder(req, res, next) {
-    try {
-        const { items, orderDetails, shippingAddress } = req.body;
-        const { totalPrice, userId } = orderDetails;
-        const stripePaymentIntentId = 'placeholder';
-        const data = {
-            stripePaymentIntentId,
-            totalPrice,
-            items: {
-                createMany: {
-                    data: { ...items },
-                },
-            },
-            shippingAddress: {
-                create: {
-                    ...shippingAddress,
-                },
-            },
-        };
-        if (userId) {
-            data.user = {
-                connect: { id: userId },
-            };
-        }
-        const newOrder = await app_1.prisma.order.create({ data });
-        return res.status(200).json(newOrder);
-    }
-    catch (err) {
-        return next(err);
-    }
-}
-exports.createOrder = createOrder;
 /**
  * Retrieves all orders.
  *

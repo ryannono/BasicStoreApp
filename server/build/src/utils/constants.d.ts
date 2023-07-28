@@ -22,3 +22,4 @@ export declare const HOUR: number;
  * @type {number}
  */
 export declare const DAY: number;
+export declare const TO_CENTS_MULTIPLIER = 100;

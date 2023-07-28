@@ -1,24 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 /**
- * Creates a new order.
- *
- * This function handles the POST request to create a new order. It accepts
- * details of the order, including items, order details and shipping address
- * from the request body, and creates a new order in the database.
- *
- * @async
- * @param {Request} req - The incoming HTTP request. The request body should
- *                        contain the details of the order to be created.
- * @param {Response} res - The outgoing HTTP response. The response body will
- *                         contain the newly created order if the operation
- *                         is successful.
- * @param {NextFunction} next - Express.js next function.
- * @throws Will throw an error if the operation fails.
- * @returns {Promise<Response>} A Promise that resolves to the Express.js
- *                              response object.
- */
-export declare function createOrder(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
-/**
  * Retrieves all orders.
  *
  * This function handles the GET request to retrieve all orders from the database.

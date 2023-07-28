@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DAY = exports.HOUR = exports.MINUTE = void 0;
+exports.TO_CENTS_MULTIPLIER = exports.DAY = exports.HOUR = exports.MINUTE = void 0;
 /**
  * This is a constant that represents the number of milliseconds in a minute.
  * It is commonly used when setting durations or intervals in functions that
@@ -25,4 +25,5 @@ exports.HOUR = 60 * exports.MINUTE;
  * @type {number}
  */
 exports.DAY = 24 * exports.HOUR;
+exports.TO_CENTS_MULTIPLIER = 100;
 //# sourceMappingURL=constants.js.map

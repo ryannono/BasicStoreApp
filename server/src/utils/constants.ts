@@ -24,3 +24,5 @@ export const HOUR: number = 60 * MINUTE;
  * @type {number}
  */
 export const DAY: number = 24 * HOUR;
+
+export const TO_CENTS_MULTIPLIER = 100;
