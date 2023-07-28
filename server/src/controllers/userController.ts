@@ -85,25 +85,13 @@ export async function updateUserById(
   const {id} = req.params;
   const {role, ...otherUpdateData} = req.body as Partial<MutableUserPayload>;
 
-  let roleUpdate = undefined;
-
-  if (role) {
-    roleUpdate = {
-      role: {
-        set: role,
-      },
-    };
-  }
-
-  const updateData = {
-    ...otherUpdateData,
-    ...roleUpdate,
-  } as const;
-
   try {
     await prisma.user.update({
       where: {id},
-      data: updateData,
+      data: {
+        role: role ? {set: role} : undefined,
+        ...otherUpdateData,
+      },
     });
 
     return res.status(200).json({message: 'User updated successfully'});
