@@ -2,7 +2,6 @@ import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
 import {getEssentialUserProps} from '../utils/';
-import {TokenUserPayload} from '../types/userTypes';
 
 // ------------------- User Controller ---------------------- //
 
