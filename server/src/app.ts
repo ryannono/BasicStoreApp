@@ -1,8 +1,9 @@
+// eslint-disable-next-line node/no-extraneous-import
+import {PrismaClient} from '@prisma/client';
+import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-// eslint-disable-next-line node/no-extraneous-import
-import {PrismaClient} from '@prisma/client';
 import express from 'express';
 
 // Import routers
@@ -11,7 +12,7 @@ import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
 import orderRoutes from './routes/orderRoutes';
 import paymentRoutes from './routes/paymentRoutes';
-// import addressRoutes from './routes/addressRoutes';
+import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
 import {errorHandler} from './middlewares/errorMiddleware';
@@ -26,7 +27,7 @@ export const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors());
 
 // ---------------------- Routes -------------------- //
 
@@ -35,7 +36,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
-// app.use('/api/address', addressRoutes);
+app.use('/api/address', addressRoutes);
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
