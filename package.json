@@ -4,7 +4,7 @@
     "prisma": "^5.0.0"
   },
   "scripts": {
-    "start": "cd ./server & node build/src/server.js"
+    "start": "node server/build/src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
