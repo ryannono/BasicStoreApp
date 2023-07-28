@@ -9,8 +9,8 @@ import express from 'express';
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import productRoutes from './routes/productRoutes';
-// import orderRoutes from './routes/orderRoutes';
-// import paymentRoutes from './routes/paymentRoutes';
+import orderRoutes from './routes/orderRoutes';
+import paymentRoutes from './routes/paymentRoutes';
 // import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
@@ -33,8 +33,8 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/payments', paymentRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/payments', paymentRoutes);
 // app.use('/api/address', addressRoutes);
 app.use(errorHandler);
 

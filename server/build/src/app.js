@@ -14,8 +14,8 @@ const express_1 = __importDefault(require("express"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const productRoutes_1 = __importDefault(require("./routes/productRoutes"));
-// import orderRoutes from './routes/orderRoutes';
-// import paymentRoutes from './routes/paymentRoutes';
+const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
+const paymentRoutes_1 = __importDefault(require("./routes/paymentRoutes"));
 // import addressRoutes from './routes/addressRoutes';
 //import error middleware
 const errorMiddleware_1 = require("./middlewares/errorMiddleware");
@@ -31,8 +31,8 @@ exports.app.use((0, cors_1.default)({ credentials: true, origin: 'http://localho
 exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/auth', authRoutes_1.default);
 exports.app.use('/api/products', productRoutes_1.default);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/payments', paymentRoutes);
+exports.app.use('/api/orders', orderRoutes_1.default);
+exports.app.use('/api/payments', paymentRoutes_1.default);
 // app.use('/api/address', addressRoutes);
 exports.app.use(errorMiddleware_1.errorHandler);
 exports.app.get('/', (req, res) => {

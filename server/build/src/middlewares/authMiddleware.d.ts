@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 /**
- * Middleware function to authenticate user access.
+ * Asynchronous middleware function to authenticate access based on a valid access token.
  *
  * This function retrieves the access token from the incoming request's cookies,
- * verifies the token and checks whether the user has valid access permissions.
- *
+ * verifies the token, and checks whether the user is authenticated.
  * If the access token is missing, or if it's not verified, a JSON response with an
  * error message is sent and the middleware chain is interrupted. If the token is
- * valid, the next middleware function in the chain is invoked.
+ * valid, the user information extracted from the token is added to the request body,
+ * and the next middleware function in the chain is invoked.
  *
  * This function should be used in routes where authenticated access is required.
  *

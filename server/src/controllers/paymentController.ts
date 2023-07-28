@@ -56,7 +56,7 @@ export async function createPaymentIntent(
           ...shippingAddress,
         },
       },
-      OrderStatus: 'paymentInitiated',
+      orderStatus: 'paymentInitiated',
     };
 
     // Connect order with user, if userId is provided
@@ -127,7 +127,7 @@ export async function handleStripeWebhook(
       const order = await prisma.order.update({
         where: {stripePaymentIntentId: paymentIntent.id},
         data: {
-          OrderStatus: {
+          orderStatus: {
             set: 'paymentSucceeded',
           },
         },
