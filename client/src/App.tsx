@@ -63,54 +63,17 @@ function App() {
 
       <main className="flex items-center justify-center py-16 px-8">
         <div className="grid grid-cols-fill w-[80vw] max-w-[1152px] place-items-center gap-16">
-          {products.map(product => {
-            return <Card productName={product.name} productImgSrc={product.}
-          })}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />{' '}
-          <Card
-            productName="test"
-            productPrice={99.99}
-            productImgSrc="https://images.unsplash.com/photo-1690286727405-ecdf6ab04bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80"
-          />
+          {products &&
+            products.map((product, index) => {
+              return (
+                <Card
+                  key={`productCard-${index}`}
+                  productName={product.name}
+                  productPrice={product.price}
+                  productImgSrc={product.images[0].url}
+                />
+              );
+            })}
         </div>
       </main>
     </>
