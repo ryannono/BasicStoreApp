@@ -1,83 +1,8 @@
-// eslint-disable-next-line node/no-extraneous-import
-import {User} from '@prisma/client';
-import './input.css';
-import {motion} from 'framer-motion';
-import Card from './components/card';
-import {Button, CardActionArea, Input, TextField} from '@mui/material';
-import {
-  ArrowDownIcon,
-  BookmarkIcon,
-  MagnifyingGlassCircleIcon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-} from '@heroicons/react/24/solid';
-import {useEffect, useState} from 'react';
-import axios from './axios';
-import useProducts from './useProducts';
+import {RouterProvider} from 'react-router-dom';
+import globalRouter from './globals/globalRouter';
 
 function App() {
-  const products = useProducts();
-  return (
-    <>
-      <nav className="flex items-center w-screen h-20 bg-black text-blue-50 z-20 fixed shadow-lg ">
-        <div className="flex w-full py-5 px-20 items-center  justify-between">
-          {/* company logo */}
-          <div className="flex gap-1 font-bold">
-            <BookmarkIcon className="h-6" />
-            TasteTrove
-          </div>
-          {/* search bar */}
-          <div className="flex items-center w-2/3 max-w-xl h-8 justify-between border-[1px] border-gray-600 border-solid rounded-md overflow-hidden">
-            <Input
-              type="search"
-              disableUnderline
-              className=" placeholder-gray-50 w-full h-full text-md placeholder- flex items-center content-center pl-5 text-white"
-              placeholder="Search"
-            ></Input>{' '}
-            <Button className="w-14 h-full rounded-l-none bg-[#ffffff1b] items-center">
-              <MagnifyingGlassIcon className="h-5 text-gray-400" />
-            </Button>
-          </div>
-          {/* cart logo */}
-          <ShoppingBagIcon className="h-6" />
-        </div>
-      </nav>
-
-      <header className="bg-hero-bg bg-left bg-fill bg-no-repeat bg-[#070707] flex items-center h-[60vh] justify-center font-medium text-white w-screen, relative overflow-clip">
-        {/* circle 1 */}
-        {/* <div className="rounded-full h-[30rem] w-[30rem] bg-green-700 absolute -left-40 -bottom-40" /> */}
-        <div className="flex flex-col relative top-6 items-center backdrop-blur-sm w-full h-full justify-center relative shadow-2xl bg-[#0000005e] py-60 px-20 gap-8">
-          <span className="text-lg bg-orange-600 font-bold rounded-lg px-6 py-1">
-            TasteTrove The Spice Galore
-          </span>
-          <div className="flex flex-col items-center gap-10">
-            <span className="text-6xl font-bold text-center max-w-3xl">
-              Ignite Your Taste Buds with Our Exotic Spices
-            </span>
-            <Button className="bg-black px-6 py-4 text-orange-600 font-bold rounded-full">
-              <ArrowDownIcon />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="flex items-center justify-center py-16 px-8">
-        <div className="grid grid-cols-fill w-[80vw] max-w-[1152px] place-items-center gap-16">
-          {products &&
-            products.map((product, index) => {
-              return (
-                <Card
-                  key={`productCard-${index}`}
-                  productName={product.name}
-                  productPrice={product.price}
-                  productImgSrc={product.images[0].url}
-                />
-              );
-            })}
-        </div>
-      </main>
-    </>
-  );
+  return <RouterProvider router={globalRouter} />;
 }
 
 export default App;
