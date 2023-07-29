@@ -51,7 +51,9 @@ export async function getAllProducts(
   next: NextFunction
 ) {
   try {
-    const allProducts = await prisma.product.findMany();
+    const allProducts = await prisma.product.findMany({
+      include: {images: true},
+    });
     return res.status(200).json(allProducts);
   } catch (err) {
     return next(err);

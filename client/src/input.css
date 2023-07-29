@@ -2,14 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* -------------------------- fonts */
+
+/* Default */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../public/fonts/Satoshi/Satoshi-Variable.woff2') format('woff2'),
+    url('../public/fonts/Satoshi/Satoshi-Variable.woff') format('woff'),
+    url('../public/fonts/Satoshi/Satoshi-Variable.ttf') format('truetype');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* Italic */
+@font-face {
+  font-family: 'Satoshi-Italic';
+  src: url('../public/fonts/Satoshi/Satoshi-VariableItalic.woff2') format('woff2'),
+    url('../public/fonts/Satoshi/Satoshi-VariableItalic.woff') format('woff'),
+    url('../public/fonts/Satoshi/Satoshi-VariableItalic.ttf') format('truetype');
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: italic;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: 'Satoshi',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { 
+  display: none;
+ }
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
