@@ -19,8 +19,8 @@ const router = express.Router();
 
 // ------------------- user model routes --------------- //
 
-router.get('/', authenticateAccessToken, verifyAdmin, getAllUsers); // GET all users
-router.get('/:id', authenticateAccessToken, getUserById); // GET a specific user
+router.get('/', authenticateAccessToken, getAllUsers); // GET all users or single user depending on user Role
+router.get('/:id', authenticateAccessToken, verifyAdmin, getUserById); // GET a specific user
 router.put('/:id', authenticateAccessToken, verifyAdmin, updateUserById); // UPDATE a specific user
 router.delete('/:id', authenticateAccessToken, verifyAdmin, deleteUserById); // DELETE a specific user
 

@@ -2,6 +2,8 @@ import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
 import {getEssentialUserProps} from '../utils/';
+import {TokenUserPayload} from '../types/userTypes';
+import {verifyToken} from '../utils/tokenUtil';
 
 // ------------------- User Controller ---------------------- //
 
@@ -23,12 +25,20 @@ export async function getAllUsers(
   res: Response,
   next: NextFunction
 ) {
-  try {
-    const allUsers = await prisma.user.findMany();
-    const essentialAllUsers = allUsers.map(user => getEssentialUserProps(user));
-    return res.status(200).json(essentialAllUsers);
-  } catch (err) {
-    return next(err);
+  const user: TokenUserPayload = res.locals.user;
+
+  if (user.role === 'ADMIN') {
+    try {
+      const allUsers = await prisma.user.findMany();
+      const essentialAllUsers = allUsers.map(user =>
+        getEssentialUserProps(user)
+      );
+      return res.status(200).json(essentialAllUsers);
+    } catch (err) {
+      return next(err);
+    }
+  } else {
+    return res.status(200).json(user);
   }
 }
 

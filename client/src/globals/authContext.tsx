@@ -11,7 +11,7 @@ type AuthContexType = {
   ) => Promise<void>;
 };
 
-export const CartContext = createContext<CartContexType | null>(null);
+export const CartContext = createContext<AuthContexType | null>(null);
 
 export default function CartProvider(props: {children: ReactNode}) {
   const {cart, addToCart} = useCart();
