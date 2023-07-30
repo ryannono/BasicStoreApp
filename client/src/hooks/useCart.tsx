@@ -5,8 +5,8 @@ import {useEffect} from 'react';
 import axios from '../axios';
 import {ClientUser} from './useUser';
 
-export default function useCart(user?: ClientUser) {
-  const [cart, setCart] = useState(getCartFromLocalstorage());
+export default function useCart(user: ClientUser | null) {
+  const [cart, setCart] = useState<IndividualCartItem[]>([]);
 
   localStorage.clear();
 
@@ -26,20 +26,13 @@ export default function useCart(user?: ClientUser) {
       setCart(updatedCart);
     } else {
       try {
-        setCart(
-          (
-            await axios.post(
-              `/users/${user.id}/cart${
-                operation === 'decrement' ? '/' + item.productId : ''
-              }`,
-              item,
-              {
-                headers: {'Content-Type': 'application/JSON'},
-                withCredentials: true,
-              }
-            )
-          ).data
+        const updatedCart = await findAndModifyProductInDatabase(
+          user.id,
+          item,
+          operation
         );
+        console.log(updatedCart);
+        setCart(updatedCart);
       } catch (err) {
         console.error(err);
       }
@@ -47,12 +40,14 @@ export default function useCart(user?: ClientUser) {
   }
 
   useEffect(() => {
-    // Read from local storage every time the hook runs
-    const updatedCart = getCartFromLocalstorage();
-    setCart(updatedCart);
+    async function setUserCart() {
+      setCart(await getCartFromDatabase());
+    }
 
-    return () => {}; // update cart in database
-  }, []); // Empty dependency array means the effect runs once on mount
+    // Read from local storage every time the hook runs
+    if (user) setUserCart();
+    else setCart(getCartFromLocalstorage());
+  }, [user]);
 
   return {cart, editCart} as const;
 }
@@ -100,4 +95,35 @@ export function findAndModifyProductInCart(
   if (!foundMatch && modification === 'increment') updatedCart.push(item);
 
   return updatedCart;
+}
+
+export async function findAndModifyProductInDatabase(
+  userId: string,
+  item: IndividualCartItem,
+  modification: 'increment' | 'decrement'
+) {
+  const {productId, productQuantity} = item;
+  const updatedItem = {
+    productId,
+    productQuantity: productQuantity + (modification === 'increment' ? 1 : -1),
+  };
+  if (updatedItem.productQuantity > 0) {
+    return (
+      await axios.put(
+        `/users/${userId}/cart`,
+        {updatedItem},
+        {
+          headers: {'Content-Type': 'application/JSON'},
+          withCredentials: true,
+        }
+      )
+    ).data;
+  } else {
+    return (
+      await axios.delete(`/users/${userId}/cart/${updatedItem.productId}`, {
+        headers: {'Content-Type': 'application/JSON'},
+        withCredentials: true,
+      })
+    ).data;
+  }
 }

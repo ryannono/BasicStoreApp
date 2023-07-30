@@ -21,13 +21,19 @@ export default function ProductPage() {
 
   async function handleAddTocart() {
     if (product && cartContext) {
-      cartContext.addToCart({productId: product.id, productQuantity: 1});
+      cartContext.editCart(
+        {productId: product.id, productQuantity: 1},
+        'increment'
+      );
     }
   }
 
   async function handleCheckout() {
     if (product && cartContext) {
-      cartContext.addToCart({productId: product.id, productQuantity: 1});
+      cartContext.editCart(
+        {productId: product.id, productQuantity: 1},
+        'increment'
+      );
       navigate('/checkout');
     }
   }

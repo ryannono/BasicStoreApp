@@ -1,20 +1,22 @@
 import {ReactNode, createContext, useContext} from 'react';
 import useCart, {IndividualCartItem} from '../hooks/useCart';
+import {useUserContext} from './userContext';
 
 type CartContexType = {
   cart: IndividualCartItem[];
-  addToCart: (
+  editCart: (
     item: IndividualCartItem,
-    cartId?: string | undefined
+    operation: 'increment' | 'decrement'
   ) => Promise<void>;
 };
 
 const CartContext = createContext<CartContexType | null>(null);
 
 export default function CartProvider(props: {children: ReactNode}) {
-  const {cart, addToCart} = useCart();
+  const userContext = useUserContext();
+  const {cart, editCart} = useCart(userContext?.user ?? null);
   return (
-    <CartContext.Provider value={{cart, addToCart}}>
+    <CartContext.Provider value={{cart, editCart}}>
       {props.children}
     </CartContext.Provider>
   );

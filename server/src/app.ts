@@ -29,7 +29,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://tastetrove.up.railway.app/'],
+    origin(requestOrigin, callback) {
+      if (
+        requestOrigin?.startsWith('http://localhost') ||
+        requestOrigin === 'https://tastetrove.up.railway.app'
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
   })
 );
 
