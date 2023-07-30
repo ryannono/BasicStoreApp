@@ -37,6 +37,7 @@ exports.app.use((0, cors_1.default)({
             callback(new Error('Not allowed by CORS'));
         }
     },
+    credentials: true,
 }));
 // ---------------------- Routes -------------------- //
 exports.app.use('/api/users', userRoutes_1.default);
