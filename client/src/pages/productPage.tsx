@@ -44,7 +44,7 @@ export default function ProductPage() {
         <>
           <div
             id="leftContainer"
-            className="flex flex-col gap-4 w-1/2 items-end"
+            className="flex flex-col gap-10 w-1/2 items-end"
           >
             <img
               id="mainImage"

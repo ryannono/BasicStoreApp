@@ -4,7 +4,7 @@ import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useCartContext} from '../globals/cartContext';
 
-export default function Cart() {
+export default function CartChip() {
   const cartContext = useCartContext();
   const navigate = useNavigate();
   const totalQuantity = useMemo(() => {
@@ -16,7 +16,7 @@ export default function Cart() {
   const baseClasses = {
     onClick: () => navigate('/cart'),
     className:
-      'bg-orange-300 text-black font-bold items-center cursor-pointer px-0 label',
+      'bg-orange-300 hover:bg-orange-300 hover:scale-[1.1] text-black font-bold items-center cursor-pointer px-0 transition-all',
   };
 
   const chipProps = {

@@ -19,7 +19,7 @@ export default function Card({
   const navigate = useNavigate();
   return (
     <article
-      className={`flex flex-col h-80 w-64 rounded-md overflow-hidden gap-0 relative cursor-pointer ${className}`}
+      className={`flex flex-col h-80 w-64 rounded-md overflow-hidden gap-0 relative cursor-pointer shadow-none hover:shadow-2xl hover:scale-[1.01] transition-all ${className}`}
       onClick={() => navigate(`product/${productId}`)}
     >
       <img
