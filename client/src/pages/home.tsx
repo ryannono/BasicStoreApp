@@ -1,17 +1,12 @@
-import {
-  BookmarkIcon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-  ArrowDownIcon,
-} from '@heroicons/react/24/solid';
-import {Input, Button} from '@mui/material';
+import {ArrowDownIcon} from '@heroicons/react/24/solid';
+import {Button} from '@mui/material';
 import Card from '../components/card';
 import {useRef} from 'react';
 import {scrollToElement} from '../globals/globalFunctions';
-import useProducts, {ProductList} from '../hooks/useProducts';
+import useProducts from '../hooks/useProducts';
 
 export default function Home() {
-  const products = useProducts();
+  const products = useProducts(null);
   const productsGalleryRef = useRef<HTMLDivElement>(null);
   return (
     <>

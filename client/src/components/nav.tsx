@@ -5,7 +5,18 @@ import {
 } from '@heroicons/react/24/solid';
 import {Input, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import Cart from './cart';
 
+/**
+ * A functional component that renders the navigation bar.
+ *
+ * The navigation bar contains a company logo, a search bar, and a shopping bag icon.
+ * The company logo is clickable and navigates the user back to the home page.
+ * The search bar allows the user to search for products.
+ * The shopping bag icon represents the user's shopping cart.
+ *
+ * @returns The navigation bar as a JSX element.
+ */
 export default function Nav() {
   const navigate = useNavigate();
   return (
@@ -32,7 +43,7 @@ export default function Nav() {
           </Button>
         </div>
         {/* cart logo */}
-        <ShoppingBagIcon className="h-6" />
+        <Cart />
       </div>
     </nav>
   );
