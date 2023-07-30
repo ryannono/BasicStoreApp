@@ -14,8 +14,8 @@ exports.getEssentialUserProps = void 0;
  * @returns {TokenUserPayload} An object containing essential user properties.
  */
 function getEssentialUserProps(user) {
-    const { id, email, firstName, lastName, role } = user;
-    return { id, email, firstName, lastName, role };
+    const { id, email, firstName, lastName, role, cart } = user;
+    return { id, email, firstName, lastName, role, cartId: cart.id };
 }
 exports.getEssentialUserProps = getEssentialUserProps;
 //# sourceMappingURL=userUtil.js.map

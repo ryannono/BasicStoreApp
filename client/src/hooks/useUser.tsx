@@ -16,6 +16,7 @@ export default function useUser() {
 }
 
 export type ClientUser = {
+  id: string;
   email: string;
   password: string;
   firstName: string;

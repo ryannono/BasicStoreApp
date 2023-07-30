@@ -1,5 +1,6 @@
-import { User } from '@prisma/client';
 import { Response } from 'express';
+import { UserWithCart } from '../types';
+import { TokenUserPayload } from '../types/userTypes';
 /**
  * Asynchronous function to handle user authentication.
  *
@@ -20,4 +21,4 @@ import { Response } from 'express';
  *
  * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
-export declare function handleAuthentication(user: User, res: Response, withRefreshToken?: boolean): Promise<Response>;
+export declare function handleAuthentication(user: UserWithCart | TokenUserPayload, res: Response, withRefreshToken?: boolean): Promise<Response>;

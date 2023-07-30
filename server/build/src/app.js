@@ -27,7 +27,9 @@ exports.app = (0, express_1.default)();
 exports.app.use(body_parser_1.default.json());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cookie_parser_1.default)());
-exports.app.use((0, cors_1.default)());
+exports.app.use((0, cors_1.default)({
+    origin: ['http://localhost:3000', 'https://tastetrove.up.railway.app/'],
+}));
 // ---------------------- Routes -------------------- //
 exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/auth', authRoutes_1.default);
@@ -36,7 +38,7 @@ exports.app.use('/api/orders', orderRoutes_1.default);
 exports.app.use('/api/payments', paymentRoutes_1.default);
 exports.app.use('/api/address', addressRoutes_1.default);
 exports.app.use(errorMiddleware_1.errorHandler);
-exports.app.get('/', (req, res) => {
+exports.app.get('/api', (req, res) => {
     res.send('Welcome to the TasteTrove API!');
 });
 //# sourceMappingURL=app.js.map

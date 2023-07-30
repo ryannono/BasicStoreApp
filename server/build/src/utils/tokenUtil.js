@@ -3,8 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = exports.generateRefreshToken = exports.generateAccessToken = void 0;
+exports.verifyToken = exports.generateRefreshToken = exports.generateAccessToken = exports.isTokenUserPayload = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const userUtil_1 = require("./userUtil");
+function isTokenUserPayload(user) {
+    return user.cartId !== undefined;
+}
+exports.isTokenUserPayload = isTokenUserPayload;
 /**
  * The `generateAccessToken` function creates a new JSON Web Token (JWT)
  * which can be used as an access token for authenticating a user.
@@ -18,8 +23,15 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
  * and the secret key from the environment variable 'ACCESS_TOKEN_SECRET'.
  * The token will expire in 20 minutes ('20m').
  */
-function generateAccessToken({ id, email, firstName, lastName, role, }) {
-    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName, role }, process.env.ACCESS_TOKEN_SECRET, {
+function generateAccessToken(userData) {
+    let data;
+    if (isTokenUserPayload(userData)) {
+        data = userData;
+    }
+    else {
+        data = (0, userUtil_1.getEssentialUserProps)(userData);
+    }
+    return jsonwebtoken_1.default.sign(data, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '20m',
     });
 }
@@ -37,8 +49,15 @@ exports.generateAccessToken = generateAccessToken;
  * and the secret key from the environment variable 'REFRESH_TOKEN_SECRET'.
  * The token will expire in 14 days ('14d').
  */
-function generateRefreshToken({ id, email, firstName, lastName, role, }) {
-    return jsonwebtoken_1.default.sign({ id, email, firstName, lastName, role }, process.env.REFRESH_TOKEN_SECRET, {
+function generateRefreshToken(userData) {
+    let data;
+    if (isTokenUserPayload(userData)) {
+        data = userData;
+    }
+    else {
+        data = (0, userUtil_1.getEssentialUserProps)(userData);
+    }
+    return jsonwebtoken_1.default.sign(data, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '14d',
     });
 }

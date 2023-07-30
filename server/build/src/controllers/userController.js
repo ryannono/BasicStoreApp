@@ -18,13 +18,19 @@ const utils_1 = require("../utils/");
  * @throws {Error} If any error occurs during the process.
  */
 async function getAllUsers(req, res, next) {
-    try {
-        const allUsers = await app_1.prisma.user.findMany();
-        const essentialAllUsers = allUsers.map(user => (0, utils_1.getEssentialUserProps)(user));
-        return res.status(200).json(essentialAllUsers);
+    const user = res.locals.user;
+    if (user.role === 'ADMIN') {
+        try {
+            const allUsers = await app_1.prisma.user.findMany({ include: { cart: true } });
+            const essentialAllUsers = allUsers.map(user => (0, utils_1.getEssentialUserProps)(user));
+            return res.status(200).json(essentialAllUsers);
+        }
+        catch (err) {
+            return next(err);
+        }
     }
-    catch (err) {
-        return next(err);
+    else {
+        return res.status(200).json(user);
     }
 }
 exports.getAllUsers = getAllUsers;
@@ -46,6 +52,7 @@ async function getUserById(req, res, next) {
     try {
         const user = await app_1.prisma.user.findUnique({
             where: { id },
+            include: { cart: true },
         });
         if (!user)
             return res.status(404).json({ error: 'User not found' });
@@ -135,7 +142,7 @@ async function getCart(req, res, next) {
         const userId = req.params.userId;
         const cart = await app_1.prisma.cart.findUnique({
             where: { userId },
-            select: { id: true, items: true },
+            select: { items: { select: { productId: true, productQuantity: true } } },
         });
         return res.status(200).json(cart);
     }
@@ -175,7 +182,7 @@ async function addItemToCart(req, res, next) {
                     },
                 },
             },
-            include: { items: true },
+            select: { items: { select: { productId: true, productQuantity: true } } },
         });
         return res.status(200).json(updatedCart);
     }
@@ -206,30 +213,26 @@ exports.addItemToCart = addItemToCart;
 async function updateCartItem(req, res, next) {
     try {
         const { userId } = req.params;
+        const user = res.locals.user;
         const { productId, productQuantity } = req.body;
-        const cart = await app_1.prisma.cart.findUnique({
-            where: { userId },
-        });
-        if (!cart)
-            return res.status(404).json({ error: 'No cart found' });
         const updatedCart = await app_1.prisma.cart.update({
-            where: { userId },
+            where: { id: user.cartId },
             data: {
                 items: {
-                    update: {
-                        where: {
-                            cartId_productId: {
-                                cartId: cart.id,
-                                productId,
-                            },
+                    upsert: {
+                        where: { cartId_productId: { productId, cartId: user.cartId } },
+                        create: {
+                            productId,
+                            productQuantity,
                         },
-                        data: {
+                        update: {
+                            productId,
                             productQuantity,
                         },
                     },
                 },
             },
-            include: { items: true },
+            select: { items: { select: { productId: true, productQuantity: true } } },
         });
         return res.status(200).json(updatedCart);
     }
@@ -274,7 +277,7 @@ async function removeItemFromCart(req, res, next) {
                     },
                 },
             },
-            include: { items: true },
+            select: { items: { select: { productId: true, productQuantity: true } } },
         });
         return res.status(200).json(updatedCart);
     }

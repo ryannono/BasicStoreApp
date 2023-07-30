@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import useProducts from '../hooks/useProducts';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {Button} from '@mui/material';

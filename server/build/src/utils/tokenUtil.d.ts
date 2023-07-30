@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
-import { TokenUserPayload } from '../types/userTypes';
+import { TokenUserPayload, UserWithCart } from '../types/userTypes';
+export declare function isTokenUserPayload(user: UserWithCart | TokenUserPayload): user is TokenUserPayload;
 /**
  * The `generateAccessToken` function creates a new JSON Web Token (JWT)
  * which can be used as an access token for authenticating a user.
@@ -13,7 +13,7 @@ import { TokenUserPayload } from '../types/userTypes';
  * and the secret key from the environment variable 'ACCESS_TOKEN_SECRET'.
  * The token will expire in 20 minutes ('20m').
  */
-export declare function generateAccessToken({ id, email, firstName, lastName, role, }: User): string;
+export declare function generateAccessToken(userData: UserWithCart | TokenUserPayload): string;
 /**
  * The `generateRefreshToken` function creates a new JSON Web Token (JWT)
  * which can be used as a refresh token for refreshing the user's access token.
@@ -27,7 +27,7 @@ export declare function generateAccessToken({ id, email, firstName, lastName, ro
  * and the secret key from the environment variable 'REFRESH_TOKEN_SECRET'.
  * The token will expire in 14 days ('14d').
  */
-export declare function generateRefreshToken({ id, email, firstName, lastName, role, }: User): string;
+export declare function generateRefreshToken(userData: UserWithCart | TokenUserPayload): string;
 /**
  * Asynchronous function to verify a given JSON Web Token (JWT).
  *

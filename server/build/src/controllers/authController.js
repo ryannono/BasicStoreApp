@@ -50,6 +50,7 @@ async function registerUser(req, res, next) {
                 ...otherData,
                 cart: { create: {} },
             },
+            include: { cart: true },
         });
         console.log(createdUser);
         // respond with accesstoken and refreshtoken in http only cookie
@@ -83,7 +84,10 @@ async function loginUser(req, res, next) {
     try {
         const { email, password } = req.body;
         // identify the user
-        const user = await app_1.prisma.user.findUnique({ where: { email } });
+        const user = await app_1.prisma.user.findUnique({
+            where: { email },
+            include: { cart: true },
+        });
         if (!user)
             return res.status(401).json({ error: 'Invalid email' });
         // verify the password
@@ -154,7 +158,7 @@ async function refreshUser(req, res, next) {
         }
         // respond with accesstoken in http only cookie
         // also send user info
-        return (0, utils_1.handleAuthentication)(tokenInDb.tokenUser, res);
+        return (0, utils_1.handleAuthentication)(userData, res);
     }
     catch (err) {
         return next(err);

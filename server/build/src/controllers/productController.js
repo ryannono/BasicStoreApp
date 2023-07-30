@@ -43,7 +43,9 @@ exports.createProduct = createProduct;
  */
 async function getAllProducts(req, res, next) {
     try {
-        const allProducts = await app_1.prisma.product.findMany();
+        const allProducts = await app_1.prisma.product.findMany({
+            include: { images: true, category: true },
+        });
         return res.status(200).json(allProducts);
     }
     catch (err) {
@@ -70,6 +72,7 @@ async function getProductById(req, res, next) {
     try {
         const product = await app_1.prisma.product.findUnique({
             where: { id },
+            include: { images: true, category: true },
         });
         if (!product)
             return res.status(404).json({ error: 'Product not found' });
@@ -103,6 +106,7 @@ async function updateProductById(req, res, next) {
         const updatedProduct = await app_1.prisma.product.update({
             where: { id },
             data: req.body,
+            include: { images: true, category: true },
         });
         return res.status(200).json(updatedProduct);
     }
@@ -130,6 +134,7 @@ async function deleteProductById(req, res, next) {
     try {
         const deletedProduct = await app_1.prisma.product.delete({
             where: { id },
+            include: { images: true, category: true },
         });
         return res.status(200).json(deletedProduct);
     }

@@ -1,21 +1,25 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {CartItem, User} from '@prisma/client';
+import {CartItem} from '@prisma/client';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import axios from '../axios';
+import {ClientUser} from './useUser';
 
-export default function useCart(user?: User) {
+export default function useCart(user?: ClientUser) {
   const [cart, setCart] = useState(getCartFromLocalstorage());
 
   localStorage.clear();
 
-  async function addToCart(item: IndividualCartItem) {
+  async function editCart(
+    item: IndividualCartItem,
+    operation: 'increment' | 'decrement'
+  ) {
     if (!user) {
       const currentCart = getCartFromLocalstorage();
       const updatedCart = findAndModifyProductInCart(
         currentCart,
         item,
-        'increment'
+        operation
       );
       saveCartToLocalstorage(updatedCart);
       console.log(updatedCart);
@@ -24,37 +28,16 @@ export default function useCart(user?: User) {
       try {
         setCart(
           (
-            await axios.post(`/users/${user.id}/cart`, item, {
-              headers: {'Content-Type': 'application/JSON'},
-              withCredentials: true,
-            })
-          ).data
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }
-
-  async function removeFromCart(item: IndividualCartItem) {
-    if (!user) {
-      const currentCart = getCartFromLocalstorage();
-      const updatedCart = findAndModifyProductInCart(
-        currentCart,
-        item,
-        'decrement'
-      );
-      saveCartToLocalstorage(updatedCart);
-      console.log(updatedCart);
-      setCart(updatedCart);
-    } else {
-      try {
-        setCart(
-          (
-            await axios.post(`/users/${user.id}/cart/${item.productId}`, item, {
-              headers: {'Content-Type': 'application/JSON'},
-              withCredentials: true,
-            })
+            await axios.post(
+              `/users/${user.id}/cart${
+                operation === 'decrement' ? '/' + item.productId : ''
+              }`,
+              item,
+              {
+                headers: {'Content-Type': 'application/JSON'},
+                withCredentials: true,
+              }
+            )
           ).data
         );
       } catch (err) {
@@ -67,15 +50,26 @@ export default function useCart(user?: User) {
     // Read from local storage every time the hook runs
     const updatedCart = getCartFromLocalstorage();
     setCart(updatedCart);
+
+    return () => {}; // update cart in database
   }, []); // Empty dependency array means the effect runs once on mount
 
-  return {cart, addToCart, removeFromCart} as const;
+  return {cart, editCart} as const;
 }
 
 export type IndividualCartItem = Omit<CartItem, 'id' | 'cartId'>;
 
 function saveCartToLocalstorage(cart: IndividualCartItem[]) {
   localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+async function getCartFromDatabase() {
+  return (
+    await axios.get('/users/cart', {
+      headers: {'Content-Type': 'application/JSON'},
+      withCredentials: true,
+    })
+  ).data;
 }
 
 export function getCartFromLocalstorage(): IndividualCartItem[] {

@@ -1,10 +1,15 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {User} from '@prisma/client';
 import {Response} from 'express';
 import {MINUTE, DAY} from './constants';
-import {generateAccessToken, generateRefreshToken} from './tokenUtil';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  isTokenUserPayload,
+} from './tokenUtil';
 import {prisma} from '../app';
 import {getEssentialUserProps} from './userUtil';
+import {UserWithCart} from '../types';
+import {TokenUserPayload} from '../types/userTypes';
 
 /**
  * Asynchronous function to handle user authentication.
@@ -27,7 +32,7 @@ import {getEssentialUserProps} from './userUtil';
  * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
 export async function handleAuthentication(
-  user: User,
+  user: UserWithCart | TokenUserPayload,
   res: Response,
   withRefreshToken?: boolean
 ): Promise<Response> {
@@ -60,5 +65,7 @@ export async function handleAuthentication(
   }
 
   // send user in response body
-  return res.status(200).json(getEssentialUserProps(user));
+  return res
+    .status(200)
+    .json(isTokenUserPayload(user) ? user : getEssentialUserProps(user));
 }

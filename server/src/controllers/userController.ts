@@ -2,8 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
 import {getEssentialUserProps} from '../utils/';
-import {TokenUserPayload} from '../types/userTypes';
-import {verifyToken} from '../utils/tokenUtil';
+import {TokenUserPayload, UserWithCart} from '../types/userTypes';
 
 // ------------------- User Controller ---------------------- //
 
@@ -29,9 +28,9 @@ export async function getAllUsers(
 
   if (user.role === 'ADMIN') {
     try {
-      const allUsers = await prisma.user.findMany();
+      const allUsers = await prisma.user.findMany({include: {cart: true}});
       const essentialAllUsers = allUsers.map(user =>
-        getEssentialUserProps(user)
+        getEssentialUserProps(user as UserWithCart)
       );
       return res.status(200).json(essentialAllUsers);
     } catch (err) {
@@ -65,10 +64,11 @@ export async function getUserById(
   try {
     const user = await prisma.user.findUnique({
       where: {id},
+      include: {cart: true},
     });
 
     if (!user) return res.status(404).json({error: 'User not found'});
-    return res.status(200).json(getEssentialUserProps(user));
+    return res.status(200).json(getEssentialUserProps(user as UserWithCart));
   } catch (err) {
     return next(err);
   }
@@ -164,7 +164,7 @@ export async function getCart(req: Request, res: Response, next: NextFunction) {
     const userId = req.params.userId;
     const cart = await prisma.cart.findUnique({
       where: {userId},
-      select: {id: true, items: true},
+      select: {items: {select: {productId: true, productQuantity: true}}},
     });
     return res.status(200).json(cart);
   } catch (err) {
@@ -208,7 +208,7 @@ export async function addItemToCart(
           },
         },
       },
-      include: {items: true},
+      select: {items: {select: {productId: true, productQuantity: true}}},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {
@@ -242,32 +242,27 @@ export async function updateCartItem(
 ) {
   try {
     const {userId} = req.params;
+    const user: TokenUserPayload = res.locals.user;
     const {productId, productQuantity} = req.body as MutableCartItemPayload;
 
-    const cart = await prisma.cart.findUnique({
-      where: {userId},
-    });
-
-    if (!cart) return res.status(404).json({error: 'No cart found'});
-
     const updatedCart = await prisma.cart.update({
-      where: {userId},
+      where: {id: user.cartId},
       data: {
         items: {
-          update: {
-            where: {
-              cartId_productId: {
-                cartId: cart.id,
-                productId,
-              },
+          upsert: {
+            where: {cartId_productId: {productId, cartId: user.cartId}},
+            create: {
+              productId,
+              productQuantity,
             },
-            data: {
+            update: {
+              productId,
               productQuantity,
             },
           },
         },
       },
-      include: {items: true},
+      select: {items: {select: {productId: true, productQuantity: true}}},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {
@@ -317,7 +312,7 @@ export async function removeItemFromCart(
           },
         },
       },
-      include: {items: true},
+      select: {items: {select: {productId: true, productQuantity: true}}},
     });
     return res.status(200).json(updatedCart);
   } catch (err) {

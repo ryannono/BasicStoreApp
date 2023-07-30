@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {LoginUserPayload, MutableUserPayload} from '../types';
+import {LoginUserPayload, MutableUserPayload, UserWithCart} from '../types';
 import {prisma} from '../app';
 import {getStripeCustomerId} from '../services/stripeService';
 import {
@@ -63,13 +63,14 @@ export async function registerUser(
         ...otherData,
         cart: {create: {}},
       },
+      include: {cart: true},
     });
 
     console.log(createdUser);
 
     // respond with accesstoken and refreshtoken in http only cookie
     // also send user info
-    return handleAuthentication(createdUser, res, true);
+    return handleAuthentication(createdUser as UserWithCart, res, true);
   } catch (err) {
     return next(err);
   }
@@ -102,7 +103,10 @@ export async function loginUser(
     const {email, password} = req.body as LoginUserPayload;
 
     // identify the user
-    const user = await prisma.user.findUnique({where: {email}});
+    const user = await prisma.user.findUnique({
+      where: {email},
+      include: {cart: true},
+    });
     if (!user) return res.status(401).json({error: 'Invalid email'});
 
     // verify the password
@@ -113,7 +117,7 @@ export async function loginUser(
 
     // respond with accesstoken and refreshtoken in http only cookie
     // also send user info
-    return handleAuthentication(user, res, true);
+    return handleAuthentication(user as UserWithCart, res, true);
   } catch (err) {
     return next(err);
   }
@@ -183,7 +187,7 @@ export async function refreshUser(
 
     // respond with accesstoken in http only cookie
     // also send user info
-    return handleAuthentication(tokenInDb.tokenUser, res);
+    return handleAuthentication(userData, res);
   } catch (err) {
     return next(err);
   }

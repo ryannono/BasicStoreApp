@@ -2,7 +2,14 @@
 // eslint-disable-next-line node/no-extraneous-import
 import {User} from '@prisma/client';
 import jwt, {JwtPayload} from 'jsonwebtoken';
-import {TokenUserPayload} from '../types/userTypes';
+import {TokenUserPayload, UserWithCart} from '../types/userTypes';
+import {getEssentialUserProps} from './userUtil';
+
+export function isTokenUserPayload(
+  user: UserWithCart | TokenUserPayload
+): user is TokenUserPayload {
+  return (user as TokenUserPayload).cartId !== undefined;
+}
 
 /**
  * The `generateAccessToken` function creates a new JSON Web Token (JWT)
@@ -17,20 +24,16 @@ import {TokenUserPayload} from '../types/userTypes';
  * and the secret key from the environment variable 'ACCESS_TOKEN_SECRET'.
  * The token will expire in 20 minutes ('20m').
  */
-export function generateAccessToken({
-  id,
-  email,
-  firstName,
-  lastName,
-  role,
-}: User) {
-  return jwt.sign(
-    {id, email, firstName, lastName, role},
-    process.env.ACCESS_TOKEN_SECRET as string,
-    {
-      expiresIn: '20m',
-    }
-  );
+export function generateAccessToken(userData: UserWithCart | TokenUserPayload) {
+  let data;
+  if (isTokenUserPayload(userData)) {
+    data = userData;
+  } else {
+    data = getEssentialUserProps(userData);
+  }
+  return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET as string, {
+    expiresIn: '20m',
+  });
 }
 
 /**
@@ -46,20 +49,18 @@ export function generateAccessToken({
  * and the secret key from the environment variable 'REFRESH_TOKEN_SECRET'.
  * The token will expire in 14 days ('14d').
  */
-export function generateRefreshToken({
-  id,
-  email,
-  firstName,
-  lastName,
-  role,
-}: User) {
-  return jwt.sign(
-    {id, email, firstName, lastName, role},
-    process.env.REFRESH_TOKEN_SECRET as string,
-    {
-      expiresIn: '14d',
-    }
-  );
+export function generateRefreshToken(
+  userData: UserWithCart | TokenUserPayload
+) {
+  let data;
+  if (isTokenUserPayload(userData)) {
+    data = userData;
+  } else {
+    data = getEssentialUserProps(userData);
+  }
+  return jwt.sign(data, process.env.REFRESH_TOKEN_SECRET as string, {
+    expiresIn: '14d',
+  });
 }
 
 /**
