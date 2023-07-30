@@ -4,10 +4,37 @@ import Card from '../components/card';
 import {useRef} from 'react';
 import {scrollToElement} from '../globals/globalFunctions';
 import useProducts from '../hooks/useProducts';
+import {useFilterContext} from '../globals/filterContext';
 
 export default function Home() {
   const products = useProducts(null);
   const productsGalleryRef = useRef<HTMLDivElement>(null);
+  const filterContext = useFilterContext();
+
+  const productCards = products?.map((product, index) => {
+    const {category, images, name, price, id} = product;
+    const {filter} = filterContext!;
+
+    return (
+      <Card
+        key={`productCard-${index}`}
+        productId={id}
+        productName={name}
+        productPrice={price}
+        productImgSrc={images[0].url}
+        className={
+          filter &&
+          !(
+            name.toLowerCase().includes(filter) ||
+            category.name.toLowerCase().includes(filter)
+          )
+            ? 'hidden'
+            : ''
+        }
+      />
+    );
+  });
+
   return (
     <>
       <header className="bg-hero-bg bg-left bg-fill bg-no-repeat bg-[#070707] flex items-center h-[60vh] justify-center font-medium text-white w-screen, relative overflow-clip">
@@ -37,18 +64,7 @@ export default function Home() {
         className="flex items-center justify-center py-16 px-8"
       >
         <div className="grid grid-cols-fill w-[80vw] max-w-[1152px] place-items-center gap-16">
-          {products &&
-            products.map((product, index) => {
-              return (
-                <Card
-                  key={`productCard-${index}`}
-                  productId={product.id}
-                  productName={product.name}
-                  productPrice={product.price}
-                  productImgSrc={product.images[0].url}
-                />
-              );
-            })}
+          {productCards}
         </div>
       </main>
     </>

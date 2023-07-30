@@ -6,6 +6,7 @@ type CardProps = {
   productId: string;
   productName: string;
   productImgSrc: string;
+  className: string;
 };
 
 export default function Card({
@@ -13,11 +14,12 @@ export default function Card({
   productName,
   productPrice,
   productImgSrc,
+  className,
 }: CardProps) {
   const navigate = useNavigate();
   return (
     <article
-      className="flex flex-col h-80 w-64 rounded-md overflow-hidden gap-0 relative cursor-pointer"
+      className={`flex flex-col h-80 w-64 rounded-md overflow-hidden gap-0 relative cursor-pointer ${className}`}
       onClick={() => navigate(`product/${productId}`)}
     >
       <img

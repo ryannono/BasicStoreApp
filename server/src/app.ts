@@ -31,7 +31,7 @@ app.use(
   cors({
     origin(requestOrigin, callback) {
       if (
-        requestOrigin?.startsWith('http://localhost') ||
+        requestOrigin?.startsWith('http://localhost:') ||
         requestOrigin === 'https://tastetrove.up.railway.app'
       ) {
         callback(null, true);

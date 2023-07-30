@@ -6,6 +6,7 @@ import {
 import {Input, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import Cart from './cart';
+import SearchBar from './searchBar';
 
 /**
  * A functional component that renders the navigation bar.
@@ -30,18 +31,12 @@ export default function Nav() {
           <BookmarkIcon className="h-6" />
           TasteTrove
         </div>
+
         {/* search bar */}
         <div className="flex items-center w-2/3 max-w-xl h-8 justify-between border-[1px] border-gray-600 border-solid rounded-md overflow-hidden">
-          <Input
-            type="search"
-            disableUnderline
-            className=" placeholder-gray-50 w-full h-full text-md placeholder- flex items-center content-center pl-5 text-white"
-            placeholder="Search"
-          ></Input>{' '}
-          <Button className="w-14 h-full rounded-l-none bg-[#ffffff1b] items-center">
-            <MagnifyingGlassIcon className="h-5 text-gray-400" />
-          </Button>
+          <SearchBar />
         </div>
+
         {/* cart logo */}
         <Cart />
       </div>

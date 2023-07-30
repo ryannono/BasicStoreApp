@@ -8,14 +8,12 @@ import {ClientUser} from './useUser';
 export default function useCart(user: ClientUser | null) {
   const [cart, setCart] = useState<IndividualCartItem[]>([]);
 
-  localStorage.clear();
-
   async function editCart(
     item: IndividualCartItem,
     operation: 'increment' | 'decrement'
   ) {
     if (!user) {
-      const currentCart = getCartFromLocalstorage();
+      const currentCart = await getCart('localStorage');
       const updatedCart = findAndModifyProductInCart(
         currentCart,
         item,
@@ -40,13 +38,12 @@ export default function useCart(user: ClientUser | null) {
   }
 
   useEffect(() => {
-    async function setUserCart() {
-      setCart(await getCartFromDatabase());
+    async function getAndSetCart() {
+      setCart(await getCart(user ? 'database' : 'localStorage'));
     }
 
     // Read from local storage every time the hook runs
-    if (user) setUserCart();
-    else setCart(getCartFromLocalstorage());
+    getAndSetCart();
   }, [user]);
 
   return {cart, editCart} as const;
@@ -58,18 +55,20 @@ function saveCartToLocalstorage(cart: IndividualCartItem[]) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-async function getCartFromDatabase() {
-  return (
-    await axios.get('/users/cart', {
-      headers: {'Content-Type': 'application/JSON'},
-      withCredentials: true,
-    })
-  ).data;
-}
-
-export function getCartFromLocalstorage(): IndividualCartItem[] {
-  const cart = localStorage.getItem('cart');
-  return cart ? JSON.parse(cart) : [];
+async function getCart(
+  cartOrigin: 'localStorage' | 'database'
+): Promise<IndividualCartItem[]> {
+  if (cartOrigin === 'database') {
+    return (
+      await axios.get('/users/cart', {
+        headers: {'Content-Type': 'application/JSON'},
+        withCredentials: true,
+      })
+    ).data;
+  } else {
+    const cart = localStorage.getItem('cart');
+    return cart ? JSON.parse(cart) : [];
+  }
 }
 
 export function findAndModifyProductInCart(

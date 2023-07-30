@@ -39,9 +39,9 @@ export default function ProductPage() {
   }
 
   return (
-    <main className="flex w-screen h-[92vh] relative top-20">
+    <main className="flex w-[calc(100vw-(2*5rem))] h-[92vh] relative top-20 p-20 gap-[6vw]">
       {product && (
-        <div className="flex w-full h-full p-20 gap-20">
+        <>
           <div
             id="leftContainer"
             className="flex flex-col gap-4 w-1/2 items-end"
@@ -49,20 +49,23 @@ export default function ProductPage() {
             <img
               id="mainImage"
               src={product.images[selectedImageIndex].url}
-              className="w-[35rem] rounded-lg shadow-2xl aspect-square object-cover"
+              className="w-full rounded-lg shadow-2xl max-w-xl aspect-square object-cover"
             />
-            <div id="secondaryImages" className="flex h-32 w-[35rem] gap-5">
+            <div
+              id="secondaryImages"
+              className="flex h-32 w-full max-w-xl gap-5"
+            >
               {product.images.map((image, index) => {
                 return (
                   <img
                     key={`secondaryImage-${index}`}
-                    className={`aspect-square object-cover w-[7.5rem] rounded-md border-2 border-solid border-gray-600 shadow-md cursor-pointer ${
+                    className={`flex aspect-square object-cover rounded-md border-2 border-solid border-gray-600 shadow-md cursor-pointer ${
                       index === selectedImageIndex
-                        ? 'border-solid border-orange-600 border-[4px]'
-                        : ''
+                        ? 'border-solid border-orange-600 border-[4px] w-[calc(((100%-3.75rem)/4)-8px)]'
+                        : 'w-[calc(((100%-3.75rem)/4)-4px)]'
                     }`}
                     src={image.url}
-                    alt={`image of ${product.name} ${index}`}
+                    alt={`image of ${product.name} ${index + 1}`}
                     onClick={() => handleImageSelection(index)}
                   />
                 );
@@ -71,7 +74,7 @@ export default function ProductPage() {
           </div>
 
           <div id="rightContainer" className="flex flex-col w-1/2 gap-5">
-            <div id="nameAndPrice" className="flex flex-col gap-2">
+            <section id="nameAndPrice" className="flex flex-col gap-2">
               <span id="productName" className="font-black text-4xl">
                 {product.name}
               </span>
@@ -81,18 +84,52 @@ export default function ProductPage() {
               >
                 {`${product.price}$`}
               </span>
-            </div>
+            </section>
 
             <div
               id="divider"
               className="max-w-md h-[2px] bg-gray-700 bg-opacity-40"
             />
 
-            <span id="productDescription" className="max-w-md font-semibold">
+            <section id="productDescriptors" className="flex flex-col gap-2">
+              <div id="categoryAndStock" className="flex gap-3">
+                <span
+                  id="productCategory"
+                  className="font-bold text-l  text-gray-500"
+                >
+                  Category: {product.category.name}
+                </span>
+                <div
+                  id="divider"
+                  className="w-[1px] h-5 bg-gray-900 bg-opacity-30"
+                />
+                <span
+                  id="productCategory"
+                  className="font-bold text-l  text-gray-500"
+                >
+                  Stock: {product.stock}
+                </span>
+              </div>
+            </section>
+
+            <div
+              id="divider"
+              className="max-w-md h-[2px] bg-gray-700 bg-opacity-10"
+            />
+
+            <span
+              id="productDescription"
+              className="max-w-md text-lg font-semibold"
+            >
               {product.description}
             </span>
 
-            <div id="CTA's" className="flex flex-col gap-4">
+            <div
+              id="divider"
+              className="max-w-md h-[2px] bg-gray-700 bg-opacity-0"
+            />
+
+            <section id="CTA's" className="flex flex-col gap-4">
               <Button
                 className="max-w-md bg-black text-orange-600 hover:bg-[#363636] py-4"
                 onClick={handleAddTocart}
@@ -105,9 +142,9 @@ export default function ProductPage() {
               >
                 Checkout
               </Button>
-            </div>
+            </section>
           </div>
-        </div>
+        </>
       )}
     </main>
   );
