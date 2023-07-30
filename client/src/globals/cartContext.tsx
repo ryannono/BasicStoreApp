@@ -1,4 +1,4 @@
-import {ReactNode, createContext} from 'react';
+import {ReactNode, createContext, useContext} from 'react';
 import useCart, {IndividualCartItem} from '../hooks/useCart';
 
 type CartContexType = {
@@ -9,7 +9,7 @@ type CartContexType = {
   ) => Promise<void>;
 };
 
-export const CartContext = createContext<CartContexType | null>(null);
+const CartContext = createContext<CartContexType | null>(null);
 
 export default function CartProvider(props: {children: ReactNode}) {
   const {cart, addToCart} = useCart();
@@ -18,4 +18,8 @@ export default function CartProvider(props: {children: ReactNode}) {
       {props.children}
     </CartContext.Provider>
   );
+}
+
+export function useCartContext() {
+  return useContext(CartContext);
 }

@@ -27,7 +27,11 @@ export const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://tastetrove.up.railway.app/'],
+  })
+);
 
 // ---------------------- Routes -------------------- //
 
@@ -39,6 +43,6 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/address', addressRoutes);
 app.use(errorHandler);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Welcome to the TasteTrove API!');
 });

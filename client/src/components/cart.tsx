@@ -1,8 +1,8 @@
 import {ShoppingBagIcon} from '@heroicons/react/24/solid';
-import useCartContext from '../hooks/useCartContext';
 import {Avatar, Button, Chip} from '@mui/material';
 import {useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useCartContext} from '../globals/cartContext';
 
 export default function Cart() {
   const cartContext = useCartContext();

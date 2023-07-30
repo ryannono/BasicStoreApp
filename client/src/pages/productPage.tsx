@@ -2,8 +2,7 @@ import React, {useContext, useMemo, useState} from 'react';
 import useProducts from '../hooks/useProducts';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {Button} from '@mui/material';
-import useCart from '../hooks/useCart';
-import {CartContext} from '../globals/cartContext';
+import {useCartContext} from '../globals/cartContext';
 
 export default function ProductPage() {
   const location = useLocation();
@@ -14,7 +13,7 @@ export default function ProductPage() {
   );
   const product = useProducts(productId);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
-  const cartContext = useContext(CartContext);
+  const cartContext = useCartContext();
 
   function handleImageSelection(index: number) {
     setSelectedImageIndex(index);
