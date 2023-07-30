@@ -28,7 +28,15 @@ exports.app.use(body_parser_1.default.json());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 exports.app.use((0, cookie_parser_1.default)());
 exports.app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'https://tastetrove.up.railway.app/'],
+    origin(requestOrigin, callback) {
+        if ((requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.startsWith('http://localhost:')) ||
+            requestOrigin === 'https://tastetrove.up.railway.app') {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
 }));
 // ---------------------- Routes -------------------- //
 exports.app.use('/api/users', userRoutes_1.default);
