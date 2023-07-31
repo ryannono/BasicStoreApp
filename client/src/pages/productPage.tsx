@@ -1,8 +1,8 @@
 import {useMemo, useState} from 'react';
-import useProducts from '../hooks/useProducts';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {Button} from '@mui/material';
 import {useCartContext} from '../globals/cartContext';
+import {useProductsContext} from '../globals/productContext';
 
 export default function ProductPage() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function ProductPage() {
     () => location.pathname.split('/').at(-1) as string,
     [location.pathname]
   );
-  const product = useProducts(productId);
+  const product = useProductsContext()?.productsMap.get(productId);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
   const cartContext = useCartContext();
 
@@ -21,21 +21,13 @@ export default function ProductPage() {
 
   async function handleAddTocart() {
     if (product && cartContext) {
-      cartContext.editCart(
-        {productId: product.id, productQuantity: 1},
-        'increment'
-      );
+      cartContext.editCart(product.id, 1, 'increment');
     }
   }
 
   async function handleCheckout() {
-    if (product && cartContext) {
-      cartContext.editCart(
-        {productId: product.id, productQuantity: 1},
-        'increment'
-      );
-      navigate('/checkout');
-    }
+    handleAddTocart();
+    navigate('/checkout');
   }
 
   return (

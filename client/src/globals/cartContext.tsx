@@ -4,9 +4,12 @@ import {useUserContext} from './userContext';
 
 type CartContexType = {
   cart: IndividualCartItem[];
+  totalPrice: number;
+  totalQuantity: number | null;
   editCart: (
-    item: IndividualCartItem,
-    operation: 'increment' | 'decrement'
+    itemToEditId: string,
+    newQuantity: number,
+    operation?: 'increment' | 'decrement'
   ) => Promise<void>;
 };
 
@@ -14,9 +17,11 @@ const CartContext = createContext<CartContexType | null>(null);
 
 export default function CartProvider(props: {children: ReactNode}) {
   const userContext = useUserContext();
-  const {cart, editCart} = useCart(userContext?.user ?? null);
+  const {cart, totalQuantity, totalPrice, editCart} = useCart(
+    userContext?.user ?? null
+  );
   return (
-    <CartContext.Provider value={{cart, editCart}}>
+    <CartContext.Provider value={{cart, totalQuantity, totalPrice, editCart}}>
       {props.children}
     </CartContext.Provider>
   );

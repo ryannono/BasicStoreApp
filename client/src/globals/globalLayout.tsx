@@ -3,19 +3,22 @@ import Nav from '../components/nav';
 import CartProvider from './cartContext';
 import UserProvider from './userContext';
 import FilterProvider from './filterContext';
+import ProductsProvider from './productContext';
 
 export default function GlobalLayout() {
   return (
     <>
-      <UserProvider>
-        <CartProvider>
-          <FilterProvider>
-            <Nav />
-            <ScrollRestoration />
-            <Outlet />
-          </FilterProvider>
-        </CartProvider>
-      </UserProvider>
+      <ProductsProvider>
+        <UserProvider>
+          <CartProvider>
+            <FilterProvider>
+              <Nav />
+              <ScrollRestoration />
+              <Outlet />
+            </FilterProvider>
+          </CartProvider>
+        </UserProvider>
+      </ProductsProvider>
     </>
   );
 }

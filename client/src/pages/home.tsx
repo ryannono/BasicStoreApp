@@ -3,15 +3,15 @@ import {Button} from '@mui/material';
 import Card from '../components/card';
 import {useRef} from 'react';
 import {scrollToElement} from '../globals/globalFunctions';
-import useProducts from '../hooks/useProducts';
 import {useFilterContext} from '../globals/filterContext';
+import {useProductsContext} from '../globals/productContext';
 
 export default function Home() {
-  const products = useProducts(null);
+  const productsContext = useProductsContext();
   const productsGalleryRef = useRef<HTMLDivElement>(null);
   const filterContext = useFilterContext();
 
-  const productCards = products?.map((product, index) => {
+  const productCards = productsContext?.products?.map((product, index) => {
     const {category, images, name, price, id} = product;
     const {filter} = filterContext!;
 

@@ -4,33 +4,20 @@ import {
   ProductImage,
   // eslint-disable-next-line node/no-extraneous-import
 } from '@prisma/client';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import axios from '../axios';
 
-type IndividualProduct = Product & {
-  images: ProductImage[];
-  category: ProductCategory;
-};
-
-export type ProductList = IndividualProduct[];
-
-export type ProductOrProductList<T extends string | null> = T extends string
-  ? IndividualProduct
-  : ProductList;
-
-type IdType = string | null;
-
-export default function useProducts<T extends IdType>(
-  id: T
-): null | ProductOrProductList<T> {
-  const [products, setProducts] = useState<ProductOrProductList<T> | null>(
-    null
+export default function useProducts() {
+  const [products, setProducts] = useState<IndividualProduct[] | null>(null);
+  const productsMap = useMemo(
+    () => new Map(products?.map(product => [product.id, product])),
+    [products]
   );
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const response = await axios.get(`/products${id ? `/${id}` : ''}`);
+        const response = await axios.get('/products');
         setProducts(response.data);
       } catch (err) {
         console.error(err);
@@ -40,5 +27,19 @@ export default function useProducts<T extends IdType>(
     fetchProducts();
   }, []);
 
-  return products;
+  return {
+    products,
+    productsMap,
+  };
 }
+
+export type IndividualProduct = Product & {
+  images: ProductImage[];
+  category: ProductCategory;
+};
+
+export type ProductOrProductList<T extends string | null> = T extends string
+  ? IndividualProduct
+  : IndividualProduct[];
+
+type IdType = string | null;

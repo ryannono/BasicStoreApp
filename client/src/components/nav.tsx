@@ -1,6 +1,6 @@
 import {BookmarkIcon} from '@heroicons/react/24/solid';
 import {useNavigate} from 'react-router-dom';
-import CartChip from './cartChip';
+import Cart from './cart/cart';
 import SearchBar from './searchBar';
 
 /**
@@ -33,7 +33,7 @@ export default function Nav() {
         </div>
 
         {/* cart logo */}
-        <CartChip />
+        <Cart />
       </div>
     </nav>
   );
