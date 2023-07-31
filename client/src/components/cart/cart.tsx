@@ -11,7 +11,7 @@ export default function Cart() {
   const cartOverlayRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const cartContext = useCartContext();
-  const {cart, totalPrice, totalQuantity, editCart} = cartContext!;
+  const {totalPrice, totalQuantity} = cartContext!;
   function toggleCartPanel() {
     document.body.classList.toggle('overflow-hidden');
     cartOverlayRef.current?.classList.toggle('hidden');

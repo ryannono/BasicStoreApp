@@ -8,7 +8,7 @@ import React from 'react';
 
 export default function CartProducts() {
   const cartContext = useCartContext();
-  const {products, productsMap} = useProductsContext()!;
+  const productsContext = useProductsContext();
 
   function ProductDivider() {
     return (
@@ -20,14 +20,15 @@ export default function CartProducts() {
 
   return (
     <>
-      {products &&
+      {productsContext &&
         cartContext &&
-        cartContext.cart?.map((product, index) => {
+        cartContext.cart?.map((cartItem, index) => {
+          const {productsMap} = productsContext;
           const {cart, editCart} = cartContext;
           return (
             <React.Fragment key={`fragment-${index}`}>
               <CartProduct
-                cartItem={product}
+                cartItem={cartItem}
                 productsMap={productsMap}
                 key={`cartProduct-${index}`}
                 editCart={editCart}
