@@ -91,11 +91,13 @@ export async function getCart(
 ): Promise<IndividualCartItem[] | null> {
   if (userId) {
     try {
-      return (
+      const cart = (
         await axios.get(`/users/${userId}/cart`, {
           withCredentials: true,
         })
       ).data.items;
+      saveLocalCart(cart);
+      return cart;
     } catch (err) {
       console.error(err);
       return null;

@@ -4,11 +4,13 @@ import {useRef} from 'react';
 import axios from '../axios';
 import {ClientUser} from '../hooks/useUser';
 import {useUserContext} from '../globals/userContext';
+import {useNavigate} from 'react-router-dom';
 
 export default function Auth() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const userContext = useUserContext();
+  const navigate = useNavigate();
 
   async function handleSignin(e: FormEvent) {
     if (!userContext || !userContext || !userContext.setUser) return;
@@ -26,6 +28,7 @@ export default function Auth() {
       ).data;
       console.log(user);
       userContext.setUser(user);
+      navigate('/');
     } catch (err) {
       console.error(err);
     }

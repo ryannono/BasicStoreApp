@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Cart from './cart/cart';
 import SearchBar from '../searchBar';
 import UserChip from './user/userChip';
+import User from './user/user';
 
 /**
  * A functional component that renders the navigation bar.
@@ -35,7 +36,7 @@ export default function Nav() {
 
         <div className="flex items-center justify-end gap-5">
           {/* user */}
-          <UserChip onClick={() => navigate('/auth/signin')} />
+          <User />
 
           {/* cart logo */}
           <Cart />
