@@ -30,7 +30,7 @@ exports.app.use((0, cookie_parser_1.default)());
 exports.app.use((0, cors_1.default)({
     origin(requestOrigin, callback) {
         if ((requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.startsWith('http://localhost:')) ||
-            requestOrigin === 'https://tastetrove.up.railway.app') {
+            (requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.startsWith('https://taste'))) {
             callback(null, true);
         }
         else {

@@ -32,7 +32,7 @@ app.use(
     origin(requestOrigin, callback) {
       if (
         requestOrigin?.startsWith('http://localhost:') ||
-        requestOrigin === 'https://tastetrove.up.railway.app'
+        requestOrigin?.startsWith('https://taste')
       ) {
         callback(null, true);
       } else {
