@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../axios';
 import {IndividualProduct} from '../useProducts';
 import {Action, IndividualCartItem, State} from './useCartTypes';
 

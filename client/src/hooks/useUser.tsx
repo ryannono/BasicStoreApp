@@ -10,7 +10,7 @@ export default function useUser() {
       setUser(await renewUser());
     }
 
-    setInitial();
+    setInitial().then(() => console.log(JSON.stringify(user)));
   }, []);
   return [user, setUser] as const;
 }

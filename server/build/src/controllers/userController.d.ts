@@ -13,6 +13,7 @@ import { NextFunction, Request, Response } from 'express';
  * @throws {Error} If any error occurs during the process.
  */
 export declare function getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+export declare function getUser(req: Request, res: Response, next: NextFunction): Promise<Response<any, Record<string, any>>>;
 /**
  * Asynchronous Express middleware to fetch a specific user from the database by their ID.
  * If successful, responds with a JSON object of the user.

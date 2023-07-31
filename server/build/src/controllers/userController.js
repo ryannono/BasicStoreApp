@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearCart = exports.removeItemFromCart = exports.updateCartItem = exports.addItemToCart = exports.getCart = exports.deleteUserById = exports.updateUserById = exports.getUserById = exports.getAllUsers = void 0;
+exports.clearCart = exports.removeItemFromCart = exports.updateCartItem = exports.addItemToCart = exports.getCart = exports.deleteUserById = exports.updateUserById = exports.getUserById = exports.getUser = exports.getAllUsers = void 0;
 const app_1 = require("../app");
 const utils_1 = require("../utils/");
 // ------------------- User Controller ---------------------- //
@@ -19,21 +19,21 @@ const utils_1 = require("../utils/");
  */
 async function getAllUsers(req, res, next) {
     const user = res.locals.user;
-    if (user.role === 'ADMIN') {
-        try {
-            const allUsers = await app_1.prisma.user.findMany({ include: { cart: true } });
-            const essentialAllUsers = allUsers.map(user => (0, utils_1.getEssentialUserProps)(user));
-            return res.status(200).json(essentialAllUsers);
-        }
-        catch (err) {
-            return next(err);
-        }
+    try {
+        const allUsers = await app_1.prisma.user.findMany({ include: { cart: true } });
+        const essentialAllUsers = allUsers.map(user => (0, utils_1.getEssentialUserProps)(user));
+        return res.status(200).json({ ...user, allUsers: essentialAllUsers });
     }
-    else {
-        return res.status(200).json(user);
+    catch (err) {
+        return next(err);
     }
 }
 exports.getAllUsers = getAllUsers;
+async function getUser(req, res, next) {
+    const user = res.locals.user;
+    return res.status(200).json(user);
+}
+exports.getUser = getUser;
 /**
  * Asynchronous Express middleware to fetch a specific user from the database by their ID.
  * If successful, responds with a JSON object of the user.
@@ -139,6 +139,7 @@ exports.deleteUserById = deleteUserById;
  */
 async function getCart(req, res, next) {
     try {
+        console.log(res.locals.user);
         const userId = req.params.userId;
         const cart = await app_1.prisma.cart.findUnique({
             where: { userId },

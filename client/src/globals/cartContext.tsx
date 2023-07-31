@@ -2,6 +2,7 @@ import {ReactNode, createContext, useContext} from 'react';
 import useCart from '../hooks/useCart/useCart';
 import {useUserContext} from './userContext';
 import {IndividualCartItem} from '../hooks/useCart/useCartTypes';
+import useEffect from 'react';
 
 type CartContexType = {
   cart: IndividualCartItem[];
@@ -32,10 +33,8 @@ const CartContext = createContext<CartContexType | null>(null);
  * @param props.children - The children components to render inside this provider.
  */
 export default function CartProvider(props: {children: ReactNode}) {
-  const userContext = useUserContext();
-  const {cart, totalQuantity, totalPrice, editCart} = useCart(
-    userContext?.user ?? null
-  );
+  const user = useUserContext()?.user ?? null;
+  const {cart, totalQuantity, totalPrice, editCart} = useCart(user);
   return (
     <CartContext.Provider value={{cart, totalQuantity, totalPrice, editCart}}>
       {props.children}

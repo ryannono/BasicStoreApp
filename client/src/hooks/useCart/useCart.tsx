@@ -49,11 +49,13 @@ export default function useCart(user: ClientUser | null) {
     // if user is logged send updates to
     // pending datbase mutations
     if (user) {
-      pendingUpdates.push({
-        productId: itemToEditId,
-        productQuantity: newQuantity,
-      });
-      setPendingUpdates(pendingUpdates);
+      setPendingUpdates([
+        ...pendingUpdates,
+        {
+          productId: itemToEditId,
+          productQuantity: newQuantity,
+        },
+      ]);
     }
     return;
   }

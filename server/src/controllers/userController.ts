@@ -26,19 +26,21 @@ export async function getAllUsers(
 ) {
   const user: TokenUserPayload = res.locals.user;
 
-  if (user.role === 'ADMIN') {
-    try {
-      const allUsers = await prisma.user.findMany({include: {cart: true}});
-      const essentialAllUsers = allUsers.map(user =>
-        getEssentialUserProps(user as UserWithCart)
-      );
-      return res.status(200).json(essentialAllUsers);
-    } catch (err) {
-      return next(err);
-    }
-  } else {
-    return res.status(200).json(user);
+  try {
+    const allUsers = await prisma.user.findMany({include: {cart: true}});
+    const essentialAllUsers = allUsers.map(user =>
+      getEssentialUserProps(user as UserWithCart)
+    );
+    return res.status(200).json({...user, allUsers: essentialAllUsers});
+  } catch (err) {
+    return next(err);
   }
+}
+
+export async function getUser(req: Request, res: Response, next: NextFunction) {
+  const user: TokenUserPayload = res.locals.user;
+
+  return res.status(200).json(user);
 }
 
 /**
@@ -161,6 +163,8 @@ export async function deleteUserById(
  */
 export async function getCart(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log(res.locals.user);
+
     const userId = req.params.userId;
     const cart = await prisma.cart.findUnique({
       where: {userId},

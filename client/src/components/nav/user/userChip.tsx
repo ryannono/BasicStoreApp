@@ -14,7 +14,7 @@ export default function UserChip({onClick}: UserChipProps) {
       onClick={onClick}
       icon={<UserIcon className="h-6" color="white" />}
       label={
-        userContext?.user
+        userContext?.user?.firstName
           ? `${userContext.user.firstName} ${userContext.user.lastName}`
           : 'Sign in'
       }

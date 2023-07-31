@@ -9,6 +9,7 @@ import {
   getCart,
   removeItemFromCart,
   updateCartItem,
+  getUser,
 } from '../controllers/userController';
 import {
   authenticateAccessToken,
@@ -19,7 +20,8 @@ const router = express.Router();
 
 // ------------------- user model routes --------------- //
 
-router.get('/', authenticateAccessToken, getAllUsers); // GET all users or single user depending on user Role
+router.get('/', authenticateAccessToken, getUser); // GET the requestor's user
+router.get('/all', authenticateAccessToken, verifyAdmin, getAllUsers); // GET all users
 router.get('/:id', authenticateAccessToken, verifyAdmin, getUserById); // GET a specific user
 router.put('/:id', authenticateAccessToken, verifyAdmin, updateUserById); // UPDATE a specific user
 router.delete('/:id', authenticateAccessToken, verifyAdmin, deleteUserById); // DELETE a specific user
