@@ -51,9 +51,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
         });
     }
     // send user in response body
-    return res
-        .status(200)
-        .json((0, tokenUtil_1.isTokenUserPayload)(user) ? user : (0, userUtil_1.getEssentialUserProps)(user));
+    return res.json((0, tokenUtil_1.isTokenUserPayload)(user) ? user : (0, userUtil_1.getEssentialUserProps)(user));
 }
 exports.handleAuthentication = handleAuthentication;
 //# sourceMappingURL=authUtil.js.map

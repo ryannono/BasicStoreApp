@@ -211,30 +211,56 @@ exports.addItemToCart = addItemToCart;
  *                              response object.
  */
 async function updateCartItem(req, res, next) {
+    var _a;
     try {
         const { userId } = req.params;
         const user = res.locals.user;
-        const { productId, productQuantity } = req.body;
-        const updatedCart = await app_1.prisma.cart.update({
+        const items = req.body;
+        const userCartMap = new Map((_a = (await app_1.prisma.cart.findUnique({
             where: { id: user.cartId },
-            data: {
-                items: {
-                    upsert: {
-                        where: { cartId_productId: { productId, cartId: user.cartId } },
-                        create: {
-                            productId,
-                            productQuantity,
-                        },
-                        update: {
-                            productId,
-                            productQuantity,
+            select: { items: true },
+        }))) === null || _a === void 0 ? void 0 : _a.items.map(item => [item.productId, item]));
+        const deletes = items.filter(item => item.productQuantity <= 0 && userCartMap.has(item.productId));
+        const updates = items.filter(item => item.productQuantity > 0);
+        console.log(JSON.stringify(updates), JSON.stringify(deletes), JSON.stringify(userCartMap.entries()));
+        for (const item of deletes) {
+            await app_1.prisma.cart.update({
+                where: { id: user.cartId },
+                data: {
+                    items: {
+                        delete: {
+                            cartId_productId: {
+                                cartId: user.cartId,
+                                productId: item.productId,
+                            },
                         },
                     },
                 },
-            },
-            select: { items: { select: { productId: true, productQuantity: true } } },
-        });
-        return res.status(200).json(updatedCart);
+            });
+        }
+        for (const item of updates) {
+            await app_1.prisma.cart.update({
+                where: { id: user.cartId },
+                data: {
+                    items: {
+                        upsert: {
+                            where: {
+                                cartId_productId: {
+                                    cartId: user.cartId,
+                                    productId: item.productId,
+                                },
+                            },
+                            create: {
+                                productId: item.productId,
+                                productQuantity: item.productQuantity,
+                            },
+                            update: { productQuantity: item.productQuantity },
+                        },
+                    },
+                },
+            });
+        }
+        return res.status(200).json({ message: 'cart updated successfully' });
     }
     catch (err) {
         return next(err);

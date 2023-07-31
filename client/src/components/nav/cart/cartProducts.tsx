@@ -2,9 +2,9 @@ import {TrashIcon} from '@heroicons/react/24/solid';
 import {useCartContext} from '../../../globals/cartContext';
 import {useProductsContext} from '../../../globals/productContext';
 import {useRef, useState, useEffect} from 'react';
-import {IndividualCartItem} from '../../../hooks/useCart';
 import {IndividualProduct} from '../../../hooks/useProducts';
 import React from 'react';
+import {IndividualCartItem} from '../../../hooks/useCart/useCartTypes';
 
 export default function CartProducts() {
   const cartContext = useCartContext();

@@ -18,7 +18,11 @@ export default function Auth() {
 
     try {
       const user: ClientUser = (
-        await axios.post('/auth/login', {email, password})
+        await axios.post(
+          '/auth/login',
+          {email, password},
+          {withCredentials: true}
+        )
       ).data;
       console.log(user);
       userContext.setUser(user);

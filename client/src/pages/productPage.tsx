@@ -21,7 +21,13 @@ export default function ProductPage() {
 
   async function handleAddTocart() {
     if (product && cartContext) {
-      cartContext.editCart(product.id, 1, 'increment');
+      const cartMatch = cartContext.cart.find(
+        item => item.productId === product.id
+      );
+      cartContext.editCart(
+        product.id,
+        cartMatch ? cartMatch.productQuantity + 1 : 1
+      );
     }
   }
 

@@ -24,14 +24,15 @@ export const app = express();
 
 // ---------- Application-Level Middleware --------- //
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(
-  cors({origin(requestOrigin, callback) {
+  cors({
+    origin(requestOrigin, callback) {
       if (
-        requestOrigin?.startsWith('http://localhost:') ||
-        requestOrigin?.startsWith('https://taste')
+        requestOrigin?.includes('localhost') ||
+        requestOrigin?.includes('taste')
       ) {
         callback(null, true);
       } else {
@@ -43,8 +44,8 @@ app.use(
 );
 // ---------------------- Routes -------------------- //
 
-app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);

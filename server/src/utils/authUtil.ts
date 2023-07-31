@@ -65,7 +65,7 @@ export async function handleAuthentication(
   }
 
   // send user in response body
-  return res
-    .status(200)
-    .json(isTokenUserPayload(user) ? user : getEssentialUserProps(user));
+  return res.json(
+    isTokenUserPayload(user) ? user : getEssentialUserProps(user)
+  );
 }

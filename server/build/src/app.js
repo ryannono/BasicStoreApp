@@ -24,22 +24,24 @@ const errorMiddleware_1 = require("./middlewares/errorMiddleware");
 exports.prisma = new client_1.PrismaClient();
 exports.app = (0, express_1.default)();
 // ---------- Application-Level Middleware --------- //
+exports.app.use((0, cookie_parser_1.default)());
 exports.app.use(body_parser_1.default.json());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
-exports.app.use((0, cookie_parser_1.default)());
-exports.app.use((0, cors_1.default)({ origin(requestOrigin, callback) {
-        if ((requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.startsWith('http://localhost:')) ||
-            (requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.startsWith('https://taste'))) {
+exports.app.use((0, cors_1.default)({
+    origin(requestOrigin, callback) {
+        if ((requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.includes('localhost')) ||
+            (requestOrigin === null || requestOrigin === void 0 ? void 0 : requestOrigin.includes('taste'))) {
             callback(null, true);
         }
         else {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    credentials: true, }));
+    credentials: true,
+}));
 // ---------------------- Routes -------------------- //
-exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/auth', authRoutes_1.default);
+exports.app.use('/api/users', userRoutes_1.default);
 exports.app.use('/api/products', productRoutes_1.default);
 exports.app.use('/api/orders', orderRoutes_1.default);
 exports.app.use('/api/payments', paymentRoutes_1.default);
