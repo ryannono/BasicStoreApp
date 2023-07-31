@@ -3,21 +3,25 @@ import React, {FormEvent} from 'react';
 import {useRef} from 'react';
 import axios from '../axios';
 import {ClientUser} from '../hooks/useUser';
+import {useUserContext} from '../globals/userContext';
 
 export default function Auth() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+  const userContext = useUserContext();
 
   async function handleSignin(e: FormEvent) {
+    if (!userContext || !userContext || !userContext.setUser) return;
     e.preventDefault();
     const email = emailInputRef.current?.value;
-    const password = emailInputRef.current?.value;
+    const password = passwordInputRef.current?.value;
 
     try {
       const user: ClientUser = (
         await axios.post('/auth/login', {email, password})
       ).data;
       console.log(user);
+      userContext.setUser(user);
     } catch (err) {
       console.error(err);
     }

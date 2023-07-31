@@ -29,11 +29,6 @@ function reducer(state: State, action: Action): State {
 
 export default function useCart(user: ClientUser | null) {
   const {productsMap} = useProductsContext()!;
-  // const [cart, setCart] = useState<IndividualCartItem[]>([]);
-  // const [totals, setTotals] = useState<{quantity: number; price: number}>({
-  //   quantity: 0,
-  //   price: 0,
-  // });
   const [state, dispatch] = useReducer(reducer, {
     cart: [],
     totals: {quantity: 0, price: 0},
@@ -46,14 +41,17 @@ export default function useCart(user: ClientUser | null) {
   ) {
     if (!user) {
       const currentCart = await getCart('localStorage');
-      const updatedCart = findAndModifyProductInCart(
-        currentCart,
-        itemToEditId,
-        newQuantity,
-        operation
-      );
-      saveCartToLocalstorage(updatedCart);
-      dispatch({type: 'SET_CART', cart: updatedCart});
+
+      if (currentCart) {
+        const updatedCart = findAndModifyProductInCart(
+          currentCart,
+          itemToEditId,
+          newQuantity,
+          operation
+        );
+        saveCartToLocalstorage(updatedCart);
+        dispatch({type: 'SET_CART', cart: updatedCart});
+      }
       return;
     }
 
@@ -81,14 +79,16 @@ export default function useCart(user: ClientUser | null) {
   useEffect(() => {
     async function getAndSetCart() {
       const cart = await getCart(user ? 'database' : 'localStorage');
-      dispatch({type: 'SET_CART', cart});
-      dispatch({
-        type: 'SET_TOTALS',
-        totals: {
-          quantity: getTotalQuantity(cart),
-          price: getTotalPrice(cart, productsMap),
-        },
-      });
+      if (cart) {
+        dispatch({type: 'SET_CART', cart});
+        dispatch({
+          type: 'SET_TOTALS',
+          totals: {
+            quantity: getTotalQuantity(cart),
+            price: getTotalPrice(cart, productsMap),
+          },
+        });
+      }
     }
     getAndSetCart();
   }, [user, productsMap]);
@@ -130,14 +130,18 @@ function saveCartToLocalstorage(cart: IndividualCartItem[]) {
 
 async function getCart(
   cartOrigin: 'localStorage' | 'database'
-): Promise<IndividualCartItem[]> {
+): Promise<IndividualCartItem[] | null> {
   if (cartOrigin === 'database') {
-    return (
-      await axios.get('/users/cart', {
-        headers: {'Content-Type': 'application/JSON'},
-        withCredentials: true,
-      })
-    ).data;
+    try {
+      return (
+        await axios.get('/users/cart', {
+          withCredentials: true,
+        })
+      ).data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   } else {
     const cart = localStorage.getItem('cart');
     return cart ? JSON.parse(cart) : [];
@@ -188,7 +192,6 @@ export async function findAndModifyProductInDatabase(
 ) {
   if (newQuantity === 0) {
     return await axios.delete(`/users/${userId}/cart/${itemToEditId}`, {
-      headers: {'Content-Type': 'application/JSON'},
       withCredentials: true,
     });
   }
@@ -201,13 +204,14 @@ export async function findAndModifyProductInDatabase(
     };
     return (
       await axios.put(`/users/${userId}/cart`, updatedItem, {
-        headers: {'Content-Type': 'application/JSON'},
         withCredentials: true,
       })
     ).data;
   }
 
   const cart = await getCart('database');
+
+  if (!cart) return;
 
   const currentQuantity = cart.find(
     product => product.productId === itemToEditId
@@ -220,7 +224,6 @@ export async function findAndModifyProductInDatabase(
 
   return (
     await axios.put(`/users/${userId}/cart`, updatedItem, {
-      headers: {'Content-Type': 'application/JSON'},
       withCredentials: true,
     })
   ).data;

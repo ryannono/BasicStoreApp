@@ -21,13 +21,13 @@ export type ClientUser = {
   password: string;
   firstName: string;
   lastName: string;
+  role: 'ADMIN' | 'BASIC';
 };
 
 async function renewUser() {
   try {
     return (
       await axios.get('/users', {
-        headers: {'Content-Type': 'application/JSON'},
         withCredentials: true,
       })
     ).data as ClientUser;
