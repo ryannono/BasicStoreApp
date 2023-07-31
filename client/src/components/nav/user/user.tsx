@@ -17,7 +17,7 @@ export default function User() {
     userMenuRef.current?.classList.toggle('translate-y-[-100px]');
   }
 
-  function handleEntryAuth(selection: 'signin' | 'signup') {
+  function handleEntryAuth(selection: 'signin' | 'register') {
     toggleUserMenu();
     navigate(`/auth/${selection}`);
   }
@@ -58,7 +58,7 @@ export default function User() {
               New customer?{' '}
               <span
                 className="text-orange-600 font-medium cursor-pointer hover:text-orange-700 hover:underline transition-all"
-                onClick={() => handleEntryAuth('signup')}
+                onClick={() => handleEntryAuth('register')}
               >
                 start here
               </span>

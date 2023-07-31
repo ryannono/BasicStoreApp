@@ -77,6 +77,27 @@ export function updateLocalCart(
   return filteredCart;
 }
 
+// ------------------ Database -------------------- //
+
+export async function updateDatabaseCart(
+  updateArray: IndividualCartItem[],
+  userId: string
+) {
+  try {
+    // send all pending updates as single request
+    await axios.put(`/users/${userId}/cart`, updateArray, {
+      withCredentials: true,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function pushLocalCartToDatabase(userId: string) {
+  const localCart = await getCart(undefined);
+  if (localCart) updateDatabaseCart(localCart, userId);
+}
+
 // ----------------- Cart fetch ------------------- //
 
 /**

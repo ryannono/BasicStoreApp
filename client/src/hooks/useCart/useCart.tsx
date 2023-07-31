@@ -1,8 +1,8 @@
 import {useState, useEffect, useReducer} from 'react';
 import axios from '../../axios';
-import {ClientUser} from '../useUser';
 import {useProductsContext} from '../../globals/productContext';
 import {IndividualCartItem} from './useCartTypes';
+import {useUserContext} from '../../globals/userContext';
 import {
   getCart,
   updateLocalCart,
@@ -10,6 +10,8 @@ import {
   getTotalQuantity,
   getTotalPrice,
   reducer,
+  updateDatabaseCart,
+  pushLocalCartToDatabase,
 } from './useCartFunctions';
 
 /**
@@ -26,7 +28,7 @@ import {
  *   - `totalPrice`: The total price of items in the cart.
  *   - `editCart`: A function to edit the cart.
  */
-export default function useCart(user: ClientUser | null) {
+export default function useCart() {
   const {productsMap} = useProductsContext()!;
   const [pendingUpdates, setPendingUpdates] = useState<IndividualCartItem[]>(
     []
@@ -35,6 +37,7 @@ export default function useCart(user: ClientUser | null) {
     cart: [],
     totals: {quantity: 0, price: 0},
   });
+  const user = useUserContext()?.user;
 
   async function editCart(itemToEditId: string, newQuantity: number) {
     // get local cart
@@ -63,7 +66,10 @@ export default function useCart(user: ClientUser | null) {
   // set initial cart in state
   useEffect(() => {
     async function getAndSetCart() {
+      // get user cart
       const cart = await getCart(user?.id);
+
+      // set states to reflect database
       if (cart) {
         dispatch({type: 'SET_CART', cart});
         dispatch({
@@ -83,16 +89,9 @@ export default function useCart(user: ClientUser | null) {
   useEffect(() => {
     if (user && pendingUpdates.length > 0) {
       const timer = setTimeout(async () => {
-        try {
-          // send all pending updates as single request
-          await axios.put(`/users/${user.id}/cart`, pendingUpdates, {
-            withCredentials: true,
-          });
-          setPendingUpdates([]);
-        } catch (err) {
-          console.error(err);
-        }
-      }, 2000); // 2 second delay
+        updateDatabaseCart(pendingUpdates, user.id);
+        setPendingUpdates([]);
+      }, 1000); // 1 second delay
 
       // cleanup
       return () => clearTimeout(timer);

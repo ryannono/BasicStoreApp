@@ -10,7 +10,11 @@ const router = createBrowserRouter([
     children: [
       {path: '/', element: <Home />},
       {path: 'product/:productId', element: <ProductPage />},
-      {path: 'auth/:signinOrRegister', element: <Auth />},
+      {
+        path: 'auth/',
+        element: <Auth />,
+        children: [{path: 'signin'}, {path: 'register'}],
+      },
     ],
   },
 ]);
