@@ -1,7 +1,8 @@
 import {BookmarkIcon} from '@heroicons/react/24/solid';
 import {useNavigate} from 'react-router-dom';
 import Cart from './cart/cart';
-import SearchBar from './searchBar';
+import SearchBar from '../searchBar';
+import UserChip from './user/userChip';
 
 /**
  * A functional component that renders the navigation bar.
@@ -32,8 +33,13 @@ export default function Nav() {
           <SearchBar />
         </div>
 
-        {/* cart logo */}
-        <Cart />
+        <div className="flex items-center justify-end gap-5">
+          {/* user */}
+          <UserChip onClick={() => navigate('/auth/signin')} />
+
+          {/* cart logo */}
+          <Cart />
+        </div>
       </div>
     </nav>
   );

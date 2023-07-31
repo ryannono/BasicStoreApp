@@ -1,9 +1,9 @@
 import {TrashIcon} from '@heroicons/react/24/solid';
-import {useCartContext} from '../../globals/cartContext';
-import {useProductsContext} from '../../globals/productContext';
+import {useCartContext} from '../../../globals/cartContext';
+import {useProductsContext} from '../../../globals/productContext';
 import {useRef, useState, useEffect} from 'react';
-import {IndividualCartItem} from '../../hooks/useCart';
-import {IndividualProduct} from '../../hooks/useProducts';
+import {IndividualCartItem} from '../../../hooks/useCart';
+import {IndividualProduct} from '../../../hooks/useProducts';
 import React from 'react';
 
 export default function CartProducts() {
@@ -82,7 +82,6 @@ function CartProduct({cartItem, editCart}: CartPropductProps) {
             <select
               ref={selectRef}
               onChange={handleSelect}
-              defaultValue={selection}
               value={selection}
               className="w-20 h-8 rounded-md cursor-pointer"
             >

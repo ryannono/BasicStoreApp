@@ -1,5 +1,5 @@
 import {ShoppingBagIcon} from '@heroicons/react/24/solid';
-import {Button, Chip, Avatar} from '@mui/material';
+import {Chip, Avatar} from '@mui/material';
 
 type CartChipProps = {
   onClick: () => void;
@@ -11,7 +11,7 @@ export function CartChip({onClick, totalQuantity}: CartChipProps) {
     'bg-orange-300 hover:bg-orange-300 hover:scale-[1.1] text-black font-bold items-center cursor-pointer px-0 transition-all';
 
   return (
-    <Button className="w-16 p-0">
+    <>
       {totalQuantity && totalQuantity > 0 ? (
         <Chip
           className={className}
@@ -24,6 +24,6 @@ export function CartChip({onClick, totalQuantity}: CartChipProps) {
           <ShoppingBagIcon className="h-6" color="black" />
         </Avatar>
       )}
-    </Button>
+    </>
   );
 }

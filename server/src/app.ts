@@ -27,7 +27,20 @@ export const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-
+app.use(
+  cors({origin(requestOrigin, callback) {
+      if (
+        requestOrigin?.startsWith('http://localhost:') ||
+        requestOrigin?.startsWith('https://taste')
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+  })
+);
 // ---------------------- Routes -------------------- //
 
 app.use('/api/users', userRoutes);

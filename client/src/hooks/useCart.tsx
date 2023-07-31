@@ -71,7 +71,6 @@ export default function useCart(user: ClientUser | null) {
   }
 
   useEffect(() => {
-    console.log(state.cart);
     const totals = {
       quantity: getTotalQuantity(state.cart),
       price: getTotalPrice(state.cart, productsMap),
@@ -93,27 +92,6 @@ export default function useCart(user: ClientUser | null) {
     }
     getAndSetCart();
   }, [user, productsMap]);
-
-  // useEffect(() => {
-  //   console.log('running');
-  //   const newTotalQuantity = getTotalQuantity(cart);
-  //   const newTotalPrice = getTotalPrice(cart, productsMap);
-  //   setTotals({quantity: newTotalQuantity, price: newTotalPrice});
-  // }, [cart, productsMap]);
-
-  // useEffect(() => {
-  //   async function getAndSetCart() {
-  //     const cart = await getCart(user ? 'database' : 'localStorage');
-  //     setCart(cart);
-  //     setTotals({
-  //       quantity: getTotalQuantity(cart),
-  //       price: getTotalPrice(cart, productsMap),
-  //     });
-  //   }
-
-  // Read from local storage every time the hook runs
-  //   getAndSetCart();
-  // }, [user, productsMap]);
 
   return {
     cart: state.cart,
