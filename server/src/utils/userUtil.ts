@@ -1,6 +1,10 @@
 // eslint-disable-next-line node/no-extraneous-import
 import {User} from '@prisma/client';
-import {TokenUserPayload, UserWithCart} from '../types/userTypes';
+import {
+  MutableCartItemPayload,
+  TokenUserPayload,
+  UserWithCart,
+} from '../types/userTypes';
 
 /**
  * Function to extract essential user properties from a User object.

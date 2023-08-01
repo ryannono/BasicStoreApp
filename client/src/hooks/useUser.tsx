@@ -4,14 +4,15 @@ import {useEffect} from 'react';
 
 export default function useUser() {
   const [user, setUser] = useState<ClientUser | null>(null);
-
   useEffect(() => {
     async function setInitial() {
       setUser(await renewUser());
     }
 
-    setInitial().then(() => console.log(JSON.stringify(user)));
-  }, []);
+    if (!user) {
+      setInitial();
+    }
+  }, [user]);
   return [user, setUser] as const;
 }
 
@@ -26,9 +27,13 @@ export type ClientUser = {
 
 async function renewUser() {
   try {
-    return (await axios.get('/users')).data as ClientUser;
+    const validResponse = await axios.get('/users').catch(() => {
+      console.log('Access token auth failled, trying again with refresh');
+    });
+
+    if (validResponse) return validResponse.data as ClientUser;
+    return (await axios.post('/auth/refresh')).data as ClientUser;
   } catch (err) {
-    console.error(err);
     return null;
   }
 }

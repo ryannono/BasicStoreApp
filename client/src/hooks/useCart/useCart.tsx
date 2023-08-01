@@ -1,13 +1,11 @@
 import {useState, useEffect, useReducer} from 'react';
 import {useProductsContext} from '../../globals/productContext';
-import {IndividualCartItem} from './useCartTypes';
 import {useUserContext} from '../../globals/userContext';
+import {getTotals} from './useCartFunctions';
 import {
   getCart,
   updateLocalCart,
   saveLocalCart,
-  getTotalQuantity,
-  getTotalPrice,
   reducer,
   updateDatabaseCart,
 } from './useCartFunctions';
@@ -28,9 +26,7 @@ import {
  */
 export default function useCart() {
   const {productsMap} = useProductsContext()!;
-  const [pendingUpdates, setPendingUpdates] = useState<IndividualCartItem[]>(
-    []
-  );
+  const [pendingUpdates, setPendingUpdates] = useState(new Map());
   const [state, dispatch] = useReducer(reducer, {
     cart: [],
     totals: {quantity: 0, price: 0},
@@ -41,7 +37,6 @@ export default function useCart() {
     // get local cart
     const currentCart = await getCart(undefined);
     if (!currentCart) return;
-
     //mutate and save local cart
     const updatedCart = updateLocalCart(currentCart, itemToEditId, newQuantity);
     saveLocalCart(updatedCart);
@@ -50,13 +45,11 @@ export default function useCart() {
     // if user is logged send updates to
     // pending datbase mutations
     if (user) {
-      setPendingUpdates([
-        ...pendingUpdates,
-        {
-          productId: itemToEditId,
-          productQuantity: newQuantity,
-        },
-      ]);
+      pendingUpdates.set(itemToEditId, {
+        productId: itemToEditId,
+        productQuantity: newQuantity,
+      });
+      setPendingUpdates(new Map(pendingUpdates));
     }
     return;
   }
@@ -69,13 +62,10 @@ export default function useCart() {
 
       // set states to reflect database
       if (cart) {
-        dispatch({type: 'SET_CART', cart});
         dispatch({
-          type: 'SET_TOTALS',
-          totals: {
-            quantity: getTotalQuantity(cart),
-            price: getTotalPrice(cart, productsMap),
-          },
+          type: 'SET_CART_AND_TOTALS',
+          cart,
+          totals: getTotals(cart, productsMap),
         });
       }
     }
@@ -85,24 +75,28 @@ export default function useCart() {
 
   // manages batch updates to database
   useEffect(() => {
-    if (user && pendingUpdates.length > 0) {
+    if (user && pendingUpdates.size > 0) {
       const timer = setTimeout(async () => {
-        updateDatabaseCart(pendingUpdates, user.id);
-        setPendingUpdates([]);
-      }, 1000); // 1 second delay
+        try {
+          await updateDatabaseCart(
+            Array.from(pendingUpdates.values()),
+            user.id
+          );
+          setPendingUpdates(new Map());
+        } catch (error) {
+          console.error('Database update failed: ', error);
+          // handle error accordingly...
+        }
+      }, 500); // 1 second delay
 
       // cleanup
       return () => clearTimeout(timer);
     }
-  }, [pendingUpdates]);
+  }, [pendingUpdates, user]);
 
   // update total on cart or product changes
   useEffect(() => {
-    const totals = {
-      quantity: getTotalQuantity(state.cart),
-      price: getTotalPrice(state.cart, productsMap),
-    };
-    dispatch({type: 'SET_TOTALS', totals});
+    dispatch({type: 'SET_TOTALS', totals: getTotals(state.cart, productsMap)});
   }, [state.cart, productsMap]);
 
   return {

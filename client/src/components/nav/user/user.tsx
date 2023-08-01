@@ -23,10 +23,10 @@ export default function User() {
   }
 
   async function handleExitAuth() {
-    toggleUserMenu();
+    await axios.post('/auth/logout');
     localStorage.clear();
     if (setUser) setUser(null);
-    await axios.post('/auth/logout');
+    toggleUserMenu();
   }
 
   return (

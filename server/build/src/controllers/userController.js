@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearCart = exports.removeItemFromCart = exports.updateCartItem = exports.addItemToCart = exports.getCart = exports.deleteUserById = exports.updateUserById = exports.getUserById = exports.getUser = exports.getAllUsers = void 0;
 const app_1 = require("../app");
 const utils_1 = require("../utils/");
+const cartUtil_1 = require("../utils/cartUtil");
 // ------------------- User Controller ---------------------- //
 /**
  * Asynchronous Express middleware to fetch all users from the database.
@@ -221,46 +222,12 @@ async function updateCartItem(req, res, next) {
             where: { id: user.cartId },
             select: { items: true },
         }))) === null || _a === void 0 ? void 0 : _a.items.map(item => [item.productId, item]));
-        const deletes = items.filter(item => item.productQuantity <= 0 && userCartMap.has(item.productId));
-        const updates = items.filter(item => item.productQuantity > 0);
-        console.log(JSON.stringify(updates), JSON.stringify(deletes), JSON.stringify(userCartMap.entries()));
-        for (const item of deletes) {
-            await app_1.prisma.cart.update({
-                where: { id: user.cartId },
-                data: {
-                    items: {
-                        delete: {
-                            cartId_productId: {
-                                cartId: user.cartId,
-                                productId: item.productId,
-                            },
-                        },
-                    },
-                },
-            });
-        }
-        for (const item of updates) {
-            await app_1.prisma.cart.update({
-                where: { id: user.cartId },
-                data: {
-                    items: {
-                        upsert: {
-                            where: {
-                                cartId_productId: {
-                                    cartId: user.cartId,
-                                    productId: item.productId,
-                                },
-                            },
-                            create: {
-                                productId: item.productId,
-                                productQuantity: item.productQuantity,
-                            },
-                            update: { productQuantity: item.productQuantity },
-                        },
-                    },
-                },
-            });
-        }
+        const { creates, deletes, updates } = (0, cartUtil_1.getActionArrays)(items, userCartMap);
+        await Promise.all([
+            (0, cartUtil_1.updateCartItems)(user.cartId, updates),
+            (0, cartUtil_1.deleteCartItems)(user.cartId, deletes),
+            (0, cartUtil_1.createCartItems)(user.cartId, creates),
+        ]);
         return res.status(200).json({ message: 'cart updated successfully' });
     }
     catch (err) {

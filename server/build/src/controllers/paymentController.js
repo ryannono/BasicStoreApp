@@ -123,7 +123,28 @@ async function handleStripeWebhook(req, res, next) {
                         set: 'paymentSucceeded',
                     },
                 },
+                include: { items: true },
             });
+            if (order.userId) {
+                await app_1.prisma.user.update({
+                    where: { id: order.userId },
+                    data: {
+                        cart: {
+                            update: {
+                                data: {
+                                    items: {
+                                        deleteMany: {
+                                            productId: {
+                                                in: order.items.map(item => item.productId),
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                });
+            }
             if (!order) {
                 console.log('Order not found for payment intent: ', paymentIntent.id);
                 return res.status(404).json({ error: 'Order not found' });

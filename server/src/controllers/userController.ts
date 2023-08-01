@@ -3,6 +3,12 @@ import {prisma} from '../app';
 import {MutableUserPayload, MutableCartItemPayload} from '../types';
 import {getEssentialUserProps} from '../utils/';
 import {TokenUserPayload, UserWithCart} from '../types/userTypes';
+import {
+  createCartItems,
+  deleteCartItems,
+  getActionArrays,
+  updateCartItems,
+} from '../utils/cartUtil';
 
 // ------------------- User Controller ---------------------- //
 
@@ -257,55 +263,13 @@ export async function updateCartItem(
       )?.items.map(item => [item.productId, item])
     );
 
-    const deletes = items.filter(
-      item => item.productQuantity <= 0 && userCartMap.has(item.productId)
-    );
-    const updates = items.filter(item => item.productQuantity > 0);
+    const {creates, deletes, updates} = getActionArrays(items, userCartMap);
 
-    console.log(
-      JSON.stringify(updates),
-      JSON.stringify(deletes),
-      JSON.stringify(userCartMap.entries())
-    );
-
-    for (const item of deletes) {
-      await prisma.cart.update({
-        where: {id: user.cartId},
-        data: {
-          items: {
-            delete: {
-              cartId_productId: {
-                cartId: user.cartId,
-                productId: item.productId,
-              },
-            },
-          },
-        },
-      });
-    }
-
-    for (const item of updates) {
-      await prisma.cart.update({
-        where: {id: user.cartId},
-        data: {
-          items: {
-            upsert: {
-              where: {
-                cartId_productId: {
-                  cartId: user.cartId,
-                  productId: item.productId,
-                },
-              },
-              create: {
-                productId: item.productId,
-                productQuantity: item.productQuantity,
-              },
-              update: {productQuantity: item.productQuantity},
-            },
-          },
-        },
-      });
-    }
+    await Promise.all([
+      updateCartItems(user.cartId, updates),
+      deleteCartItems(user.cartId, deletes),
+      createCartItems(user.cartId, creates),
+    ]);
 
     return res.status(200).json({message: 'cart updated successfully'});
   } catch (err) {

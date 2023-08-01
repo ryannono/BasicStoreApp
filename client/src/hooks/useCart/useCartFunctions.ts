@@ -4,40 +4,21 @@ import {Action, IndividualCartItem, State} from './useCartTypes';
 
 // ---------------- Calculations ------------------ //
 
-/**
- * Calculates the total price of the items in the cart.
- *
- * @param cart - An array of items in the cart.
- * @param productsMap - A map of products.
- *
- * @returns The total price of the items in the cart, rounded to two decimal places.
- */
-export function getTotalPrice(
+export function getTotals(
   cart: IndividualCartItem[],
   productsMap: Map<string, IndividualProduct>
 ) {
-  return (
-    Math.round(
-      cart.reduce((runningTotal, cartItem) => {
-        const productMatch = productsMap.get(cartItem.productId);
-        const cost = (productMatch?.price ?? 0) * cartItem.productQuantity;
-        return runningTotal + cost;
-      }, 0) * 100
-    ) / 100
-  );
-}
+  let totalPrice = 0,
+    totalQuantity = 0;
+  for (const cartItem of cart) {
+    totalQuantity += cartItem.productQuantity;
+    const productMatch = productsMap.get(cartItem.productId);
+    const cost = (productMatch?.price ?? 0) * cartItem.productQuantity;
+    totalPrice += cost;
+  }
 
-/**
- * Calculates the total quantity of items in the cart.
- *
- * @param cart - An array of items in the cart.
- *
- * @returns The total quantity of items in the cart.
- */
-export function getTotalQuantity(cart: IndividualCartItem[]) {
-  return cart.reduce((runningTotal, cartItem) => {
-    return runningTotal + cartItem.productQuantity;
-  }, 0);
+  totalPrice = Math.round(totalPrice * 100) / 100;
+  return {price: totalPrice, quantity: totalQuantity};
 }
 
 // ---------------- Local Storage ---------------- //
@@ -65,16 +46,27 @@ export function updateLocalCart(
   itemToEditId: string,
   newQuantity: number
 ): IndividualCartItem[] {
+  if (!cart.length && newQuantity === 0) return cart;
+  // If the new quantity is 0, filter out the item and return the cart
   if (newQuantity === 0) {
     return cart.filter(cartItem => cartItem.productId !== itemToEditId);
   }
 
-  const filteredCart = cart.filter(
-    cartItem => cartItem.productId !== itemToEditId
+  // Check if the item exists in the cart
+  const existingItemIndex = cart.findIndex(
+    cartItem => cartItem.productId === itemToEditId
   );
-  filteredCart.push({productId: itemToEditId, productQuantity: newQuantity});
 
-  return filteredCart;
+  // If the item exists, update the quantity. Otherwise, add the item to the cart.
+  if (existingItemIndex !== -1) {
+    // Create a new copy of the cart for immutability
+    return cart.with(existingItemIndex, {
+      productId: itemToEditId,
+      productQuantity: newQuantity,
+    });
+  } else {
+    return [...cart, {productId: itemToEditId, productQuantity: newQuantity}];
+  }
 }
 
 // ------------------ Database -------------------- //
@@ -138,6 +130,8 @@ export function reducer(state: State, action: Action): State {
       return {...state, cart: action.cart};
     case 'SET_TOTALS':
       return {...state, totals: action.totals};
+    case 'SET_CART_AND_TOTALS':
+      return {...state, cart: action.cart, totals: action.totals};
     default:
       return state;
   }
