@@ -40,7 +40,7 @@ export async function handleAuthentication(
   const accessToken = generateAccessToken(user);
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
     maxAge: 20 * MINUTE,
   });
 
@@ -61,7 +61,7 @@ export async function handleAuthentication(
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
       maxAge: 14 * DAY,
     });
   }
