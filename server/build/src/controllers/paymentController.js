@@ -35,8 +35,7 @@ async function createPaymentIntent(req, res, next) {
         // Create a new Stripe PaymentIntent
         const paymentIntent = await stripeService_1.default.paymentIntents.create({
             amount: totalPrice * utils_1.TO_CENTS_MULTIPLIER,
-            currency: 'cad',
-            payment_method_types: ['card'], // Specify the payment methods this PaymentIntent can use
+            currency: 'cad', // Set currency to Canadian Dollar
         });
         console.log(JSON.stringify(paymentIntent.id));
         // Construct data for new Order

@@ -40,7 +40,6 @@ export async function createPaymentIntent(
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalPrice * TO_CENTS_MULTIPLIER, // Stripe requires amount in cents
       currency: 'cad', // Set currency to Canadian Dollar
-      payment_method_types: ['card'], // Specify the payment methods this PaymentIntent can use
     });
 
     console.log(JSON.stringify(paymentIntent.id));

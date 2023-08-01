@@ -90,6 +90,7 @@ export function PaymentRoutingManager() {
 
 export function PaymentSubmissionForm() {
   const stripe = useStripe();
+  const elements = useElements();
   const userContext = useUserContext();
   const cartContext = useCartContext();
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
@@ -102,7 +103,7 @@ export function PaymentSubmissionForm() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!stripe) return;
+    if (!stripe || !elements) return;
 
     const items = cartContext?.cart;
     const orderDetails = {
@@ -119,20 +120,21 @@ export function PaymentSubmissionForm() {
     };
 
     try {
-      const {clientSecret: clientSecret} = (
+      const clientSecret: string = (
         await axios.post(
           '/payments/intent',
           {items, orderDetails, shippingAddress},
           {withCredentials: true}
         )
-      ).data;
+      ).data.clientSecret;
 
-      await stripe.confirmPayment({
-        clientSecret,
-        confirmParams: {
-          return_url: `${BASE_URL}/checkout/complete`,
-        },
-      });
+      const paymentElement = elements.getElement(PaymentElement);
+
+      if (paymentElement === null) {
+        throw new Error('Stripe Elements not found');
+      }
+
+      await stripe.confirmCardPayment(clientSecret);
     } catch (err) {
       console.error(err);
     }
