@@ -20,45 +20,30 @@ import {useElements} from '@stripe/react-stripe-js';
 
 export default function StripePaymentGateway() {
   const cartContext = useCartContext();
+  const navigate = useNavigate();
 
   const PUBLISHABLE_KEY = 'pk_live_GDivFnbDb7zQeRFcGQLLP5ws00FJWq75EN';
   const stripePromise = useMemo(
     () => loadStripe(PUBLISHABLE_KEY),
     [PUBLISHABLE_KEY]
   );
-  const TO_CENTS_MULTIPLIER = 100;
-  const taxAmount = Number(cartContext?.totalPrice) * 0.13;
-  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
-  const totalAmount =
-    (Math.round(taxtIncludedPrice * 100) / 100) * TO_CENTS_MULTIPLIER;
+  const taxAmount =
+    Math.round(Number(cartContext?.totalPrice) * 0.13 * 100) / 100;
+  const taxIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
+  const totalAmountInCents = taxIncludedPrice * 100;
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
-    amount: totalAmount,
+    amount: totalAmountInCents,
     currency: 'cad',
   };
 
   return (
-    <Elements stripe={stripePromise} options={paymentOptions}>
-      <PaymentRoutingManager />
-    </Elements>
-  );
-}
-
-export function PaymentRoutingManager() {
-  const navigate = useNavigate();
-  const location = useLocation().pathname.split('/').at(-1);
-  const cartContext = useCartContext();
-  const [pageType, setPageType] = useState<'checkout' | 'checkoutComplete'>(
-    location === 'complete' ? 'checkoutComplete' : 'checkout'
-  );
-
-  useEffect(() => {
-    setPageType(location === 'complete' ? 'checkoutComplete' : 'checkout');
-  }, [location]);
-
-  return (
-    <main className="grid place-items-center px-10 pb-12 pt-32 w-[calc(100vw-(2*3rem))] min-h-[calc(100vh-(2*3rem)-5rem)] overflow-x-hidden bg-slate-100">
-      {!cartContext || !cartContext?.totalPrice ? (
+    <>
+      {cartContext && cartContext.totalPrice !== 0 ? (
+        <Elements stripe={stripePromise} options={paymentOptions}>
+          <PaymentRoutingManager />
+        </Elements>
+      ) : (
         <section className="flex flex-col gap-5 w-full p-8 max-w-xs rounded-xl bg-white shadow-md text-center">
           <h1>Your cart is empty</h1>
           <Button
@@ -70,7 +55,25 @@ export function PaymentRoutingManager() {
             Shop products
           </Button>
         </section>
-      ) : pageType === 'checkout' ? (
+      )}
+    </>
+  );
+}
+
+export function PaymentRoutingManager() {
+  const navigate = useNavigate();
+  const location = useLocation().pathname.split('/').at(-1);
+  const [pageType, setPageType] = useState<'checkout' | 'checkoutComplete'>(
+    location === 'complete' ? 'checkoutComplete' : 'checkout'
+  );
+
+  useEffect(() => {
+    setPageType(location === 'complete' ? 'checkoutComplete' : 'checkout');
+  }, [location]);
+
+  return (
+    <main className="grid place-items-center px-10 pb-12 pt-32 w-[calc(100vw-(2*3rem))] min-h-[calc(100vh-(2*3rem)-5rem)] overflow-x-hidden bg-slate-100">
+      {pageType === 'checkout' ? (
         <PaymentSubmissionForm />
       ) : (
         <section className="flex flex-col gap-5 w-full p-8 max-w-xs rounded-xl bg-white shadow-md text-center">
@@ -96,7 +99,8 @@ export function PaymentSubmissionForm() {
   const cartContext = useCartContext();
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
 
-  const taxAmount = Number(cartContext?.totalPrice) * 0.13;
+  const taxAmount =
+    Math.round(Number(cartContext?.totalPrice) * 0.13 * 100) / 100;
   const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
   const addressOptions: StripeAddressElementOptions = {mode: 'shipping'};
 
@@ -182,11 +186,11 @@ export function PaymentSubmissionForm() {
                 </div>
                 <div className="flex justify-between p-1">
                   <span>HST(13%):</span>
-                  <span>{Math.round(taxAmount * 100) / 100}</span>
+                  <span>{taxAmount}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
-                  <span>{Math.round(taxtIncludedPrice * 100) / 100}</span>
+                  <span>{taxtIncludedPrice}</span>
                 </div>
               </section>
 
