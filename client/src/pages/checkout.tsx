@@ -104,10 +104,11 @@ export function PaymentSubmissionForm() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!stripe || !elements) return;
+    await elements.submit();
 
     const items = cartContext?.cart;
     const orderDetails = {
-      userId: userContext?.user ?? null,
+      userId: userContext?.user?.id ?? null,
       totalPrice: totalAmount / 100,
     };
     const shippingAddress = {
@@ -134,7 +135,14 @@ export function PaymentSubmissionForm() {
         throw new Error('Stripe Elements not found');
       }
 
-      await stripe.confirmCardPayment(clientSecret);
+      await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          // Make sure to change this to your payment completion page
+          return_url: `${BASE_URL}/checkout/complete`,
+        },
+      });
     } catch (err) {
       console.error(err);
     }
