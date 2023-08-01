@@ -90,7 +90,6 @@ export function PaymentRoutingManager() {
 
 export function PaymentSubmissionForm() {
   const stripe = useStripe();
-  const elements = useElements();
   const userContext = useUserContext();
   const cartContext = useCartContext();
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
@@ -103,7 +102,8 @@ export function PaymentSubmissionForm() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!stripe || !elements) return;
+    if (!stripe) return;
+
     const items = cartContext?.cart;
     const orderDetails = {
       userId: userContext?.user ?? null,
@@ -128,7 +128,6 @@ export function PaymentSubmissionForm() {
       ).data;
 
       await stripe.confirmPayment({
-        elements,
         clientSecret,
         confirmParams: {
           return_url: `${BASE_URL}/checkout/complete`,
@@ -185,6 +184,7 @@ export function PaymentSubmissionForm() {
               {/* submission button */}
               <Button
                 type="submit"
+                disabled={!stripe}
                 className="bg-orange-600 text-white hover:bg-orange-800 py-4 transition-all"
               >
                 Submit
