@@ -28,11 +28,12 @@ export default function StripePaymentGateway() {
   );
   const TO_CENTS_MULTIPLIER = 100;
   const taxAmount = Number(cartContext?.totalPrice) * 0.13;
-  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
-  const totalAmount = Math.round(taxtIncludedPrice * TO_CENTS_MULTIPLIER);
+  const taxtIncludedPrice =
+    Number((Number(cartContext?.totalPrice) + taxAmount).toFixed(2)) *
+    TO_CENTS_MULTIPLIER;
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
-    amount: totalAmount,
+    amount: taxtIncludedPrice,
     currency: 'cad',
   };
 
@@ -183,7 +184,7 @@ export function PaymentSubmissionForm() {
                 </div>
                 <div className="flex justify-between p-1">
                   <span>HST(13%):</span>
-                  <span>{taxAmount.toFixed(2)}</span>
+                  <span>{taxAmount.toFixed()}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
