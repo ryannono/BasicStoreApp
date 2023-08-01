@@ -26,11 +26,17 @@ const userUtil_1 = require("./userUtil");
  * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
 async function handleAuthentication(user, res, withRefreshToken) {
+    // define cookie options
+    const baseCookieOptions = {
+        httpOnly: true,
+        ...(process.env.NODE_ENV !== 'production'
+            ? { sameSite: 'lax', secure: false }
+            : { sameSite: 'none', secure: true }),
+    };
     // send tokens as cookies
     const accessToken = (0, tokenUtil_1.generateAccessToken)(user);
     res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
+        ...baseCookieOptions,
         maxAge: 20 * constants_1.MINUTE,
     });
     if (withRefreshToken) {
@@ -47,8 +53,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
             },
         });
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
+            ...baseCookieOptions,
             maxAge: 14 * constants_1.DAY,
         });
     }

@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-extraneous-import
-import {Response} from 'express';
+import {CookieOptions, Response} from 'express';
 import {MINUTE, DAY} from './constants';
 import {
   generateAccessToken,
@@ -36,11 +36,18 @@ export async function handleAuthentication(
   res: Response,
   withRefreshToken?: boolean
 ): Promise<Response> {
+  // define cookie options
+  const baseCookieOptions: CookieOptions = {
+    httpOnly: true,
+    ...(process.env.NODE_ENV !== 'production'
+      ? {sameSite: 'lax', secure: false}
+      : {sameSite: 'none', secure: true}),
+  };
+
   // send tokens as cookies
   const accessToken = generateAccessToken(user);
   res.cookie('accessToken', accessToken, {
-    httpOnly: true,
-    sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
+    ...baseCookieOptions,
     maxAge: 20 * MINUTE,
   });
 
@@ -60,8 +67,7 @@ export async function handleAuthentication(
     });
 
     res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      sameSite: process.env.NODE_ENV !== 'production' ? 'lax' : 'none',
+      ...baseCookieOptions,
       maxAge: 14 * DAY,
     });
   }
