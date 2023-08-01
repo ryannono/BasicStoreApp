@@ -1,7 +1,7 @@
 import {ArrowDownIcon} from '@heroicons/react/24/solid';
-import {Button, CircularProgress, LinearProgress} from '@mui/material';
+import {Button, CircularProgress} from '@mui/material';
 import Card from '../components/card';
-import {Suspense, useRef} from 'react';
+import {useRef} from 'react';
 import {scrollToElement} from '../globals/globalFunctions';
 import {useFilterContext} from '../globals/filterContext';
 import {useProductsContext} from '../globals/productContext';

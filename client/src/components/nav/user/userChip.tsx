@@ -1,6 +1,5 @@
 import {UserIcon} from '@heroicons/react/24/solid';
 import {Chip} from '@mui/material';
-import React from 'react';
 import {useUserContext} from '../../../globals/userContext';
 
 type UserChipProps = {

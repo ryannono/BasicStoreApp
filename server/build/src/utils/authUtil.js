@@ -29,7 +29,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
     // send tokens as cookies
     const accessToken = (0, tokenUtil_1.generateAccessToken)(user);
     res.cookie('accessToken', accessToken, {
-        httpOnly: true,
+        // httpOnly: true,
         maxAge: 20 * constants_1.MINUTE,
     });
     if (withRefreshToken) {
@@ -46,7 +46,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
             },
         });
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
+            // httpOnly: true,
             maxAge: 14 * constants_1.DAY,
         });
     }
