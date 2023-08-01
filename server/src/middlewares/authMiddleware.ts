@@ -36,6 +36,7 @@ export async function authenticateAccessToken(
 
     // check token exists
     if (!accessToken) return noAccess();
+    console.log('accessToken');
 
     // verify token
     const verifiedUser = await verifyToken(accessToken, 'access');

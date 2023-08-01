@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {HtmlHTMLAttributes} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 type CardProps = {
@@ -6,8 +6,7 @@ type CardProps = {
   productId: string;
   productName: string;
   productImgSrc: string;
-  className: string;
-};
+} & HtmlHTMLAttributes<HTMLDivElement>;
 
 export default function Card({
   productId,
@@ -15,12 +14,14 @@ export default function Card({
   productPrice,
   productImgSrc,
   className,
+  ...rest
 }: CardProps) {
   const navigate = useNavigate();
   return (
     <article
       className={`flex flex-col h-80 w-64 rounded-md overflow-hidden gap-0 relative cursor-pointer shadow-none hover:shadow-2xl hover:scale-[1.01] transition-all ${className}`}
       onClick={() => navigate(`product/${productId}`)}
+      {...rest}
     >
       <img
         src={productImgSrc}

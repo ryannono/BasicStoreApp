@@ -10,6 +10,9 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_1 = __importDefault(require("express"));
+const node_cron_1 = __importDefault(require("node-cron"));
+const utils_1 = require("./utils");
+// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 // Import routers
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
@@ -19,10 +22,13 @@ const paymentRoutes_1 = __importDefault(require("./routes/paymentRoutes"));
 const addressRoutes_1 = __importDefault(require("./routes/addressRoutes"));
 //import error middleware
 const errorMiddleware_1 = require("./middlewares/errorMiddleware");
-// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 // ---------------- initialization ----------------- //
 exports.prisma = new client_1.PrismaClient();
 exports.app = (0, express_1.default)();
+// periodic database cleanup
+node_cron_1.default.schedule('0 0 * * *', async () => {
+    await (0, utils_1.deleteExpiredRefreshTokens)();
+});
 // ---------- Application-Level Middleware --------- //
 exports.app.use((0, cookie_parser_1.default)());
 exports.app.use(body_parser_1.default.json());

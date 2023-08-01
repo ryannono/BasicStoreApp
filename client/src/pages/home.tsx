@@ -1,7 +1,7 @@
 import {ArrowDownIcon} from '@heroicons/react/24/solid';
-import {Button} from '@mui/material';
+import {Button, CircularProgress, LinearProgress} from '@mui/material';
 import Card from '../components/card';
-import {useRef} from 'react';
+import {Suspense, useRef} from 'react';
 import {scrollToElement} from '../globals/globalFunctions';
 import {useFilterContext} from '../globals/filterContext';
 import {useProductsContext} from '../globals/productContext';
@@ -29,7 +29,7 @@ export default function Home() {
             category.name.toLowerCase().includes(filter)
           )
             ? 'hidden'
-            : ''
+            : 'flex'
         }
       />
     );
@@ -63,9 +63,17 @@ export default function Home() {
         ref={productsGalleryRef}
         className="flex items-center justify-center py-16 px-8"
       >
-        <div className="grid grid-cols-fill w-[80vw] max-w-[1152px] place-items-center gap-16">
-          {productCards}
-        </div>
+        <>
+          {productsContext?.products ? (
+            <div className="grid grid-cols-fill w-[80vw] max-w-[1152px] place-items-center gap-16">
+              {productCards}
+            </div>
+          ) : (
+            <div className="flex w-screen items-center justify-center p-8">
+              <CircularProgress />
+            </div>
+          )}
+        </>
       </main>
     </>
   );

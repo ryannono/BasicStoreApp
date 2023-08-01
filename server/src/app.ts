@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import cron from 'node-cron';
+import {deleteExpiredRefreshTokens} from './utils';
+// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 
 // Import routers
 import userRoutes from './routes/userRoutes';
@@ -15,12 +18,16 @@ import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
 import {errorHandler} from './middlewares/errorMiddleware';
-// import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 
 // ---------------- initialization ----------------- //
 
 export const prisma = new PrismaClient();
 export const app = express();
+
+// periodic database cleanup
+cron.schedule('0 0 * * *', async () => {
+  await deleteExpiredRefreshTokens();
+});
 
 // ---------- Application-Level Middleware --------- //
 

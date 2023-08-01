@@ -46,3 +46,16 @@ export declare function generateRefreshToken(userData: UserWithCart | TokenUserP
  *      has been tampered with.
  */
 export declare function verifyToken(token: string, tokenType: 'access' | 'refresh'): Promise<TokenUserPayload | null>;
+/**
+ * Deletes all expired refresh tokens from the database.
+ *
+ * @param {PrismaClient} prisma - An instance of PrismaClient which is used to perform database operations.
+ *
+ * This function works by getting the current date and time, then deleting all refresh tokens in the database
+ * where the expiration date is less than or equal to the current time. This means it removes all tokens that have expired.
+ *
+ * If an error occurs while deleting the tokens, the error is logged to the console.
+ *
+ * @returns {Promise<void>} A Promise that resolves when the deletion is completed. This Promise doesn't resolve with any value.
+ */
+export declare function deleteExpiredRefreshTokens(): Promise<void>;

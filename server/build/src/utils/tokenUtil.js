@@ -3,9 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = exports.generateRefreshToken = exports.generateAccessToken = exports.isTokenUserPayload = void 0;
+exports.deleteExpiredRefreshTokens = exports.verifyToken = exports.generateRefreshToken = exports.generateAccessToken = exports.isTokenUserPayload = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const userUtil_1 = require("./userUtil");
+const app_1 = require("../app");
 function isTokenUserPayload(user) {
     return user.cartId !== undefined;
 }
@@ -95,4 +96,29 @@ function verifyToken(token, tokenType) {
     });
 }
 exports.verifyToken = verifyToken;
+/**
+ * Deletes all expired refresh tokens from the database.
+ *
+ * @param {PrismaClient} prisma - An instance of PrismaClient which is used to perform database operations.
+ *
+ * This function works by getting the current date and time, then deleting all refresh tokens in the database
+ * where the expiration date is less than or equal to the current time. This means it removes all tokens that have expired.
+ *
+ * If an error occurs while deleting the tokens, the error is logged to the console.
+ *
+ * @returns {Promise<void>} A Promise that resolves when the deletion is completed. This Promise doesn't resolve with any value.
+ */
+async function deleteExpiredRefreshTokens() {
+    const now = new Date();
+    await app_1.prisma.refreshToken
+        .deleteMany({
+        where: {
+            expiresAt: { lte: now },
+        },
+    })
+        .catch(err => {
+        console.error(err);
+    });
+}
+exports.deleteExpiredRefreshTokens = deleteExpiredRefreshTokens;
 //# sourceMappingURL=tokenUtil.js.map
