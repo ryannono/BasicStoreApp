@@ -95,10 +95,10 @@ export function PaymentSubmissionForm() {
   const cartContext = useCartContext();
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
 
-  const TO_CENTS_MULTIPLIER = 100;
   const taxAmount = Number(cartContext?.totalPrice) * 0.13;
-  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
-  const totalAmount = Math.round(taxtIncludedPrice * TO_CENTS_MULTIPLIER);
+  const taxtIncludedPrice = Number(
+    (Number(cartContext?.totalPrice) + taxAmount).toFixed(2)
+  );
   const addressOptions: StripeAddressElementOptions = {mode: 'shipping'};
 
   async function handleSubmit(e: FormEvent) {
@@ -109,7 +109,7 @@ export function PaymentSubmissionForm() {
     const items = cartContext?.cart;
     const orderDetails = {
       userId: userContext?.user?.id ?? null,
-      totalPrice: totalAmount / 100,
+      totalPrice: taxtIncludedPrice,
     };
     const shippingAddress = {
       addressLine1: address?.address.line1,
@@ -183,11 +183,11 @@ export function PaymentSubmissionForm() {
                 </div>
                 <div className="flex justify-between p-1">
                   <span>HST(13%):</span>
-                  <span>{Math.round(taxAmount * 100) / 100}</span>
+                  <span>{taxAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
-                  <span>{totalAmount / 100}</span>
+                  <span>{taxtIncludedPrice}</span>
                 </div>
               </section>
 
