@@ -8,10 +8,9 @@ const urls = [
 
 const location = window.location;
 export const BASE_URL = location.protocol.concat(
-  '/',
+  '//',
   location.hostname,
-  '/',
-  location.port
+  location.port ? `:${location.port}` : ''
 );
 
 export const BASE_API_URL = 'https://tastetrove.up.railway.app/api';
