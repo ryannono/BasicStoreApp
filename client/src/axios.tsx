@@ -9,7 +9,9 @@ const urls = [
 export const BASE_URL = 'http://localhost:4000';
 export const BASE_API_URL = 'https://tastetrove.up.railway.app/api';
 
-export default axios.create({
-  baseURL: BASE_API_URL,
-  withCredentials: true,
-});
+const axiosInstance = axios.create();
+
+axiosInstance.defaults.withCredentials = true;
+axiosInstance.defaults.baseURL = BASE_API_URL;
+
+export default axiosInstance;

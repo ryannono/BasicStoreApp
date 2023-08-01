@@ -39,7 +39,8 @@ export async function handleAuthentication(
   // send tokens as cookies
   const accessToken = generateAccessToken(user);
   res.cookie('accessToken', accessToken, {
-    // httpOnly: true,
+    httpOnly: true,
+    sameSite: 'none',
     maxAge: 20 * MINUTE,
   });
 
@@ -59,7 +60,8 @@ export async function handleAuthentication(
     });
 
     res.cookie('refreshToken', refreshToken, {
-      // httpOnly: true,
+      httpOnly: true,
+      sameSite: 'none',
       maxAge: 14 * DAY,
     });
   }
