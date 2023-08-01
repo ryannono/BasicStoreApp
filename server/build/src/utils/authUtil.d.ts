@@ -22,3 +22,11 @@ import { TokenUserPayload } from '../types/userTypes';
  * @returns {Promise<Response>} Promise object represents the HTTP response.
  */
 export declare function handleAuthentication(user: UserWithCart | TokenUserPayload, res: Response, withRefreshToken?: boolean): Promise<Response>;
+/**
+ * Function to handle user deauthentication. It clears the access and refresh token cookies.
+ *
+ * @param {Response} res - The response object from Express.js.
+ *
+ * @returns {Response} - The response object with the cleared cookies and a success message.
+ */
+export declare function handleDeauthentication(res: Response): Response<any, Record<string, any>>;

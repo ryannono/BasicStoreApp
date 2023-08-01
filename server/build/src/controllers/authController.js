@@ -199,10 +199,7 @@ async function logoutUser(req, res, next) {
             },
         });
         // Clear the access and refresh token cookies
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
-        // Send response
-        res.status(200).json({ message: 'User logged out successfully' });
+        return (0, utils_1.handleDeauthentication)(res);
     }
     catch (err) {
         return next(err);

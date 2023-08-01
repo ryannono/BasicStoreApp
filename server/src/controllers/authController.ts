@@ -7,6 +7,7 @@ import {
   verifyPassword,
   verifyToken,
   handleAuthentication,
+  handleDeauthentication,
 } from '../utils';
 
 /**
@@ -233,11 +234,7 @@ export async function logoutUser(
     });
 
     // Clear the access and refresh token cookies
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
-
-    // Send response
-    res.status(200).json({message: 'User logged out successfully'});
+    return handleDeauthentication(res);
   } catch (err) {
     return next(err);
   }
