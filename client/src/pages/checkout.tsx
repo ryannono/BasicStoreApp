@@ -30,7 +30,7 @@ export default function StripePaymentGateway() {
   const taxAmount = Number(cartContext?.totalPrice) * 0.13;
   const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
   const totalAmount =
-    Math.round(taxtIncludedPrice * TO_CENTS_MULTIPLIER * 100) / 100;
+    (Math.round(taxtIncludedPrice * 100) / 100) * TO_CENTS_MULTIPLIER;
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
     amount: totalAmount,
