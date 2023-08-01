@@ -34,7 +34,7 @@ async function createPaymentIntent(req, res, next) {
         const { totalPrice, userId } = orderDetails;
         // Create a new Stripe PaymentIntent
         const paymentIntent = await stripeService_1.default.paymentIntents.create({
-            amount: totalPrice * utils_1.TO_CENTS_MULTIPLIER,
+            amount: parseInt((totalPrice * utils_1.TO_CENTS_MULTIPLIER).toFixed()),
             currency: 'cad',
             automatic_payment_methods: {
                 enabled: true,

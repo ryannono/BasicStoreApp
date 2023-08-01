@@ -38,8 +38,6 @@ export default function Home() {
   return (
     <>
       <header className="bg-hero-bg bg-left bg-fill bg-no-repeat bg-[#070707] flex items-center h-[60vh] justify-center font-medium text-white w-screen, relative overflow-clip">
-        {/* circle 1 */}
-        {/* <div className="rounded-full h-[30rem] w-[30rem] bg-green-700 absolute -left-40 -bottom-40" /> */}
         <div className="flex flex-col top-6 items-center backdrop-blur-sm w-full h-full justify-center relative shadow-2xl bg-[#0000005e] py-60 px-20 gap-8">
           <span className="text-lg bg-orange-600 font-bold rounded-lg px-6 py-1">
             TasteTrove The Spice Galore

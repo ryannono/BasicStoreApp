@@ -27,10 +27,11 @@ export default function StripePaymentGateway() {
     () => loadStripe(PUBLISHABLE_KEY),
     [PUBLISHABLE_KEY]
   );
-  const taxAmount =
-    Math.round(Number(cartContext?.totalPrice) * 0.13 * 100) / 100;
-  const taxIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
-  const totalAmountInCents = taxIncludedPrice * 100;
+  const subtotal = cartContext?.totalPrice ?? 0;
+  const taxAmount = Number((subtotal * 0.13).toFixed(2));
+  const totalRoundedAmount = Number((subtotal + taxAmount).toFixed(2));
+  const totalAmountInCents = Number((totalRoundedAmount * 100).toFixed());
+  console.log(subtotal, taxAmount, totalRoundedAmount, totalAmountInCents);
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
     amount: totalAmountInCents,
@@ -101,9 +102,9 @@ export function PaymentSubmissionForm() {
   const cartContext = useCartContext();
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
 
-  const taxAmount =
-    Math.round(Number(cartContext?.totalPrice) * 0.13 * 100) / 100;
-  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
+  const subtotal = cartContext?.totalPrice ?? 0;
+  const taxAmount = Number((subtotal * 0.13).toFixed(2));
+  const totalRoundedAmount = Number((subtotal + taxAmount).toFixed(2));
   const addressOptions: StripeAddressElementOptions = {mode: 'shipping'};
 
   async function handleSubmit(e: FormEvent) {
@@ -114,7 +115,7 @@ export function PaymentSubmissionForm() {
     const items = cartContext?.cart;
     const orderDetails = {
       userId: userContext?.user?.id ?? null,
-      totalPrice: taxtIncludedPrice,
+      totalPrice: totalRoundedAmount,
     };
     const shippingAddress = {
       addressLine1: address?.address.line1,
@@ -184,7 +185,7 @@ export function PaymentSubmissionForm() {
               <section id="checkout" className="flex flex-col gap-1 py-7">
                 <div className="flex justify-between p-1">
                   <span>Subtotal:</span>
-                  <span>{cartContext.totalPrice}</span>
+                  <span>{subtotal}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>HST(13%):</span>
@@ -192,7 +193,7 @@ export function PaymentSubmissionForm() {
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
-                  <span>{taxtIncludedPrice}</span>
+                  <span>{totalRoundedAmount}</span>
                 </div>
               </section>
 

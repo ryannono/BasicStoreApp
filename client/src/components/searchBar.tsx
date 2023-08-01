@@ -17,6 +17,7 @@ export default function SearchBar() {
   return (
     <>
       <Input
+        name="Nav search bar"
         onChange={handleFilter}
         inputRef={inputRef}
         type="search"
