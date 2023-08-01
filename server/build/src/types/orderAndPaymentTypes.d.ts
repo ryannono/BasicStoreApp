@@ -4,7 +4,7 @@ export declare type MutableOrderPayload = Pick<OrderPayload['scalars'], 'userId'
 export declare type MutableAddressPayload = Omit<AddressPayload['scalars'], 'id'>;
 export declare type CreateOrderData = (Prisma.Without<Prisma.OrderCreateInput, Prisma.OrderUncheckedCreateInput> & Prisma.OrderUncheckedCreateInput) | (Prisma.Without<Prisma.OrderUncheckedCreateInput, Prisma.OrderCreateInput> & Prisma.OrderCreateInput);
 export declare type CreatePaymentIntentPayload = {
-    items: MutableCartItemPayload;
+    items: MutableCartItemPayload[];
     shippingAddress: MutableAddressPayload;
     orderDetails: MutableOrderPayload;
 };

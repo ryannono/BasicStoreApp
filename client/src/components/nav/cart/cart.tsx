@@ -12,10 +12,16 @@ export default function Cart() {
   const navigate = useNavigate();
   const cartContext = useCartContext();
   const {totalPrice, totalQuantity} = cartContext!;
+
   function toggleCartPanel() {
     document.body.classList.toggle('overflow-hidden');
     cartOverlayRef.current?.classList.toggle('hidden');
     cartPanelRef.current?.classList.toggle('translate-x-[512px]');
+  }
+
+  function handleCheckoutClick() {
+    toggleCartPanel();
+    navigate('/checkout');
   }
 
   return (
@@ -59,7 +65,10 @@ export default function Cart() {
               <span>Subtotal:</span>
               <span>{totalPrice}</span>
             </div>
-            <Button className="w-full bg-orange-600 text-white hover:bg-[#363636] py-4">
+            <Button
+              className="w-full bg-orange-600 text-white hover:bg-[#363636] py-4"
+              onClick={handleCheckoutClick}
+            >
               Checkout
             </Button>
           </section>

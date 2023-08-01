@@ -3,6 +3,7 @@ import Home from '../pages/home';
 import ProductPage from '../pages/productPage';
 import GlobalLayout from './globalLayout';
 import Auth from '../pages/auth';
+import StripePaymentGateway from '../pages/checkout';
 
 const router = createBrowserRouter([
   {
@@ -11,9 +12,14 @@ const router = createBrowserRouter([
       {path: '/', element: <Home />},
       {path: 'product/:productId', element: <ProductPage />},
       {
-        path: 'auth/',
+        path: 'auth',
         element: <Auth />,
         children: [{path: 'signin'}, {path: 'register'}],
+      },
+      {
+        path: 'checkout',
+        element: <StripePaymentGateway />,
+        children: [{path: 'complete'}],
       },
     ],
   },

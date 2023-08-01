@@ -17,7 +17,7 @@ export type CreateOrderData =
       Prisma.OrderCreateInput);
 
 export type CreatePaymentIntentPayload = {
-  items: MutableCartItemPayload;
+  items: MutableCartItemPayload[];
   shippingAddress: MutableAddressPayload;
   orderDetails: MutableOrderPayload;
 };

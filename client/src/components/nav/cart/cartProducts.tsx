@@ -1,12 +1,12 @@
 import {TrashIcon} from '@heroicons/react/24/solid';
 import {useCartContext} from '../../../globals/cartContext';
 import {useProductsContext} from '../../../globals/productContext';
-import {useRef, useState, useEffect} from 'react';
+import {useRef, useState, useEffect, HTMLAttributes} from 'react';
 import {IndividualProduct} from '../../../hooks/useProducts';
 import React from 'react';
 import {IndividualCartItem} from '../../../hooks/useCart/useCartTypes';
 
-export default function CartProducts() {
+export default function CartProducts(props?: CartProductsProps) {
   const cartContext = useCartContext();
   const productsContext = useProductsContext();
 
@@ -32,6 +32,7 @@ export default function CartProducts() {
                 productsMap={productsMap}
                 key={`cartProduct-${index}`}
                 editCart={editCart}
+                {...props}
               />
               {index !== cart.length - 1 && (
                 <ProductDivider key={`divider-${index}`} />
@@ -43,10 +44,14 @@ export default function CartProducts() {
   );
 }
 
-function CartProduct({cartItem, editCart}: CartPropductProps) {
+function CartProduct({
+  cartItem,
+  editCart,
+  productsMap,
+  ...rest
+}: CartPropductProps) {
   const selectRef = useRef<HTMLSelectElement | null>(null);
-  const productContext = useProductsContext();
-  const fullProduct = productContext?.productsMap.get(cartItem.productId);
+  const fullProduct = productsMap.get(cartItem.productId);
   const [selection, setSelection] = useState('');
   const quantityOptions = getSelectOptions(Number(selection));
 
@@ -62,9 +67,14 @@ function CartProduct({cartItem, editCart}: CartPropductProps) {
   function handleRemove() {
     editCart(cartItem.productId, 0);
   }
+
+  const {className, ...containerProps} = rest;
   return (
     <>
-      <article className="flex py-6 px-10 gap-2">
+      <article
+        className={`flex py-6 px-10 gap-2 ${className}`}
+        {...containerProps}
+      >
         <img
           src={fullProduct?.images[0].url}
           className="w-1/4 rounded-lg aspect-square object-cover"
@@ -104,6 +114,8 @@ function CartProduct({cartItem, editCart}: CartPropductProps) {
   );
 }
 
+type CartProductsProps = HTMLAttributes<HTMLDivElement>;
+
 type CartPropductProps = {
   cartItem: IndividualCartItem;
   productsMap: Map<string, IndividualProduct>;
@@ -112,7 +124,7 @@ type CartPropductProps = {
     newQuantity: number,
     operation?: 'increment' | 'decrement' | undefined
   ) => Promise<void>;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 export function getSelectOptions(currentSelection: number) {
   const lowerBound = Math.max(1, currentSelection - 4);
