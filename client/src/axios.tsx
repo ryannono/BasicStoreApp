@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const urls = [
   {baseURL: 'https://tastetrove.up.railway.app/api'},
   {baseURL: 'http://localhost:4000/api'},

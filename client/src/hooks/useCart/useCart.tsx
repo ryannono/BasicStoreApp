@@ -1,5 +1,4 @@
 import {useState, useEffect, useReducer} from 'react';
-import axios from '../../axios';
 import {useProductsContext} from '../../globals/productContext';
 import {IndividualCartItem} from './useCartTypes';
 import {useUserContext} from '../../globals/userContext';
@@ -11,7 +10,6 @@ import {
   getTotalPrice,
   reducer,
   updateDatabaseCart,
-  pushLocalCartToDatabase,
 } from './useCartFunctions';
 
 /**

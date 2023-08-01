@@ -39,23 +39,25 @@ export default function StripePaymentGateway() {
 
   return (
     <>
-      {cartContext && cartContext.totalPrice !== 0 ? (
-        <Elements stripe={stripePromise} options={paymentOptions}>
-          <PaymentRoutingManager />
-        </Elements>
-      ) : (
-        <section className="flex flex-col gap-5 w-full p-8 max-w-xs rounded-xl bg-white shadow-md text-center">
-          <h1>Your cart is empty</h1>
-          <Button
-            className="bg-orange-600 text-white hover:bg-orange-800 py-4 transition-all"
-            onClick={() => {
-              navigate('/');
-            }}
-          >
-            Shop products
-          </Button>
-        </section>
-      )}
+      <main className="grid place-items-center px-10 pb-12 pt-32 w-[calc(100vw-(2*3rem))] min-h-[calc(100vh-(2*3rem)-5rem)] overflow-x-hidden bg-slate-100">
+        {cartContext && cartContext.totalPrice > 0 ? (
+          <Elements stripe={stripePromise} options={paymentOptions}>
+            <PaymentRoutingManager />
+          </Elements>
+        ) : (
+          <section className="flex flex-col gap-5 w-full p-8 max-w-xs rounded-xl bg-white shadow-md text-center">
+            <h1>Your cart is empty</h1>
+            <Button
+              className="bg-orange-600 text-white hover:bg-orange-800 py-4 transition-all"
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              Shop products
+            </Button>
+          </section>
+        )}
+      </main>
     </>
   );
 }
@@ -72,7 +74,7 @@ export function PaymentRoutingManager() {
   }, [location]);
 
   return (
-    <main className="grid place-items-center px-10 pb-12 pt-32 w-[calc(100vw-(2*3rem))] min-h-[calc(100vh-(2*3rem)-5rem)] overflow-x-hidden bg-slate-100">
+    <>
       {pageType === 'checkout' ? (
         <PaymentSubmissionForm />
       ) : (
@@ -88,7 +90,7 @@ export function PaymentRoutingManager() {
           </Button>
         </section>
       )}
-    </main>
+    </>
   );
 }
 

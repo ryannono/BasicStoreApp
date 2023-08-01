@@ -41,5 +41,3 @@ export type IndividualProduct = Product & {
 export type ProductOrProductList<T extends string | null> = T extends string
   ? IndividualProduct
   : IndividualProduct[];
-
-type IdType = string | null;
