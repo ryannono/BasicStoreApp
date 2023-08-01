@@ -30,7 +30,7 @@ async function authenticateAccessToken(req, res, next) {
             return res.status(401).json({ error: 'User does not have access' });
         };
         // check token exists
-        console.log('accessToken');
+        console.log(accessToken);
         if (!accessToken)
             return noAccess();
         // verify token

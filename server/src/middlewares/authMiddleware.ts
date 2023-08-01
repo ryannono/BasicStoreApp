@@ -35,7 +35,7 @@ export async function authenticateAccessToken(
     };
 
     // check token exists
-    console.log('accessToken');
+    console.log(accessToken);
     if (!accessToken) return noAccess();
 
     // verify token
