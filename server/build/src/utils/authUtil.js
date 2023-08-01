@@ -30,7 +30,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
     const accessToken = (0, tokenUtil_1.generateAccessToken)(user);
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        sameSite: 'none',
+        domain: process.env.NODE_ENV !== 'production' ? 'localhost' : '.railway.app',
         maxAge: 20 * constants_1.MINUTE,
     });
     if (withRefreshToken) {
@@ -48,7 +48,7 @@ async function handleAuthentication(user, res, withRefreshToken) {
         });
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            sameSite: 'none',
+            domain: process.env.NODE_ENV !== 'production' ? 'localhost' : '.railway.app',
             maxAge: 14 * constants_1.DAY,
         });
     }
