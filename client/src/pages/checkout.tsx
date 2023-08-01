@@ -28,12 +28,12 @@ export default function StripePaymentGateway() {
   );
   const TO_CENTS_MULTIPLIER = 100;
   const taxAmount = Number(cartContext?.totalPrice) * 0.13;
-  const taxtIncludedPrice =
-    Number((Number(cartContext?.totalPrice) + taxAmount).toFixed(2)) *
-    TO_CENTS_MULTIPLIER;
+  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
+  const totalAmount =
+    Math.round(taxtIncludedPrice * TO_CENTS_MULTIPLIER * 100) / 100;
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
-    amount: taxtIncludedPrice,
+    amount: totalAmount,
     currency: 'cad',
   };
 
@@ -97,9 +97,7 @@ export function PaymentSubmissionForm() {
   const [address, setAddress] = useState<StripeAddressValue | null>(null);
 
   const taxAmount = Number(cartContext?.totalPrice) * 0.13;
-  const taxtIncludedPrice = Number(
-    (Number(cartContext?.totalPrice) + taxAmount).toFixed(2)
-  );
+  const taxtIncludedPrice = Number(cartContext?.totalPrice) + taxAmount;
   const addressOptions: StripeAddressElementOptions = {mode: 'shipping'};
 
   async function handleSubmit(e: FormEvent) {
@@ -184,11 +182,11 @@ export function PaymentSubmissionForm() {
                 </div>
                 <div className="flex justify-between p-1">
                   <span>HST(13%):</span>
-                  <span>{taxAmount.toFixed()}</span>
+                  <span>{Math.round(taxAmount * 100) / 100}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
-                  <span>{taxtIncludedPrice}</span>
+                  <span>{Math.round(taxtIncludedPrice * 100) / 100}</span>
                 </div>
               </section>
 
