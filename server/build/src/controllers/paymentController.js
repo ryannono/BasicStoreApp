@@ -44,7 +44,7 @@ async function createPaymentIntent(req, res, next) {
             totalPrice,
             items: {
                 createMany: {
-                    data: { ...items },
+                    data: items,
                 },
             },
             shippingAddress: {

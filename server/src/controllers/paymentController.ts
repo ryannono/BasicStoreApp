@@ -50,7 +50,7 @@ export async function createPaymentIntent(
       totalPrice,
       items: {
         createMany: {
-          data: {...items},
+          data: items,
         },
       },
       shippingAddress: {
