@@ -36,15 +36,7 @@ async function createPaymentIntent(req, res, next) {
         const paymentIntent = await stripeService_1.default.paymentIntents.create({
             amount: totalPrice * utils_1.TO_CENTS_MULTIPLIER,
             currency: 'cad',
-            payment_method_types: [
-                'card',
-                'ideal',
-                'bancontact',
-                'giropay',
-                'p24',
-                'eps',
-                'sofort',
-            ], // Specify the payment methods this PaymentIntent can use
+            payment_method_types: ['card'], // Specify the payment methods this PaymentIntent can use
         });
         console.log(JSON.stringify(paymentIntent.id));
         // Construct data for new Order
