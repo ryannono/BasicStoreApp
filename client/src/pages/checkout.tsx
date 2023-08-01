@@ -22,7 +22,7 @@ export default function StripePaymentGateway() {
   const cartContext = useCartContext();
   const navigate = useNavigate();
 
-  const PUBLISHABLE_KEY = 'pk_live_GDivFnbDb7zQeRFcGQLLP5ws00FJWq75EN';
+  const PUBLISHABLE_KEY = 'pk_test_29RHQ2la0lz7Q8pCmapGBnS300Rrfcyl9n';
   const stripePromise = useMemo(
     () => loadStripe(PUBLISHABLE_KEY),
     [PUBLISHABLE_KEY]
@@ -31,7 +31,6 @@ export default function StripePaymentGateway() {
   const taxAmount = Number((subtotal * 0.13).toFixed(2));
   const totalRoundedAmount = Number((subtotal + taxAmount).toFixed(2));
   const totalAmountInCents = Number((totalRoundedAmount * 100).toFixed());
-  console.log(subtotal, taxAmount, totalRoundedAmount, totalAmountInCents);
   const paymentOptions: StripeElementsOptions = {
     mode: 'payment',
     amount: totalAmountInCents,
@@ -185,15 +184,15 @@ export function PaymentSubmissionForm() {
               <section id="checkout" className="flex flex-col gap-1 py-7">
                 <div className="flex justify-between p-1">
                   <span>Subtotal:</span>
-                  <span>{subtotal}</span>
+                  <span>{`${subtotal} $`}</span>
                 </div>
                 <div className="flex justify-between p-1">
-                  <span>HST(13%):</span>
-                  <span>{taxAmount}</span>
+                  <span>HST (13%):</span>
+                  <span>{`${taxAmount} $`}</span>
                 </div>
                 <div className="flex justify-between p-1">
                   <span>Total:</span>
-                  <span>{totalRoundedAmount}</span>
+                  <span>{`${totalRoundedAmount} $`}</span>
                 </div>
               </section>
 
