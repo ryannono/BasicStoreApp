@@ -129,7 +129,7 @@ export async function handleStripeWebhook(
     // Handle the payment_intent.succeeded event
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log(`Payment Intent: ${JSON.stringify(paymentIntent)}`);
+
       // Use paymentIntent.id to find the corresponding order and update its status
       const order = await prisma.order.update({
         where: {stripePaymentIntentId: paymentIntent.id},
@@ -149,7 +149,6 @@ export async function handleStripeWebhook(
     }
 
     // Return a response to acknowledge receipt of the event
-    console.log('Event received');
     return res.json({received: true});
   } catch (err) {
     return next(err);
