@@ -15,6 +15,7 @@ import addressRoutes from './routes/addressRoutes';
 
 //import error middleware
 import {errorHandler} from './middlewares/errorMiddleware';
+import path from 'node:path';
 // import {addCategories, addProducts, removeProducts} from './utils/productUtil';
 
 // ---------------- initialization ----------------- //
@@ -51,6 +52,14 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/address', addressRoutes);
 app.use(errorHandler);
+
+// Serve static files from the "client/build" directory
+app.use(express.static(path.join(__dirname, 'client', 'build')));
+
+// Serve the index.html file for all routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 app.get('/api', (req, res) => {
   res.send('Welcome to the TasteTrove API!');
