@@ -26,7 +26,7 @@ export default function User() {
     toggleUserMenu();
     localStorage.clear();
     if (setUser) setUser(null);
-    await axios.post('/auth/logout', {}, {withCredentials: true});
+    await axios.post('/auth/logout');
   }
 
   return (

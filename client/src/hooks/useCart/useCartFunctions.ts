@@ -85,9 +85,7 @@ export async function updateDatabaseCart(
 ) {
   try {
     // send all pending updates as single request
-    await axios.put(`/users/${userId}/cart`, updateArray, {
-      withCredentials: true,
-    });
+    await axios.put(`/users/${userId}/cart`, updateArray);
   } catch (err) {
     console.error(err);
   }
@@ -112,11 +110,7 @@ export async function getCart(
 ): Promise<IndividualCartItem[] | null> {
   if (userId) {
     try {
-      const cart = (
-        await axios.get(`/users/${userId}/cart`, {
-          withCredentials: true,
-        })
-      ).data.items;
+      const cart = (await axios.get(`/users/${userId}/cart`)).data.items;
       saveLocalCart(cart);
       return cart;
     } catch (err) {

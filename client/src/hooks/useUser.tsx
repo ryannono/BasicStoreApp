@@ -26,11 +26,7 @@ export type ClientUser = {
 
 async function renewUser() {
   try {
-    return (
-      await axios.get('/users', {
-        withCredentials: true,
-      })
-    ).data as ClientUser;
+    return (await axios.get('/users')).data as ClientUser;
   } catch (err) {
     console.error(err);
     return null;

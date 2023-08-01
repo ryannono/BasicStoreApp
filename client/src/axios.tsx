@@ -11,4 +11,5 @@ export const BASE_API_URL = 'https://tastetrove.up.railway.app/api';
 
 export default axios.create({
   baseURL: BASE_API_URL,
+  withCredentials: true,
 });

@@ -127,11 +127,11 @@ export function PaymentSubmissionForm() {
 
     try {
       const clientSecret: string = (
-        await axios.post(
-          '/payments/intent',
-          {items, orderDetails, shippingAddress},
-          {withCredentials: true}
-        )
+        await axios.post('/payments/intent', {
+          items,
+          orderDetails,
+          shippingAddress,
+        })
       ).data.clientSecret;
 
       const paymentElement = elements.getElement(PaymentElement);

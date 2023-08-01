@@ -38,11 +38,7 @@ export default function Auth() {
 
     try {
       const user: ClientUser = (
-        await axios.post(
-          '/auth/login',
-          {email, password},
-          {withCredentials: true}
-        )
+        await axios.post('/auth/login', {email, password})
       ).data;
       console.log(user);
       userContext.setUser(user);
@@ -66,11 +62,13 @@ export default function Auth() {
 
     try {
       const user: ClientUser = (
-        await axios.post(
-          '/auth/register',
-          {email, password, firstName, lastName, phoneNumber},
-          {withCredentials: true}
-        )
+        await axios.post('/auth/register', {
+          email,
+          password,
+          firstName,
+          lastName,
+          phoneNumber,
+        })
       ).data;
       console.log(user);
       userContext.setUser(user);
