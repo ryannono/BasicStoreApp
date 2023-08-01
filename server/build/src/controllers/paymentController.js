@@ -37,6 +37,7 @@ async function createPaymentIntent(req, res, next) {
             amount: totalPrice * utils_1.TO_CENTS_MULTIPLIER,
             currency: 'cad', // Set currency to Canadian Dollar
         });
+        console.log(JSON.stringify(paymentIntent.id));
         // Construct data for new Order
         const data = {
             stripePaymentIntentId: paymentIntent.id,
@@ -69,6 +70,7 @@ async function createPaymentIntent(req, res, next) {
     }
     catch (error) {
         // Pass any errors to the error handler middleware
+        console.log(error);
         return next(error);
     }
 }

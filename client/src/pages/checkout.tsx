@@ -88,21 +88,6 @@ export function PaymentRoutingManager() {
   );
 }
 
-type StripeAddressValue = {
-  name: string;
-  firstName?: string | undefined;
-  lastName?: string | undefined;
-  address: {
-    line1: string;
-    line2: string | null;
-    city: string;
-    state: string;
-    postal_code: string;
-    country: string;
-  };
-  phone?: string | undefined;
-};
-
 export function PaymentSubmissionForm() {
   const stripe = useStripe();
   const elements = useElements();
@@ -219,3 +204,18 @@ export function PaymentSubmissionForm() {
     </>
   );
 }
+
+type StripeAddressValue = {
+  name: string;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  address: {
+    line1: string;
+    line2: string | null;
+    city: string;
+    state: string;
+    postal_code: string;
+    country: string;
+  };
+  phone?: string | undefined;
+};
