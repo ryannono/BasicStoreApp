@@ -4,7 +4,7 @@ import axios from 'axios';
 const urls = [
   {baseURL: 'https://tastetrove.up.railway.app/api'},
   {baseURL: 'http://localhost:4000/api'},
-];
+] as const;
 
 const location = window.location;
 export const BASE_URL = location.protocol.concat(
@@ -13,7 +13,9 @@ export const BASE_URL = location.protocol.concat(
   location.port ? `:${location.port}` : ''
 );
 
-export const BASE_API_URL = 'http://localhost:4000/api';
+export const BASE_API_URL = window.location.hostname.includes('taste')
+  ? 'https://tastetrove.up.railway.app/api'
+  : urls[1].baseURL;
 
 const axiosInstance = axios.create();
 axiosInstance.defaults.withCredentials = true;
