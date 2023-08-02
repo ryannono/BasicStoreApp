@@ -227,23 +227,20 @@ export async function addItemToCart(
 }
 
 /**
- * Updates the quantity of an item in a user's shopping cart.
+ * Updates the cart items of a specific user.
  *
- * This function handles the PUT request to update the quantity of an item
- * in a user's cart. It fetches the cart associated with the given user ID,
- * finds the item with the provided product ID, and updates its quantity in
- * the database.
+ * This asynchronous function first gets the items in the user's cart and
+ * creates a map (userCartMap) for fast access. Then, it categorizes the incoming items into arrays
+ * based on if they need to be created, updated, or deleted.
+ * Finally, it performs these create, update, and delete operations concurrently and sends a success message.
  *
  * @async
- * @param {Request} req - The incoming HTTP request. The request parameters
- *                        should contain the user ID and the request body
- *                        should contain the product ID and new quantity.
- * @param {Response} res - The outgoing HTTP response. The response body will
- *                         contain the updated cart if the operation is successful.
- * @param {NextFunction} next - Express.js next function.
- * @throws Will throw an error if the operation fails.
- * @returns {Promise<Response>} A Promise that resolves to the Express.js
- *                              response object.
+ * @function
+ * @param {Request} req - Express.js request object containing the incoming cart items in the request body.
+ * @param {Response} res - Express.js response object used to send the response.
+ * @param {NextFunction} next - Express.js next function for error handling.
+ * @throws {Error} Will throw an error if there is an issue in reading the user's current cart,
+ * categorizing the incoming items, or in creating/updating/deleting the items.
  */
 export async function updateCartItem(
   req: Request,

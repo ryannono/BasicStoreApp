@@ -20,4 +20,17 @@ import { Request, Response, NextFunction } from 'express';
  * @returns {void} This function does not have a return value.
  */
 export declare function authenticateAccessToken(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
+/**
+ * Verifies if the user has admin role.
+ *
+ * This function uses the user object stored in res.locals (from previous middleware functions),
+ * and checks if the user is an admin. If the user does not exist or is not an admin, it sends an
+ * error message and ends the request-response cycle.
+ *
+ * @function
+ * @param {Request} req - Express.js request object.
+ * @param {Response} res - Express.js response object used to send the error message if the user is not an admin.
+ * @param {NextFunction} next - Express.js next function to move to the next middleware function or to handle errors.
+ * @throws {Error} Will throw an error if the user is not authenticated or the user's role is not 'ADMIN'.
+ */
 export declare function verifyAdmin(req: Request, res: Response, next: NextFunction): void | Response<any, Record<string, any>>;

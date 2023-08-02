@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
 // eslint-disable-next-line node/no-extraneous-import
-import {PrismaClient, AddressPayload} from '@prisma/client';
+import {AddressPayload} from '@prisma/client';
 import {TokenUserPayload} from '../types/userTypes';
 import {prisma} from '../app';
 
