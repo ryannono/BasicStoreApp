@@ -2,10 +2,12 @@ import {UserIcon} from '@heroicons/react/24/solid';
 import {Chip} from '@mui/material';
 import {useUserContext} from '../../../globals/userContext';
 
-type UserChipProps = {
-  onClick: () => void;
-};
-
+/**
+ * A React component representing a user chip showing user-related information.
+ * @component
+ * @param {UserChipProps} props - The component props.
+ * @param {Function} props.onClick - A function to be executed when the user chip is clicked.
+ */
 export default function UserChip({onClick}: UserChipProps) {
   const userContext = useUserContext();
   return (
@@ -21,3 +23,7 @@ export default function UserChip({onClick}: UserChipProps) {
     />
   );
 }
+
+type UserChipProps = {
+  onClick: () => void;
+};

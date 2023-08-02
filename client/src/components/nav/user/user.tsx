@@ -5,6 +5,10 @@ import {useNavigate} from 'react-router-dom';
 import {useUserContext} from '../../../globals/userContext';
 import axios from '../../../axios';
 
+/**
+ * React component representing a user menu overlay with sign-in/sign-out options.
+ * @component
+ */
 export default function User() {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const userOverlayRef = useRef<HTMLDivElement>(null);

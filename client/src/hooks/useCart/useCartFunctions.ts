@@ -4,6 +4,14 @@ import {Action, IndividualCartItem, State} from './useCartTypes';
 
 // ---------------- Calculations ------------------ //
 
+/**
+ * Calculates and returns the total quantity and price of items in a cart.
+ *
+ * @param cart - An array of cart items.
+ * @param productsMap - A map where the key is product ID and the value is the product object.
+ *
+ * @returns {Object} An object containing the total quantity and price of items in the cart.
+ */
 export function getTotals(
   cart: IndividualCartItem[],
   productsMap: Map<string, IndividualProduct>
@@ -24,22 +32,22 @@ export function getTotals(
 // ---------------- Local Storage ---------------- //
 
 /**
- * Stores the current state of the cart in the local storage.
+ * Saves the current cart items into local storage.
  *
- * @param cart - An array of items in the cart.
+ * @param cart - An array of cart items.
  */
 export function saveLocalCart(cart: IndividualCartItem[]) {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 /**
- * Updates the quantity of an item in the cart stored in the local storage.
+ * Updates the quantity of an item in a locally stored cart.
  *
- * @param cart - An array of items in the cart.
+ * @param cart - An array of cart items.
  * @param itemToEditId - The ID of the item to be updated.
  * @param newQuantity - The new quantity of the item.
  *
- * @returns An updated array of items in the cart.
+ * @returns An array of updated cart items.
  */
 export function updateLocalCart(
   cart: IndividualCartItem[],
@@ -71,6 +79,12 @@ export function updateLocalCart(
 
 // ------------------ Database -------------------- //
 
+/**
+ * Updates the user's cart in the database with the given items.
+ *
+ * @param updateArray - An array of items to be updated in the cart.
+ * @param userId - The ID of the user.
+ */
 export async function updateDatabaseCart(
   updateArray: IndividualCartItem[],
   userId: string
@@ -83,19 +97,14 @@ export async function updateDatabaseCart(
   }
 }
 
-export async function pushLocalCartToDatabase(userId: string) {
-  const localCart = await getCart(undefined);
-  if (localCart) updateDatabaseCart(localCart, userId);
-}
-
 // ----------------- Cart fetch ------------------- //
 
 /**
- * Fetches the cart of a user. If the user is not signed in, it retrieves the cart from the local storage.
+ * Retrieves the user's cart from the database or from local storage if no user ID is provided.
  *
- * @param userId - The ID of the user.
+ * @param userId - The ID of the user. Optional parameter.
  *
- * @returns A Promise that resolves to an array of items in the cart, or null if there's an error.
+ * @returns A Promise that resolves to an array of cart items or null in case of an error.
  */
 export async function getCart(
   userId?: string
@@ -118,11 +127,12 @@ export async function getCart(
 // -----------------`States` ---------------- //
 
 /**
- * The reducer function for the useReducer hook in the Cart component.
+ * A reducer function to manage the cart and its totals state.
  *
- * @param state - The current state of the component.
- * @param action - The action to perform on the state.
- * @returns The new state after the action is performed.
+ * @param state - The current state of the cart.
+ * @param action - The dispatched action.
+ *
+ * @returns The new state of the cart after applying the action.
  */
 export function reducer(state: State, action: Action): State {
   switch (action.type) {

@@ -18,6 +18,17 @@ import CartProducts from '../components/nav/cart/cartProducts';
 import {useUserContext} from '../globals/userContext';
 import {useElements} from '@stripe/react-stripe-js';
 
+/**
+ * StripePaymentGateway - The main functional component representing the Stripe payment gateway.
+ *
+ * The StripePaymentGateway component uses the cart context to fetch cart items and calculates
+ * the subtotal, tax amount, and total amount for the payment.
+ * It sets up the Stripe elements options and, based on whether the cart is empty or not,
+ * either displays a message with a redirection button or
+ * renders the PaymentRoutingManager component inside the Stripe Elements.
+ *
+ * @returns The StripePaymentGateway component with Stripe elements and payment management setup.
+ */
 export default function StripePaymentGateway() {
   const cartContext = useCartContext();
   const navigate = useNavigate();
@@ -62,6 +73,15 @@ export default function StripePaymentGateway() {
   );
 }
 
+/**
+ * PaymentRoutingManager - Functional component that handles page routing for the checkout process.
+ *
+ * Based on the current location, the page type is set to either 'checkout' or 'checkoutComplete'.
+ * Depending on the page type, it either renders the PaymentSubmissionForm component or displays a
+ * message with a redirection button.
+ *
+ * @returns The PaymentRoutingManager component with routing setup for the checkout process.
+ */
 export function PaymentRoutingManager() {
   const navigate = useNavigate();
   const location = useLocation().pathname.split('/').at(-1);
@@ -94,6 +114,17 @@ export function PaymentRoutingManager() {
   );
 }
 
+/**
+ * PaymentSubmissionForm - Functional component that represents the payment submission form.
+ *
+ * The PaymentSubmissionForm component uses Stripe and Elements hooks, as well as the cart and user contexts.
+ * It manages the user's address state, calculates the subtotal, tax amount, and total amount for the checkout,
+ * and sets up options for the Stripe address elements. This component handles form submission,
+ * creates the payment intent, confirms the payment, and catches any errors that may occur.
+ * It also renders the payment and address elements, totals, submission button, and the cart products.
+ *
+ * @returns The PaymentSubmissionForm component with Stripe elements and payment submission setup.
+ */
 export function PaymentSubmissionForm() {
   const stripe = useStripe();
   const elements = useElements();
@@ -220,6 +251,10 @@ export function PaymentSubmissionForm() {
   );
 }
 
+/**
+ * `StripeAddressValue` is a TypeScript type that represents the value of a Stripe address.
+ * It contains properties for the user's name, first name, last name, address details, and phone number.
+ */
 type StripeAddressValue = {
   name: string;
   firstName?: string | undefined;

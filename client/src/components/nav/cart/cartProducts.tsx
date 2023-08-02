@@ -6,6 +6,11 @@ import {IndividualProduct} from '../../../hooks/useProducts';
 import React from 'react';
 import {IndividualCartItem} from '../../../hooks/useCart/useCartTypes';
 
+/**
+ * A React component representing a list of cart products with their details and options for each product.
+ * @component
+ * @param {CartProductsProps} [props] - The component props.
+ */
 export default function CartProducts(props?: CartProductsProps) {
   const cartContext = useCartContext();
   const productsContext = useProductsContext();
@@ -44,6 +49,11 @@ export default function CartProducts(props?: CartProductsProps) {
   );
 }
 
+/**
+ * A React component representing a single cart product with its details and options.
+ * @component
+ * @param {CartProductProps} props - The component props.
+ */
 function CartProduct({
   cartItem,
   editCart,
@@ -126,6 +136,11 @@ type CartPropductProps = {
   ) => Promise<void>;
 } & HTMLAttributes<HTMLDivElement>;
 
+/**
+ * A utility function to get an array of options for a select element based on the current selection.
+ * @param {number} currentSelection - The current selected quantity.
+ * @returns An array of JSX options for the select element.
+ */
 export function getSelectOptions(currentSelection: number) {
   const lowerBound = Math.max(1, currentSelection - 4);
   const upperBound = currentSelection + 4;

@@ -4,6 +4,17 @@ import {Button} from '@mui/material';
 import {useCartContext} from '../globals/cartContext';
 import {useProductsContext} from '../globals/productContext';
 
+/**
+ * `ProductPage` is a functional React component used to display the detailed view of a single product.
+ * It provides options to view different images of the product, add the product to cart and proceed to checkout.
+ *
+ * The product ID is retrieved from the URL using the `useMemo` hook and React Router's `useLocation` hook.
+ * The product details are then fetched from a context object using the `useProductsContext` hook.
+ *
+ * It manages state for the currently selected product image using React's `useState` hook.
+ *
+ * The component returns a `main` element containing all product details and associated actions.
+ */
 export default function ProductPage() {
   const location = useLocation();
   const navigate = useNavigate();

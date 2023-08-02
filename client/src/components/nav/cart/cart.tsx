@@ -6,6 +6,10 @@ import {CartChip} from './cartChip';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import CartProducts from './cartProducts';
 
+/**
+ * React component representing a shopping cart overlay with cart items and checkout functionality.
+ * @component
+ */
 export default function Cart() {
   const cartPanelRef = useRef<HTMLDivElement>(null);
   const cartOverlayRef = useRef<HTMLDivElement>(null);

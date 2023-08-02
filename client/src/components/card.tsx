@@ -1,13 +1,16 @@
-import React, {HtmlHTMLAttributes} from 'react';
+import {HtmlHTMLAttributes} from 'react';
 import {useNavigate} from 'react-router-dom';
 
-type CardProps = {
-  productPrice: number;
-  productId: string;
-  productName: string;
-  productImgSrc: string;
-} & HtmlHTMLAttributes<HTMLDivElement>;
-
+/**
+ * A React component representing a card displaying product information.
+ * @component
+ * @param {CardProps} props - The component props.
+ * @param {string} props.productId - The ID of the product associated with the card.
+ * @param {string} props.productName - The name of the product displayed on the card.
+ * @param {number} props.productPrice - The price of the product displayed on the card.
+ * @param {string} props.productImgSrc - The URL of the product image displayed on the card.
+ * @param {string} [props.className] - Additional CSS class name(s) to apply to the card component.
+ */
 export default function Card({
   productId,
   productName,
@@ -35,3 +38,10 @@ export default function Card({
     </article>
   );
 }
+
+type CardProps = {
+  productPrice: number;
+  productId: string;
+  productName: string;
+  productImgSrc: string;
+} & HtmlHTMLAttributes<HTMLDivElement>;

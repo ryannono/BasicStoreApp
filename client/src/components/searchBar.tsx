@@ -4,6 +4,10 @@ import {useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useFilterContext} from '../globals/filterContext';
 
+/**
+ * React component representing the search bar.
+ * @component
+ */
 export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const filterContext = useFilterContext();

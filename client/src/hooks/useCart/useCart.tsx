@@ -11,18 +11,16 @@ import {
 } from './useCartFunctions';
 
 /**
- * A hook that manages the cart functionality. It provides several utilities
- * like getting the cart for a user, updating the cart, and calculating total
- * price and quantity. It also manages updating the cart status in the backend
- * and local storage based on the user's actions.
+ * Custom hook `useCart` provides the functionality to handle the shopping cart state and its side effects.
+ * It interfaces with the local storage to maintain the cart state when a user is not logged in, and communicates
+ * with the database when a user is logged in.
  *
- * @param user - The currently logged-in user or null if no user is logged in.
+ * @returns {Object} An object containing the current state of the cart and a function to edit it.
  *
- * @returns An object with properties:
- *   - `cart`: An array of items currently in the cart.
- *   - `totalQuantity`: The total quantity of items in the cart.
- *   - `totalPrice`: The total price of items in the cart.
- *   - `editCart`: A function to edit the cart.
+ * @property {CartItem[]} cart - An array of items currently in the cart.
+ * @property {number} totalQuantity - Total quantity of items in the cart.
+ * @property {number} totalPrice - Total price of items in the cart.
+ * @property {(itemToEditId: string, newQuantity: number): Promise<void>} editCart - Function to edit the quantity of an item in the cart.
  */
 export default function useCart() {
   const {productsMap} = useProductsContext()!;

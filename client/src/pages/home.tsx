@@ -6,6 +6,17 @@ import {scrollToElement} from '../globals/globalFunctions';
 import {useFilterContext} from '../globals/filterContext';
 import {useProductsContext} from '../globals/productContext';
 
+/**
+ * Home - The main functional component representing the landing page of the application.
+ *
+ * The Home component uses the product and filter contexts to fetch and filter the products respectively.
+ * It maps the products to create a gallery of product cards, which are filterable based on the user's filter context input.
+ *
+ * This component consists of two main sections:
+ * 1. The Hero section - Displays a catchy banner and a call-to-action (CTA) button. On clicking the button, the page scrolls to the product gallery section.
+ * 2. The Product Gallery section - Displays the product cards. If the products are not yet loaded, a spinner is displayed.
+ * @returns The Home component with a Hero section and a Product Gallery section.
+ */
 export default function Home() {
   const productsContext = useProductsContext();
   const productsGalleryRef = useRef<HTMLDivElement>(null);

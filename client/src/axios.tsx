@@ -1,5 +1,21 @@
 import axios from 'axios';
 
+/**
+ * This module configures an axios instance for making HTTP requests.
+ *
+ * `BASE_URL` is the URL that corresponds to the protocol, hostname, and port number of the current location.
+ * `BASE_API_URL` is set based on whether the current hostname includes 'taste', defaulting to the local API URL if not.
+ *
+ * `axiosInstance` is an instance of axios with default configurations.
+ * It includes response interceptors that handle 401 status code by refreshing the token.
+ * It sets a flag in sessionStorage `hasRefreshedToken` to limit refresh attempts to one per session.
+ *
+ * @exports
+ * @default axiosInstance - The configured axios instance.
+ */
+
+// -------------------------- urls -------------------------- //
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const urls = [
   {baseURL: 'https://tastetrove.up.railway.app/api'},
@@ -16,6 +32,8 @@ export const BASE_URL = location.protocol.concat(
 export const BASE_API_URL = window.location.hostname.includes('taste')
   ? 'https://tastetrove.up.railway.app/api'
   : urls[1].baseURL;
+
+// -------------------------- axios -------------------------- //
 
 const axiosInstance = axios.create();
 axiosInstance.defaults.withCredentials = true;
