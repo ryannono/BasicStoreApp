@@ -2,6 +2,7 @@ import {useState, useEffect, useReducer} from 'react';
 import {useProductsContext} from '../../globals/productContext';
 import {useUserContext} from '../../globals/userContext';
 import {getTotals} from './useCartFunctions';
+import {IndividualCartItem} from './useCartTypes';
 import {
   getCart,
   updateLocalCart,
@@ -24,7 +25,9 @@ import {
  */
 export default function useCart() {
   const {productsMap} = useProductsContext()!;
-  const [pendingUpdates, setPendingUpdates] = useState(new Map());
+  const [pendingUpdates, setPendingUpdates] = useState(
+    new Map<string, IndividualCartItem>()
+  );
   const [state, dispatch] = useReducer(reducer, {
     cart: [],
     totals: {quantity: 0, price: 0},
@@ -43,18 +46,21 @@ export default function useCart() {
     // if user is logged send updates to
     // pending datbase mutations
     if (user) {
-      pendingUpdates.set(itemToEditId, {
-        productId: itemToEditId,
-        productQuantity: newQuantity,
+      setPendingUpdates(prevpendingUpdates => {
+        return new Map(
+          prevpendingUpdates.set(itemToEditId, {
+            productId: itemToEditId,
+            productQuantity: newQuantity,
+          })
+        );
       });
-      setPendingUpdates(new Map(pendingUpdates));
     }
     return;
   }
 
   // set initial cart in state
   useEffect(() => {
-    async function getAndSetCart() {
+    async function initializeCart() {
       // get user cart
       const cart = await getCart(user?.id);
 
@@ -68,7 +74,7 @@ export default function useCart() {
       }
     }
 
-    getAndSetCart();
+    initializeCart();
   }, [user, productsMap]);
 
   // manages batch updates to database
@@ -80,7 +86,7 @@ export default function useCart() {
             Array.from(pendingUpdates.values()),
             user.id
           );
-          setPendingUpdates(new Map());
+          setPendingUpdates(new Map<string, IndividualCartItem>());
         } catch (error) {
           console.error('Database update failed: ', error);
           // handle error accordingly...
